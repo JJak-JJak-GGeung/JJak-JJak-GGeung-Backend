@@ -13,7 +13,11 @@ from PIL import Image, UnidentifiedImageError
 
 MAX_BYTES = 10 * 1024 * 1024
 DOC_TYPES = ("DELIVERY", "RECEIPT", "INVOICE", "CORRECTED_INVOICE", "UNKNOWN")
-PROMPT_VERSION = "document-vision-v1"
+PROMPT_VERSION = "document-vision-v2"
+AMOUNT_FIELDS = (
+    "supply_total", "tax_total", "document_total", "previous_balance",
+    "balance_after_dispatch", "deposit_amount", "current_balance",
+)
 TEXT_FIELDS = ("store_name_read", "trade_date", "issued_on", "quoted_on", "source_date_text",
                "supplier_name_read", "doc_no", "doc_date", "period_start", "period_end",
                "payment_due_on", "replaces_doc_no", "agreement_text")
@@ -29,6 +33,7 @@ def object_schema(properties):
 SCHEMA = object_schema({
     "doc_type": {"type": "string", "enum": list(DOC_TYPES)},
     **{key: {"type": ["string", "null"]} for key in TEXT_FIELDS},
+    **{key: {"type": ["integer", "null"]} for key in AMOUNT_FIELDS},
     "lines": {"type": "array", "items": object_schema({
         key: {"type": ["integer" if key in {"amount_read", "tax_amount_read"} else "string", "null"]}
         for key in LINE_FIELDS})},
@@ -39,6 +44,9 @@ CORRECTED_INVOICE 명시된 수정 청구. 기타/불명은 UNKNOWN. 결제영�
 공급처는 판매자이며 구매자/받는 점포와 구분한다. store_name_read는 받는 점포만 옮긴다.
 trade_date는 거래일, issued_on은 발행일, quoted_on은 견적일이며 명시된 표제로만 구분한다.
 source_date_text는 머리글 날짜 표제와 원문이다. 월일만 있는 행은 line_date_text에 그대로 옮기고 연도를 추측하지 않는다.
+문서 전체 원화 금액은 해당 표제에 인쇄된 정수만 옮긴다. 빈칸은 null이고 명시된 0원은 0이다.
+supply_total=공급가액 합계, tax_total=세액 합계, document_total=문서 합계금액, previous_balance=전잔액, balance_after_dispatch=전잔액 + 출고액, deposit_amount=입금액, current_balance=현잔액.
+현잔액과 문서 합계금액은 별개다. 입금액은 문서 표기만 뜻한다. 합산·차감해 채우지 않는다. 문서 전체의 잔액이 명시된 경우에만 현잔액으로 옮기고, 여러 행의 잔액에서 하나를 임의로 고르지 않는다.
 tax_amount_read는 행별 세액이며 빈칸은 null이다. 품목별 행을 원본 순서로 한 번씩 추출한다.
 합계/세액/잔액 행과 동일 문서의 보관용 사본을 품목으로 추가하지 않는다. 누락된 값을 추측하지 않는다.
 품목/규격/수량/단위/단가/해당 행의 기재 금액을 구분하고 계산으로 보충하거나 맞추지 않는다.
@@ -80,10 +88,14 @@ def iso(value):
 
 def validate_fields(value):
     """Validate both provider output and edits; reject malformed values, never repair silently."""
-    if not isinstance(value, dict) or set(value) != set(SCHEMA["properties"]):
+    if not isinstance(value, dict) or set(value).difference(AMOUNT_FIELDS) != {"doc_type", *TEXT_FIELDS, "lines"}:
         raise ExtractionError("INVALID_DOCUMENT_FIELDS")
     if value["doc_type"] not in DOC_TYPES:
         raise ExtractionError("INVALID_DOCUMENT_TYPE")
+    for key in AMOUNT_FIELDS:
+        amount = value.get(key)
+        if amount is not None and (type(amount) is not int or abs(amount) > 9007199254740991):
+            raise ExtractionError("INVALID_DOCUMENT_AMOUNT")
     for key in TEXT_FIELDS:
         field = value[key]
         if field is not None and (not isinstance(field, str) or not field.strip() or len(field) > 10000):
