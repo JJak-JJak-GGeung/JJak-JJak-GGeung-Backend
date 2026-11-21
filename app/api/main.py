@@ -20,6 +20,7 @@ from app.photo.extractor import AMOUNT_FIELDS
 from app.api.directory import router as directory_router
 from app.api.photo_review_v2 import router as review_v2_router
 from app.api.database import original_upload_path, remote, rows, rpc
+from app.photo.extractor import DETAIL_FIELDS
 from app.workflow.settlement import get_settlement
 from app.voice.router import router as voice_router
 
@@ -76,7 +77,7 @@ def period(period_id: UUID, owner: Owner):
 
 
 def line_response(row):
-    return {"line_id": row["id"], "delivery_no": row["delivery_no"],
+    return {**{key: row.get(key) for key in DETAIL_FIELDS}, "line_id": row["id"], "delivery_no": row["delivery_no"],
             "delivery_date": row["delivery_date"], "item": row["raw_name"],
             "spec": row["raw_spec"], "unit": row["raw_unit"],
             "qty_read": None if row["qty_read"] is None else str(row["qty_read"]),
