@@ -16,6 +16,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.auth import Owner, current_owner, require_store
 from app.api.photo_review import router as review_router
+from app.api.directory import router as directory_router
 from app.api.photo_review_v2 import router as review_v2_router
 from app.api.database import original_upload_path, remote, rows, rpc
 from app.workflow.settlement import get_settlement
@@ -25,6 +26,7 @@ load_dotenv(Path(__file__).resolve().parents[2] / ".env", override=False)
 app = FastAPI(title="짝짜꿍 조회 API")
 app.include_router(voice_router, dependencies=[Depends(current_owner)])
 app.include_router(review_router)
+app.include_router(directory_router)
 app.include_router(review_v2_router)
 app.add_middleware(
     CORSMiddleware,
@@ -41,7 +43,8 @@ def health():
 
 @app.get("/api/stores")
 def stores(owner: Owner):
-    return {"stores": [{"id": r["id"], "name": r["name"]} for r in rows("stores", owner_user_id="eq." + owner, order="name")]}
+    return {"directory_registration": True,
+            "stores": [{"id": r["id"], "name": r["name"]} for r in rows("stores", owner_user_id="eq." + owner, order="name")]}
 
 
 @app.get("/api/suppliers")
