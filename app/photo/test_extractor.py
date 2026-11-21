@@ -39,6 +39,21 @@ def provider(value=None, **changes):
 
 
 class ExtractorTests(unittest.TestCase):
+    def test_quantity_unit_formatting_does_not_change_its_meaning(self):
+        for read_unit, heading, expected in [
+            ("(kg)", None, "kg"),
+            ("（ KG ）", None, "kg"),
+            (None, "실수령(KG)", "kg"),
+            ("kg/박스", "수량(kg)", "kg/박스"),
+            ("(40kg)", "수량(kg)", "(40kg)"),
+            (None, "단가(원/kg)", None),
+        ]:
+            with self.subTest(read_unit=read_unit, heading=heading):
+                document = facts()
+                document["lines"][0].update(unit=read_unit, quantity_heading=heading)
+                result = extract_document(image_bytes(), "image/png", None, client=provider(document))
+                self.assertEqual(result["lines"][0]["unit"], expected)
+
     def test_image_only_structured_call_and_legacy_contract(self):
         client = provider()
         result = extract_document(image_bytes(), "image/png", "server-document", client=client)
