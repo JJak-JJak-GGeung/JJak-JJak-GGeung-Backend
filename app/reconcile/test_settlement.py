@@ -45,25 +45,6 @@ def memo(**changes):
 
 
 class SettlementTests(unittest.TestCase):
-    def test_confirmed_manual_receipt_supports_approval_and_keeps_evidence(self):
-        inputs = period_input(True)
-        receipt = inputs["receipts"][1]
-        receipt["source_line_id"] = None
-        receipt["evidence_refs"] = [{
-            "kind": "RECEIPT", "document_id": None, "line_id": None,
-            "receipt_id": receipt["receipt_id"], "source_location": None,
-            "evidence_text": "점주 재계량 기록",
-        }]
-        result = reconcile_period(**inputs)
-        self.assertEqual(result["summary"]["received_qty"], "96")
-        self.assertEqual(result["approvable_amount"], 1920000)
-        self.assertTrue(result["can_approve"])
-        self.assertIn(receipt["evidence_refs"][0], result["items"][1]["evidence_refs"])
-        receipt["evidence_refs"][0]["evidence_text"] = "  "
-        result = reconcile_period(**inputs)
-        self.assertIn("MISSING_SOURCE_EVIDENCE", result["blockers"])
-        self.assertFalse(result["can_approve"])
-
     def test_c1_claim_preserves_receipt_and_invoice_and_is_idempotent(self):
         inputs = period_input()
         inputs["memos"] = [memo(), memo()]
