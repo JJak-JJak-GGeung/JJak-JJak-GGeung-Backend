@@ -19,3 +19,26 @@ __pycache__/
 .pytest_cache/
 .ruff_cache/
 .coverage
+
+# 문서 파일 (팀 배포팩·검수 자료는 노션/공유 폴더에서 관리)
+*.pdf
+*.doc
+*.docx
+*.xls
+*.xlsx
+*.ppt
+*.pptx
+*.hwp
+*.hwpx
+*.zip
+
+# 녹음 원본 (원음 미보관 원칙)
+*.m4a
+*.mp3
+*.mp4
+*.wav
+*.webm
+*.ogg
+*.opus
+*.flac
+*.aac
