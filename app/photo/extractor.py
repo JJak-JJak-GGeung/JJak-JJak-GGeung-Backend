@@ -77,6 +77,69 @@ def iso(value):
         return None
 
 
+DATE_FIELDS = ("trade_date", "doc_date", "issued_on", "quoted_on", "period_start", "period_end", "payment_due_on")
+DECIMAL = r"-?[0-9]{1,16}(?:\.[0-9]{1,8})?"
+THOUSANDS = r"-?[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]{1,8})?"
+
+
+def _keep_text(target, key, printed, limit):
+    """Keep an unparseable printed value as evidence text instead of dropping it."""
+    if key not in target:
+        return
+    existing = target.get(key)
+    if existing is None:
+        target[key] = printed[:limit]
+    elif printed not in existing:
+        target[key] = f"{existing} / {printed}"[:limit]
+
+
+def _decimal(raw):
+    """'12,000' / '₩12,000원' -> '12000'. Anything ambiguous ('1,2', '12.000원', '10kg') -> None."""
+    text = re.sub(r"[₩원]", "", raw).strip()
+    if re.fullmatch(THOUSANDS, text):
+        text = text.replace(",", "")
+    elif re.search(r"[₩원]", raw) and "." in text:
+        return None  # Won has no fraction; a dot here is a misread separator, not a decimal point.
+    return text if re.fullmatch(DECIMAL, text) else None
+
+
+def normalize_draft(facts):
+    """Model draft only: printed formats -> contract, blank or unreadable -> null for the reviewer.
+
+    One odd cell must not fail the whole photo. Nothing is guessed: unreadable dates keep their
+    printed text, and owner edits still go through validate_fields unchanged.
+    """
+    if not isinstance(facts, dict):
+        return facts
+    for key in TEXT_FIELDS:
+        if isinstance(facts.get(key), str) and not facts[key].strip():
+            facts[key] = None
+    for key in DATE_FIELDS:
+        if isinstance(facts.get(key), str):
+            printed = facts[key].strip()
+            facts[key] = iso(printed)
+            if facts[key] is None:
+                _keep_text(facts, "source_date_text", printed, 10000)
+    start, end = facts.get("period_start"), facts.get("period_end")
+    if isinstance(start, str) and isinstance(end, str) and start > end:
+        _keep_text(facts, "source_date_text", f"{start} ~ {end}", 10000)
+        facts["period_start"] = facts["period_end"] = None
+    for line in facts["lines"] if isinstance(facts.get("lines"), list) else []:
+        if not isinstance(line, dict):
+            continue
+        for key in LINE_FIELDS:
+            if isinstance(line.get(key), str) and not line[key].strip():
+                line[key] = None
+        if isinstance(line.get("delivery_date"), str):
+            printed = line["delivery_date"].strip()
+            line["delivery_date"] = iso(printed)
+            if line["delivery_date"] is None:
+                _keep_text(line, "line_date_text", printed, 1000)
+        for key in ("qty_read", "unit_price_read"):
+            if isinstance(line.get(key), str):
+                line[key] = _decimal(line[key])
+    return facts
+
 
 def validate_fields(value):
     """Validate both provider output and edits; reject malformed values, never repair silently."""
@@ -148,15 +211,7 @@ def extract_document(raw_bytes, mime, document_id, context=None, *, client=None)
         if any(getattr(part, "type", None) == "refusal"
                for item in response.output for part in getattr(item, "content", [])):
             raise ExtractionError("READING_REFUSED")
-        raw_facts = json.loads(response.output_text)
-        # Normalize printed Korean dates in the model draft; edits still require ISO.
-        for key in ("trade_date", "doc_date", "issued_on", "quoted_on", "period_start", "period_end", "payment_due_on"):
-            if (normalized := iso(raw_facts.get(key))) is not None:
-                raw_facts[key] = normalized
-        for line in raw_facts.get("lines", []):
-            if (normalized := iso(line.get("delivery_date"))) is not None:
-                line["delivery_date"] = normalized
-        facts = validate_fields(raw_facts)
+        facts = validate_fields(normalize_draft(json.loads(response.output_text)))
     except ExtractionError:
         raise
     except Exception as error:
