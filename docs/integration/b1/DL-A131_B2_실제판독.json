@@ -1,0 +1,160 @@
+{
+  "provenance": {
+    "extraction": "local_rapidocr_from_team_pack_png_bytes",
+    "store_name_source": "visual_review_of_team_pack_originals",
+    "deployment_rows_verified": true,
+    "notes": [
+      "A02/A04/A03 rows verified in the deployed period response.",
+      "A04 is the original invoice baseline, independent of the currently effective invoice.",
+      "Owner confirmation was verified against the A03 source line and A02 target line."
+    ],
+    "deployment_input_revision": 39
+  },
+  "matching_context": {
+    "store_name": "가온 장어식당",
+    "supplier_name": "달마루 수산",
+    "period_start": "2026-11-09",
+    "period_end": "2026-11-15",
+    "delivery_no": "DL-A131",
+    "delivery_date": "2026-11-13"
+  },
+  "documents": [
+    {
+      "fixture_ref": "A02",
+      "source_file": "A02_납품명세_1113.png",
+      "document_id": "fb844e75-67ee-47ef-8d0a-c7c090e78096",
+      "document_id_source": "deployment_period_response",
+      "line_id": "0cbd24f6-3260-5a2d-a90e-935c2196b0de",
+      "doc_type": "DELIVERY",
+      "doc_no": "DL-A131",
+      "store_id": "cc3be3a5-a76d-43fb-aeea-1d9a5502184f",
+      "store_name": "가온 장어식당",
+      "supplier_id": "d12b383c-2d40-4c77-83f1-05e6479f7c00",
+      "supplier_name_read": "달마루 수산",
+      "period_id": "56a6054f-909f-4073-9f1b-35fcd4d41150",
+      "period_start_read": null,
+      "period_end_read": null,
+      "delivery_no": "DL-A131",
+      "delivery_date": "2026-11-13",
+      "item": "손질장어",
+      "spec": null,
+      "qty_read": "40",
+      "unit": "kg",
+      "unit_price_read": "20000",
+      "amount_read": 800000,
+      "source_location": {
+        "row": 1,
+        "page": 1,
+        "region": [
+          74,
+          518,
+          982,
+          556
+        ]
+      }
+    },
+    {
+      "fixture_ref": "A04",
+      "source_file": "A04_주간청구서.png",
+      "document_id": "a2182bea-7a62-4284-823b-4b4e117524b3",
+      "document_id_source": "deployment_period_response",
+      "line_id": "1ed3aee4-d1fd-5975-9c9e-8e9aa4d774ba",
+      "doc_type": "INVOICE",
+      "doc_no": "INV-A01",
+      "store_id": "cc3be3a5-a76d-43fb-aeea-1d9a5502184f",
+      "store_name": "가온 장어식당",
+      "supplier_id": "d12b383c-2d40-4c77-83f1-05e6479f7c00",
+      "supplier_name_read": "달마루 수산",
+      "period_id": "56a6054f-909f-4073-9f1b-35fcd4d41150",
+      "period_start_read": "2026-11-09",
+      "period_end_read": "2026-11-15",
+      "delivery_no": "DL-A131",
+      "delivery_date": "2026-11-13",
+      "item": "손질장어",
+      "spec": null,
+      "qty_read": "40",
+      "unit": "kg",
+      "unit_price_read": "20000",
+      "amount_read": 800000,
+      "source_location": {
+        "row": 2,
+        "page": 1,
+        "region": [
+          75,
+          646,
+          1051,
+          682
+        ]
+      }
+    },
+    {
+      "fixture_ref": "A03",
+      "source_file": "A03_점포수령기록.png",
+      "document_id": "b292095a-e43a-46ed-befb-726eeafdcb72",
+      "document_id_source": "deployment_period_response",
+      "line_id": "460954b6-4711-5ed4-992f-cab3142e0362",
+      "doc_type": "RECEIPT",
+      "doc_no": null,
+      "store_id": "cc3be3a5-a76d-43fb-aeea-1d9a5502184f",
+      "store_name": "가온 장어식당",
+      "supplier_id": "d12b383c-2d40-4c77-83f1-05e6479f7c00",
+      "supplier_name_read": "달마루 수산",
+      "period_id": "56a6054f-909f-4073-9f1b-35fcd4d41150",
+      "period_start_read": "2026-11-09",
+      "period_end_read": "2026-11-15",
+      "delivery_no": "DL-A131",
+      "delivery_date": "2026-11-13",
+      "item": "손질장어",
+      "spec": null,
+      "qty_read": "36",
+      "unit": "kg",
+      "unit_price_read": null,
+      "amount_read": null,
+      "source_location": {
+        "row": 2,
+        "page": 1,
+        "region": [
+          75,
+          585,
+          984,
+          622
+        ]
+      }
+    }
+  ],
+  "receipt": {
+    "candidate_fixture_ref": "A03",
+    "candidate_qty_read": "36",
+    "unit": "kg",
+    "owner_confirmed": true,
+    "receipt_id": "8bb5a598-9d9e-4629-b84f-41ab010f63d2",
+    "received_qty": "36",
+    "confirmed_by": "검수 점주",
+    "confirmed_at": "2026-11-21T11:25:10.652557+09:00",
+    "target_delivery_line_id": "0cbd24f6-3260-5a2d-a90e-935c2196b0de",
+    "include_in_received_totals": true,
+    "store_id": "cc3be3a5-a76d-43fb-aeea-1d9a5502184f",
+    "period_id": "56a6054f-909f-4073-9f1b-35fcd4d41150",
+    "delivery_no": "DL-A131",
+    "supplier_id": "d12b383c-2d40-4c77-83f1-05e6479f7c00",
+    "evidence_refs": [
+      {
+        "kind": "RECEIPT",
+        "line_id": "460954b6-4711-5ed4-992f-cab3142e0362",
+        "document_id": "b292095a-e43a-46ed-befb-726eeafdcb72",
+        "source_location": {
+          "row": 2,
+          "page": 1,
+          "region": [
+            75,
+            585,
+            984,
+            622
+          ]
+        }
+      }
+    ],
+    "source_line_id": "460954b6-4711-5ed4-992f-cab3142e0362",
+    "supersedes_receipt_id": null
+  }
+}

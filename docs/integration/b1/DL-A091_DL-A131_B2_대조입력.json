@@ -1,0 +1,145 @@
+{
+  "store_id": "cc3be3a5-a76d-43fb-aeea-1d9a5502184f",
+  "supplier_id": "d12b383c-2d40-4c77-83f1-05e6479f7c00",
+  "period_id": "56a6054f-909f-4073-9f1b-35fcd4d41150",
+  "lines": [
+    {
+      "store_id": "cc3be3a5-a76d-43fb-aeea-1d9a5502184f",
+      "supplier_id": "d12b383c-2d40-4c77-83f1-05e6479f7c00",
+      "period_id": "56a6054f-909f-4073-9f1b-35fcd4d41150",
+      "line_id": "bc8f4252-1514-54ac-ba71-8dcfbd78b081",
+      "delivery_no": "DL-A091",
+      "delivery_date": "2026-11-09",
+      "item": "손질장어",
+      "spec": null,
+      "unit": "kg",
+      "declared_qty": "60",
+      "billed_qty": "60",
+      "unit_price": "20000",
+      "billed_amount": 1200000,
+      "evidence_refs": [
+        {
+          "document_id": "ff8c8d71-9ff7-4d98-9469-8d5dc37dbc9a",
+          "line_id": "bc8f4252-1514-54ac-ba71-8dcfbd78b081",
+          "kind": "DELIVERY",
+          "source_location": {
+            "page": 1,
+            "row": 1
+          }
+        },
+        {
+          "document_id": "a2182bea-7a62-4284-823b-4b4e117524b3",
+          "line_id": "795f21a1-ea43-55ce-b352-0b55693ee3e3",
+          "kind": "INVOICE",
+          "source_location": {
+            "page": 1,
+            "row": 1
+          }
+        }
+      ]
+    },
+    {
+      "store_id": "cc3be3a5-a76d-43fb-aeea-1d9a5502184f",
+      "supplier_id": "d12b383c-2d40-4c77-83f1-05e6479f7c00",
+      "period_id": "56a6054f-909f-4073-9f1b-35fcd4d41150",
+      "line_id": "0cbd24f6-3260-5a2d-a90e-935c2196b0de",
+      "delivery_no": "DL-A131",
+      "delivery_date": "2026-11-13",
+      "item": "손질장어",
+      "spec": null,
+      "unit": "kg",
+      "declared_qty": "40",
+      "billed_qty": "40",
+      "unit_price": "20000",
+      "billed_amount": 800000,
+      "evidence_refs": [
+        {
+          "document_id": "fb844e75-67ee-47ef-8d0a-c7c090e78096",
+          "line_id": "0cbd24f6-3260-5a2d-a90e-935c2196b0de",
+          "kind": "DELIVERY",
+          "source_location": {
+            "row": 1,
+            "page": 1,
+            "region": [
+              74,
+              518,
+              982,
+              556
+            ]
+          }
+        },
+        {
+          "document_id": "a2182bea-7a62-4284-823b-4b4e117524b3",
+          "line_id": "1ed3aee4-d1fd-5975-9c9e-8e9aa4d774ba",
+          "kind": "INVOICE",
+          "source_location": {
+            "row": 2,
+            "page": 1,
+            "region": [
+              75,
+              646,
+              1051,
+              682
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "receipts": [
+    {
+      "store_id": "cc3be3a5-a76d-43fb-aeea-1d9a5502184f",
+      "supplier_id": "d12b383c-2d40-4c77-83f1-05e6479f7c00",
+      "period_id": "56a6054f-909f-4073-9f1b-35fcd4d41150",
+      "receipt_id": "364c235a-bc95-4a8a-96cd-2a6517914d46",
+      "source_line_id": "87dfde82-74cd-5055-ac01-8160fe76c022",
+      "target_delivery_line_id": "bc8f4252-1514-54ac-ba71-8dcfbd78b081",
+      "delivery_no": "DL-A091",
+      "received_qty": "60",
+      "unit": "kg",
+      "confirmed_by": "검수 점주",
+      "confirmed_at": "2026-11-21T11:25:08.346543+09:00",
+      "evidence_refs": [
+        {
+          "document_id": "b292095a-e43a-46ed-befb-726eeafdcb72",
+          "line_id": "87dfde82-74cd-5055-ac01-8160fe76c022",
+          "kind": "RECEIPT",
+          "source_location": {
+            "page": 1,
+            "row": 1
+          }
+        }
+      ]
+    },
+    {
+      "store_id": "cc3be3a5-a76d-43fb-aeea-1d9a5502184f",
+      "supplier_id": "d12b383c-2d40-4c77-83f1-05e6479f7c00",
+      "period_id": "56a6054f-909f-4073-9f1b-35fcd4d41150",
+      "receipt_id": "8bb5a598-9d9e-4629-b84f-41ab010f63d2",
+      "source_line_id": "460954b6-4711-5ed4-992f-cab3142e0362",
+      "target_delivery_line_id": "0cbd24f6-3260-5a2d-a90e-935c2196b0de",
+      "delivery_no": "DL-A131",
+      "received_qty": "36",
+      "unit": "kg",
+      "confirmed_by": "검수 점주",
+      "confirmed_at": "2026-11-21T11:25:10.652557+09:00",
+      "evidence_refs": [
+        {
+          "document_id": "b292095a-e43a-46ed-befb-726eeafdcb72",
+          "line_id": "460954b6-4711-5ed4-992f-cab3142e0362",
+          "kind": "RECEIPT",
+          "source_location": {
+            "row": 2,
+            "page": 1,
+            "region": [
+              75,
+              585,
+              984,
+              622
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
