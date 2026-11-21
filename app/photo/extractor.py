@@ -81,13 +81,20 @@ def _location(row, row_number=None):
     }
 
 
+def _header_key(text):
+    return re.sub(r"[\s·ㆍ.()（）:_/\-]", "", text).lower()
+
+
 def _headers(rows):
-    labels = ("공급처", "받는점포", "점포", "기록기준", "납품일", "명세번호", "청구번호", "발행일", "정산기간", "합의지급일", "대체청구")
+    labels = ("공급처", "받는점포", "점포", "기록기준", "납품일", "명세번호", "청구번호", "발행일", "정산기간", "합의지급일", "대체청구", "거래일")
+    aliases = {"상호": "공급처", "상호법인명": "공급처", "법인명": "공급처",
+               "공급업체": "공급처", "공급자상호": "공급처",
+               "거래일자": "거래일", "거래명세번호": "명세번호", "작성일": "발행일"}
     values = {}
     for row in rows:
         active = None
         for *_, token in row:
-            key = _compact(token)
+            key = aliases.get(_header_key(token), _header_key(token))
             if key in labels:
                 active = key
             elif active:
@@ -97,16 +104,18 @@ def _headers(rows):
 
 
 def _column(label):
-    key = _compact(label).lower()
+    key = _header_key(label)
     if '수량' in key or '실수령' in key:
         return 'qty_read'
     if '단가' in key:
         return 'unit_price_read'
-    if '금액' in key:
+    if '금액' in key or key in ('공급가액', '공급액'):
         return 'amount_read'
     return {
         '납품일': 'delivery_date', '수령일': 'delivery_date', '명세번호': 'delivery_no',
-        '대상명세': 'delivery_no', '품목': 'item', '규격': 'spec', '단위': 'unit',
+        '대상명세': 'delivery_no', '품목': 'item', '품명': 'item',
+        '품목규격': 'item', '품명규격': 'item', '품명및규격': 'item',
+        '규격': 'spec', '단위': 'unit',
         '메모': 'memo',
     }.get(key)
 
@@ -130,6 +139,11 @@ def extract_document(raw_bytes: bytes, mime: str, document_id: str, context=None
     with OCR_LOCK:
         scan = _engine()(clean)
     rows = _rows(scan.boxes, scan.txts) if scan.boxes is not None and scan.txts else []
+    return _parse_rows(rows, document_id)
+
+
+def _parse_rows(rows, document_id):
+    """Parse positioned OCR tokens without relying on one document template."""
     heading = None
     for i, row in enumerate(rows):
         fields = {_column(t[4]) for t in row}
@@ -145,7 +159,7 @@ def extract_document(raw_bytes: bytes, mime: str, document_id: str, context=None
         doc_type = 'RECEIPT'
     elif '청구서' in title:
         doc_type = 'CORRECTED_INVOICE' if '수정본' in title or labels.get('대체청구') else 'INVOICE'
-    elif '납품명세서' in title:
+    elif any(label in title for label in ('납품명세서', '거래명세표', '거래명세서')):
         doc_type = 'DELIVERY'
     delivery_date = _date(labels.get('납품일'))
     delivery_no = _id(labels.get('명세번호'))
@@ -196,7 +210,7 @@ def extract_document(raw_bytes: bytes, mime: str, document_id: str, context=None
     return {
         'document_id': document_id, 'doc_type': doc_type,
         'supplier_name_read': labels.get('공급처'), 'doc_no': _id(labels.get('청구번호')) or delivery_no,
-        'doc_date': _date(labels.get('발행일')) or delivery_date,
+        'doc_date': _date(labels.get('발행일')) or _date(labels.get('거래일')) or delivery_date,
         'period_start': period_start, 'period_end': period_end,
         'payment_due_on': _date(labels.get('합의지급일')), 'replaces_doc_no': _id(labels.get('대체청구')),
         'agreement_text': ' '.join(t[4] for t in agreement) if agreement else None,
