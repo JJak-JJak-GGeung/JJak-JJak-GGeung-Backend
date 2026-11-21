@@ -86,7 +86,7 @@ def document_response(value, lines=None):
         "duplicate": value.get("duplicate", False),
         "input_revision": value.get("input_revision"),
         **{key: value.get(key) for key in (
-            "supplier_name_read", "supplier_id", "doc_no", "period_start", "period_end",
+            "supplier_name_read", "supplier_id", "doc_no", "doc_date", "period_start", "period_end",
             "replaces_doc_no", "agreement_text", "agreement_source_location", "source_mode")},
     }
 

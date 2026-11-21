@@ -1,4 +1,7 @@
 import unittest
+from types import SimpleNamespace
+from unittest.mock import patch
+from app.photo.extractor import extract_document
 from app.photo.extractor import _column, _parse_rows
 
 
@@ -40,6 +43,34 @@ class LayoutTests(unittest.TestCase):
         self.assertEqual(result["lines"][0]["qty_read"], "40")
         self.assertEqual(result["lines"][0]["unit"], "kg")
         self.assertEqual(result["lines"][0]["amount_read"], 800000)
+
+    def test_footer_and_blank_marker_do_not_create_items(self):
+        result = _parse_rows([
+            row((0, "거래명세표")),
+            row((200, "품목규격"), (400, "단위"), (500, "수량"), (600, "단가"), (750, "공급가액")),
+            row((200, "검증품목"), (400, "kg"), (500, "2"), (600, "100"), (750, "200")),
+            row((200, "안내문"), (400, "합계"), (500, "2"), (750, "200")),
+            row((200, "*** 이 하 여 백 ***")),
+            row((200, "하단 안내"), (500, "999"), (750, "999")),
+        ], "document")
+        self.assertEqual(len(result["lines"]), 1)
+        self.assertEqual(result["lines"][0]["amount_read"], 200)
+
+    def test_grayscale_fallback_when_threshold_erases_header(self):
+        cv = SimpleNamespace(
+            IMREAD_GRAYSCALE=0, THRESH_BINARY=1, THRESH_OTSU=2,
+            imdecode=lambda *args: "gray", threshold=lambda *args: (0, "threshold"))
+        np = SimpleNamespace(uint8=int, frombuffer=lambda *args: "buffer")
+        scanned = [
+            row((0, "거래명세표")),
+            row((0, "품목"), (200, "수량(kg)"), (400, "단가"), (600, "공급가액")),
+            row((0, "검증품목"), (200, "2"), (400, "100"), (600, "200")),
+        ]
+        with patch.dict("sys.modules", {"cv2": cv, "numpy": np}):
+            with patch("app.photo.extractor._scan_rows", side_effect=[[], scanned]) as scan:
+                result = extract_document(b"test bytes", "image/png", "document")
+        self.assertEqual([call.args[0] for call in scan.call_args_list], ["threshold", "gray"])
+        self.assertEqual(len(result["lines"]), 1)
 
     def test_combined_item_header_variants(self):
         for title in ("품목·규격", "품목 - 규격", "품명 및 규격"):
