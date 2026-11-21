@@ -5,13 +5,17 @@ import os
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
-from uuid import UUID
+from uuid import UUID, uuid5
+from typing import Literal
+from pydantic import BaseModel, Field
 
 from fastapi import FastAPI, HTTPException, UploadFile, File, Form
 from fastapi.responses import Response
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.photo.extractor import extract_document
+from app.api.database import remote, rows, rpc
+from app.workflow.settlement import get_settlement
 
 app = FastAPI(title="짝짜꿍 조회 API")
 app.add_middleware(
@@ -20,21 +24,6 @@ app.add_middleware(
     allow_methods=["GET", "POST"],
     allow_headers=["Content-Type"],
 )
-
-
-def rows(table, **filters):
-    query = urlencode({"select": "*", **filters})
-    request = Request(
-        os.environ["SUPABASE_URL"] + "/rest/v1/" + table + "?" + query,
-        headers={"apikey": os.environ["SUPABASE_SECRET_KEY"],
-                 "Authorization": "Bearer " + os.environ["SUPABASE_SECRET_KEY"]},
-    )
-    try:
-        with urlopen(request, timeout=10) as response:
-            return json.load(response)
-    except (HTTPError, URLError, TimeoutError):
-        logging.exception("Database read failed")
-        raise HTTPException(503, "Database temporarily unavailable")
 
 
 @app.get("/health")
@@ -64,43 +53,20 @@ def periods(store_id: UUID, supplier_id: UUID):
 
 @app.get("/api/periods/{period_id}")
 def period(period_id: UUID):
-    result = rows("periods", id="eq." + str(period_id))
-    if not result:
-        raise HTTPException(404, "Period not found")
-    value = result[0]
-    return {
-        "period_id": value["id"], "store_id": value["store_id"],
-        "supplier_id": value["supplier_id"], "period_start": value["period_start"],
-        "period_end": value["period_end"], "is_example": False,
-        "input_revision": value["input_revision"],
-        "summary": {key: None for key in [
-            "declared_qty", "billed_qty", "received_qty", "unit",
-            "delta_qty", "check_amount", "billed_amount"]},
-        "documents": document_list(period_id),
-        "items": [], "confirmation_scope": "DOCUMENTS_ONLY",
-        "match_result": "MISSING_DATA", "fact_status": "UNCONFIRMED",
-        "work_status": "NEEDS_INFO", "blockers": ["거래 자료가 아직 등록되지 않았습니다."],
-        "can_approve": False, "approvable_amount": None,
-        "approved_amount": None, "payment_status": "UNCONFIRMED",
-    }
-
-
-def remote(path, method="GET", data=None, content_type="application/json"):
-    request = Request(
-        os.environ["SUPABASE_URL"] + path,
-        data=data, method=method,
-        headers={"apikey": os.environ["SUPABASE_SECRET_KEY"],
-                 "Authorization": "Bearer " + os.environ["SUPABASE_SECRET_KEY"],
-                 "Content-Type": content_type},
-    )
-    return urlopen(request, timeout=30)
+    result = get_settlement(period_id)
+    result["documents"] = document_list(period_id)
+    return result
 
 
 def line_response(row):
     return {"line_id": row["id"], "delivery_no": row["delivery_no"],
             "delivery_date": row["delivery_date"], "item": row["raw_name"],
             "spec": row["raw_spec"], "unit": row["raw_unit"],
-            "qty_read": row["qty_read"], "unit_price_read": row["unit_price_read"],
+            "qty_read": None if row["qty_read"] is None else str(row["qty_read"]),
+            "qty_corrected": None if row["qty_corrected"] is None else str(row["qty_corrected"]),
+            "unit_price_read": None if row["unit_price_read"] is None else str(row["unit_price_read"]),
+            "unit_price_corrected": None if row["unit_price_corrected"] is None else str(row["unit_price_corrected"]),
+            "amount_corrected": row["amount_corrected"],
             "amount_read": row["amount_read"], "source_location": row["source_location"]}
 
 
@@ -115,49 +81,35 @@ def document_response(value, lines=None):
         "lines": [line_response(r) for r in lines],
         "duplicate": value.get("duplicate", False),
         "input_revision": value.get("input_revision"),
+        **{key: value.get(key) for key in (
+            "supplier_name_read", "supplier_id", "doc_no", "period_start", "period_end",
+            "replaces_doc_no", "agreement_text", "agreement_source_location", "source_mode")},
     }
 
 
 def run_extraction(doc, data=None):
-    """Read the original with the photo extractor and store its lines on the document."""
-    doc_id = doc["id"]
-    path = "/rest/v1/documents?id=eq." + doc_id
+    """Persist one complete extraction atomically with stable source line IDs."""
+    if doc["extraction_status"] in ("COMPLETED", "SUCCESS"):
+        return doc["extraction_status"]
     try:
         if data is None:
             with remote("/storage/v1/object/authenticated/originals/" + doc["storage_path"]) as response:
                 data = response.read()
-        result = extract_document(data, doc["mime_type"], doc_id)
-        start, end = result["period_start"], result["period_end"]
-        if start and end and end < start:
-            start = end = None
-        with remote("/rest/v1/doc_lines?document_id=eq." + doc_id, "DELETE"):
-            pass
-        lines = [{"store_id": doc["store_id"], "document_id": doc_id,
-                  "delivery_no": line["delivery_no"], "delivery_date": line["delivery_date"],
-                  "raw_name": line["item"], "raw_spec": line["spec"], "raw_unit": line["unit"],
-                  "qty_read": line["qty_read"], "unit_price_read": line["unit_price_read"],
-                  "amount_read": line["amount_read"], "source_location": line["source_location"],
-                  "extraction_status": "COMPLETED"} for line in result["lines"]]
-        if lines:
-            with remote("/rest/v1/doc_lines", "POST", json.dumps(lines).encode()):
-                pass
-        fields = {key: result[key] for key in (
-            "supplier_name_read", "doc_no", "doc_date", "payment_due_on",
-            "replaces_doc_no", "agreement_text", "agreement_source_location")}
-        fields.update(period_start=start, period_end=end, extraction_status="COMPLETED",
-                      metadata={**(doc.get("metadata") or {}), "doc_type_read": result["doc_type"]})
-        status = "COMPLETED"
+        result = extract_document(data, doc["mime_type"], doc["id"])
+        compact = lambda value: "".join((value or "").split())
+        matches = [supplier for supplier in rows("suppliers", store_id="eq." + doc["store_id"])
+                   if compact(supplier["name"]) == compact(result["supplier_name_read"]) and compact(supplier["name"])]
+        result["supplier_id"] = matches[0]["id"] if len(matches) == 1 else None
+        lines = [{**line, "id": str(uuid5(UUID(doc["id"]), "line-" + str(index)))}
+                 for index, line in enumerate(result["lines"])]
+        rpc("persist_extraction", {"p_document": doc["id"], "p_fields": result, "p_lines": lines})
+        return "COMPLETED"
     except Exception:
-        logging.exception("Extraction failed for document %s", doc_id)
-        fields, status = {"extraction_status": "FAILED"}, "FAILED"
-    try:
-        with remote(path, "PATCH", json.dumps(fields).encode()):
+        logging.exception("Extraction failed for document %s", doc["id"])
+        with remote("/rest/v1/documents?id=eq." + doc["id"], "PATCH",
+                    json.dumps({"extraction_status": "FAILED"}).encode()):
             pass
-    except (HTTPError, URLError, TimeoutError):
-        logging.exception("Extraction status update failed for document %s", doc_id)
-        status = "FAILED"
-    logging.warning("Extraction %s for document %s", status, doc_id)
-    return status
+        return "FAILED"
 
 
 def document_list(period_id):
@@ -219,7 +171,9 @@ def upload_document(period_id: UUID, file: UploadFile = File(...),
         doc["extraction_status"] = run_extraction(doc, data)
         # Saved lines bump the period revision through a database trigger.
         doc["input_revision"] = rows("periods", id="eq." + str(period_id))[0]["input_revision"]
-    return document_response(doc)
+    return document_response({**rows("documents", id="eq." + doc["id"])[0],
+                              "duplicate": doc.get("duplicate", False),
+                              "input_revision": doc.get("input_revision")})
 
 
 @app.post("/api/documents/{document_id}/extraction")
@@ -231,7 +185,9 @@ def retry_extraction(document_id: UUID):
     if doc.get("source_mode", "FILE") != "FILE":
         raise HTTPException(422, "Only uploaded originals can be read")
     doc["extraction_status"] = run_extraction(doc)
-    return document_response(doc)
+    return document_response({**rows("documents", id="eq." + doc["id"])[0],
+                              "duplicate": doc.get("duplicate", False),
+                              "input_revision": doc.get("input_revision")})
 
 
 @app.get("/api/documents/{document_id}/original")
@@ -240,6 +196,8 @@ def original(document_id: UUID):
     if not result:
         raise HTTPException(404, "Document not found")
     doc = result[0]
+    if doc["source_mode"] != "FILE":
+        raise HTTPException(422, "This document contains confirmed text")
     try:
         with remote("/storage/v1/object/authenticated/originals/" + doc["storage_path"]) as response:
             data = response.read()
@@ -247,3 +205,109 @@ def original(document_id: UUID):
                         headers={"Cache-Control": "no-store", "X-Content-Type-Options": "nosniff"})
     except (HTTPError, URLError, TimeoutError):
         raise HTTPException(503, "Original temporarily unavailable")
+
+
+class RevisionRequest(BaseModel):
+    expected_revision: int = Field(strict=True, ge=0)
+    request_key: str = Field(min_length=1, max_length=200)
+    actor_label: str = Field(default="검수 점주", min_length=1, max_length=100)
+
+
+class ConfirmationRequest(RevisionRequest):
+    kind: Literal["receipt_link", "replacement", "line_correction"]
+    source_line_id: UUID | None = None
+    document_id: UUID | None = None
+    target_id: UUID | None = None
+    evidence_refs: list[dict]
+    corrected_fields: dict | None = None
+    supersedes_receipt_id: UUID | None = None
+
+
+class MemoRequest(RevisionRequest):
+    confirmed_text: str = Field(min_length=1, max_length=10000)
+    source_mode: Literal["VOICE_MEMO", "TYPED_TEXT"]
+
+
+def period_record(period_id):
+    result = rows("periods", id="eq." + str(period_id))
+    if not result:
+        raise HTTPException(404, "Period not found")
+    return result[0]
+
+
+@app.post("/api/periods/{period_id}/confirmations")
+def confirm(period_id: UUID, request: ConfirmationRequest):
+    value = period_record(period_id)
+    body = request.model_dump(mode="json", exclude_none=True)
+    for key in ("expected_revision", "request_key", "actor_label"):
+        body.pop(key)
+    saved = rpc("save_confirmation", {
+        "p_store": value["store_id"], "p_period": value["id"],
+        "p_expected": request.expected_revision, "p_key": request.request_key,
+        "p_body": body, "p_actor_label": request.actor_label,
+    })
+    return {**saved, "settlement": get_settlement(period_id, refresh=True)}
+
+
+@app.get("/api/transactions/{transaction_id}")
+def transaction(transaction_id: UUID):
+    result = rows("recon_items", id="eq." + str(transaction_id))
+    if not result:
+        raise HTTPException(404, "Transaction not found")
+    value = result[0]
+    state = get_settlement(value["period_id"])
+    item = next((item for item in state["items"] if item["transaction_id"] == str(transaction_id)), None)
+    if not item:
+        raise HTTPException(404, "Transaction not in current period")
+    memos = rows("transaction_memos", transaction_id="eq." + str(transaction_id), order="confirmed_at")
+    return {**item, "input_revision": state["input_revision"],
+            "memos": [{**m, "memo_id": m["id"]} for m in memos]}
+
+
+@app.post("/api/transactions/{transaction_id}/memos")
+def save_memo(transaction_id: UUID, request: MemoRequest):
+    result = rows("recon_items", id="eq." + str(transaction_id))
+    if not result:
+        raise HTTPException(404, "Transaction not found")
+    value = result[0]
+    saved = rpc("save_confirmed_memo", {
+        "p_store": value["store_id"], "p_transaction": str(transaction_id),
+        "p_text": request.confirmed_text, "p_mode": request.source_mode,
+        "p_expected": request.expected_revision, "p_key": request.request_key,
+        "p_actor_label": request.actor_label,
+    })
+    return {**saved, "settlement": get_settlement(value["period_id"], refresh=True)}
+
+
+def approval_response(value):
+    return {"approval_id": value["id"], "period_id": value["period_id"],
+            "input_revision": value["input_revision"], "version_no": value["version_no"],
+            "approved_amount": int(value["confirmed_total"]),
+            "approved_at": value["approved_at"], "payment_status": value["payment_status"]}
+
+
+@app.post("/api/periods/{period_id}/approvals")
+def approve(period_id: UUID, request: RevisionRequest):
+    value = period_record(period_id)
+    return rpc("approve_period", {
+        "p_store": value["store_id"], "p_period": value["id"],
+        "p_expected": request.expected_revision, "p_key": request.request_key,
+        "p_actor_label": request.actor_label,
+    })
+
+
+@app.get("/api/periods/{period_id}/approvals")
+def approvals(period_id: UUID):
+    period_record(period_id)
+    return {"approvals": [approval_response(value) for value in
+                          rows("settlement_versions", period_id="eq." + str(period_id), order="version_no.desc")]}
+
+
+@app.get("/api/approvals/{approval_id}")
+def approval(approval_id: UUID):
+    result = rows("settlement_versions", id="eq." + str(approval_id))
+    if not result:
+        raise HTTPException(404, "Approval not found")
+    value = result[0]
+    snapshot = value["snapshot"]
+    return {**approval_response(value), "snapshot": snapshot}
