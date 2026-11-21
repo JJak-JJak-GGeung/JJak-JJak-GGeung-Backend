@@ -1,8 +1,4 @@
 fastapi==0.121.3
 uvicorn==0.38.0
 python-multipart==0.0.20
-rapidocr==3.10.0
-onnxruntime>=1.20,<2
-opencv-python-headless>=4.10,<5
-openai>=1.60
-Pillow>=10.3,<13
+-r app/photo/requirements.txt
