@@ -32,3 +32,26 @@ def test_browser_evidence_reopens_only_for_same_profile(monkeypatch):
         assert reopened.get("/api/documents/" + document + "/original", headers=first).content == b"test-original"
         for path in ["/api/approvals/" + approval, "/api/documents/" + document + "/original"]:
             assert reopened.get(path, headers=other).status_code == 404
+
+
+def test_direct_zero_receipt_uses_owner_and_existing_rpc(monkeypatch):
+    period, store, target = [str(uuid4()) for _ in range(3)]
+    actor = auth.HTTPAuthorizationCredentials(scheme="Bearer", credentials="device-v1." + "ab" * 32)
+    owner = auth.current_owner(actor)
+    monkeypatch.setattr(main, "period_record", lambda *args: {"id": period, "store_id": store})
+    monkeypatch.setattr(main, "get_settlement", lambda *args, **kwargs: {})
+    saved = []
+    def save(name, params):
+        saved.append((name, params))
+        return {"receipt_id": target}
+    monkeypatch.setattr(main, "rpc", save)
+    endpoint = f"/api/periods/{period}/confirmations"
+    headers = {"Authorization": "Bearer " + actor.credentials}
+    base = {"expected_revision": 3, "request_key": "direct-qa", "target_id": target}
+    with TestClient(main.app) as client:
+        body = {**base, "kind": "receipt_entry", "evidence_text": "검수 계량", "received_qty": "0", "unit": "kg"}
+        assert client.post(endpoint, json=body, headers=headers).status_code == 200
+        assert saved[0][0] == "save_direct_receipt"
+        assert saved[0][1]["p_body"]["received_qty"] == "0"
+        assert saved[0][1]["p_actor"] == owner
+        assert client.post(endpoint, json={**base, "kind": "receipt_link"}, headers=headers).status_code == 422

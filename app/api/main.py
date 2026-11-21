@@ -161,11 +161,14 @@ class RevisionRequest(BaseModel):
 
 
 class ConfirmationRequest(RevisionRequest):
-    kind: Literal["receipt_link", "replacement", "line_correction"]
+    kind: Literal["receipt_link", "replacement", "line_correction", "receipt_entry"]
     source_line_id: UUID | None = None
     document_id: UUID | None = None
     target_id: UUID | None = None
-    evidence_refs: list[dict]
+    evidence_refs: list[dict] | None = None
+    received_qty: str | None = Field(default=None, pattern=r"^[0-9]{1,18}(\.[0-9]{1,9})?$")
+    unit: str | None = Field(default=None, min_length=1, max_length=60)
+    evidence_text: str | None = Field(default=None, min_length=1, max_length=2000)
     corrected_fields: dict | None = None
     supersedes_receipt_id: UUID | None = None
 
@@ -189,11 +192,21 @@ def confirm(period_id: UUID, request: ConfirmationRequest, owner: Owner):
     body = request.model_dump(mode="json", exclude_none=True)
     for key in ("expected_revision", "request_key", "actor_label"):
         body.pop(key)
-    saved = rpc("save_confirmation", {
+    direct = request.kind == "receipt_entry" or (
+        request.kind == "line_correction" and request.evidence_text is not None
+    )
+    if direct and not (request.target_id and (request.evidence_text or "").strip()):
+        raise HTTPException(422, "INVALID_RECEIPT_ENTRY")
+    if not direct and not request.evidence_refs:
+        raise HTTPException(422, "INVALID_EVIDENCE")
+    payload = {
         "p_store": value["store_id"], "p_period": value["id"],
         "p_expected": request.expected_revision, "p_key": request.request_key,
         "p_body": body, "p_actor_label": request.actor_label,
-    })
+    }
+    if direct:
+        payload["p_actor"] = owner
+    saved = rpc("save_direct_receipt" if direct else "save_confirmation", payload)
     return {**saved, "settlement": get_settlement(period_id, refresh=True)}
 
 
