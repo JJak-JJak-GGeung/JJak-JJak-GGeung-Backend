@@ -5,9 +5,25 @@ import hashlib
 import hmac
 import json
 import os
+import re
 import time
 
 from .extractor import ExtractionError, LINE_FIELDS, TEXT_FIELDS, validate_fields
+
+
+_QUANTITY_WITH_UNIT = re.compile(
+    r"[+-]?(?:[0-9][0-9,]*(?:\.[0-9]+)?|\.[0-9]+)\s*"
+    r"(?:kg|g|mg|t|l|ml|㎏|㎖|개|박스|상자|봉|포|팩|병|통|마리|근|톤|장|세트|묶음)?",
+    re.IGNORECASE,
+)
+
+
+class UnitContainsQuantity(ExtractionError):
+    pass
+
+
+def unit_contains_quantity(unit):
+    return isinstance(unit, str) and _QUANTITY_WITH_UNIT.fullmatch(unit.strip()) is not None
 
 
 def review_warnings(draft):
@@ -66,6 +82,8 @@ def prepare_review(draft, review):
             used.add(source)
         if not isinstance(row["item"], str) or not row["item"].strip():
             raise ExtractionError("ITEM_REQUIRED")
+        if unit_contains_quantity(row["unit"]):
+            raise UnitContainsQuantity("UNIT_CONTAINS_QUANTITY")
         edits.append({**row, "source_row": source})
     validate_fields(facts)
     if facts["doc_type"] == "UNKNOWN":
