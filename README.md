@@ -19,3 +19,10 @@ FastAPI 서버와 도메인 로직을 구현합니다. AWS에서 Docker로 실�
 [팀 노션과 역할 카드](https://tasteful-fight-7cd.notion.site/41d58907758380bdb941e7781b7096af) · [Database](https://github.com/JJak-JJak-GGeung/JJak-JJak-GGeung-Database) · [Frontend](https://github.com/JJak-JJak-GGeung/JJak-JJak-GGeung-Frontend)
 
 공개 A 자료는 팀 배포팩에서 사용합니다. 로컬 환경 파일·인증 키·B 입력과 정답표는 팀 저장소 밖에 보관합니다.
+
+## 점주 인증 배포
+
+- Supabase Auth에 검수 점주를 만들고 검수 점포의 `stores.owner_user_id`를 해당 Auth 사용자 UUID로 설정합니다. 해당 점포의 거래처·정산 기간을 연결합니다.
+- FastAPI 런타임에 `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_SECRET_KEY`, `CORS_ORIGINS`를 설정합니다. 프런트 빌드에는 URL과 공개 키를 전달합니다.
+- Database의 `20261121040000_authenticated_direct_receipts.sql` 적용 후 API와 프런트를 함께 배포합니다. `/health`는 공개이고 업무 API는 Supabase 세션을 요구합니다.
+- 검수 서버에서 `tests/verify_public_a.py`를 실행할 때 `PUBLIC_A_ACCESS_TOKEN`을 환경에 주입합니다. 새 로그인까지 비교하려면 같은 점주의 새 토큰을 `PUBLIC_A_FRESH_ACCESS_TOKEN`에 지정합니다.

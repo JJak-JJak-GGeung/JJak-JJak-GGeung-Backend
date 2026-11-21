@@ -99,17 +99,24 @@ def calculate(state):
     for receipt in state["receipts"]:
         source = by_line.get(receipt["source_line_id"])
         delivery = by_line.get(receipt["doc_line_id"])
-        if not source or not delivery:
+        evidence_text = receipt.get("evidence_text")
+        if not delivery or (not source and not evidence_text):
             warnings.add("MISSING_RECEIPT_SOURCE")
             continue
+        receipt_evidence = [evidence(documents[source["document_id"]], source, "RECEIPT")] if source else []
+        if evidence_text:
+            receipt_evidence.append({
+                "kind": "RECEIPT", "document_id": None, "line_id": None,
+                "receipt_id": receipt["id"], "source_location": None, "evidence_text": evidence_text,
+            })
         receipts.append({
-            **scope, "receipt_id": receipt["id"], "source_line_id": source["id"],
+            **scope, "receipt_id": receipt["id"], "source_line_id": source["id"] if source else None,
             "target_delivery_line_id": receipt["doc_line_id"],
             "delivery_no": delivery["delivery_no"], "received_qty": (
                 None if receipt["received_qty"] is None else str(receipt["received_qty"])),
             "unit": receipt["unit"], "confirmed_by": receipt["confirmed_by"] or receipt["actor_label"],
             "confirmed_at": receipt["confirmed_at"], "supersedes_receipt_id": receipt["supersedes_id"],
-            "evidence_refs": [evidence(documents[source["document_id"]], source, "RECEIPT")],
+            "evidence_refs": receipt_evidence,
         })
     latest_receipts = [r for r in receipts if not any(n["supersedes_receipt_id"] == r["receipt_id"] for n in receipts)]
 
