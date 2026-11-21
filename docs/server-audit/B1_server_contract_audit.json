@@ -1,0 +1,3009 @@
+{
+  "server_source_commit": "5abcde45f3fa31a4b62e974a32f45ceccc63b936",
+  "mode": "offline synthetic DB-state replay",
+  "network_or_db_called": false,
+  "server_files_modified": false,
+  "patch_applied_to_server": false,
+  "cases": {
+    "confirmed_mismatch": {
+      "input": {
+        "period": {
+          "id": "00000000-0000-0000-0000-000000000001",
+          "store_id": "00000000-0000-0000-0000-000000000002",
+          "supplier_id": "00000000-0000-0000-0000-000000000003",
+          "period_start": "2026-11-09",
+          "period_end": "2026-11-15",
+          "input_revision": 8
+        },
+        "documents": [
+          {
+            "id": "delivery",
+            "doc_type": "DELIVERY",
+            "doc_no": "delivery-number",
+            "supplier_id": "00000000-0000-0000-0000-000000000003",
+            "source_mode": "FILE",
+            "extraction_status": "COMPLETED",
+            "link_status": "LINKED",
+            "metadata": {
+              "doc_type_read": "DELIVERY"
+            },
+            "period_start": "2026-11-09",
+            "period_end": "2026-11-15",
+            "replaces_doc_no": null,
+            "agreement_text": null,
+            "agreement_source_location": null
+          },
+          {
+            "id": "invoice",
+            "doc_type": "INVOICE",
+            "doc_no": "invoice-number",
+            "supplier_id": "00000000-0000-0000-0000-000000000003",
+            "source_mode": "FILE",
+            "extraction_status": "COMPLETED",
+            "link_status": "LINKED",
+            "metadata": {
+              "doc_type_read": "INVOICE"
+            },
+            "period_start": "2026-11-09",
+            "period_end": "2026-11-15",
+            "replaces_doc_no": null,
+            "agreement_text": null,
+            "agreement_source_location": null
+          },
+          {
+            "id": "receipt",
+            "doc_type": "RECEIPT",
+            "doc_no": "receipt-number",
+            "supplier_id": "00000000-0000-0000-0000-000000000003",
+            "source_mode": "FILE",
+            "extraction_status": "COMPLETED",
+            "link_status": "LINKED",
+            "metadata": {
+              "doc_type_read": "RECEIPT"
+            },
+            "period_start": "2026-11-09",
+            "period_end": "2026-11-15",
+            "replaces_doc_no": null,
+            "agreement_text": null,
+            "agreement_source_location": null
+          }
+        ],
+        "lines": [
+          {
+            "id": "delivery-line",
+            "document_id": "delivery",
+            "delivery_no": "delivery-number",
+            "delivery_date": "2026-11-13",
+            "raw_name": "eel",
+            "raw_spec": "trimmed",
+            "raw_unit": "kg",
+            "qty_read": "40",
+            "unit_price_read": "20000",
+            "amount_read": 800000,
+            "source_location": {
+              "page": 1,
+              "row": 1
+            }
+          },
+          {
+            "id": "invoice-line",
+            "document_id": "invoice",
+            "delivery_no": "delivery-number",
+            "delivery_date": "2026-11-13",
+            "raw_name": "eel",
+            "raw_spec": "trimmed",
+            "raw_unit": "kg",
+            "qty_read": "40",
+            "unit_price_read": "20000",
+            "amount_read": 800000,
+            "source_location": {
+              "page": 1,
+              "row": 1
+            }
+          },
+          {
+            "id": "receipt-line",
+            "document_id": "receipt",
+            "delivery_no": "delivery-number",
+            "delivery_date": "2026-11-13",
+            "raw_name": "eel",
+            "raw_spec": "trimmed",
+            "raw_unit": "kg",
+            "qty_read": "36",
+            "unit_price_read": "20000",
+            "amount_read": 800000,
+            "source_location": {
+              "page": 1,
+              "row": 1
+            }
+          }
+        ],
+        "receipts": [
+          {
+            "id": "confirmed-receipt",
+            "source_line_id": "receipt-line",
+            "doc_line_id": "delivery-line",
+            "received_qty": "36",
+            "unit": "kg",
+            "confirmed_by": "local-owner",
+            "actor_label": "local-owner",
+            "confirmed_at": "2026-11-21T11:00:00+09:00",
+            "supersedes_id": null
+          }
+        ],
+        "confirmations": [],
+        "memos": [],
+        "approvals": []
+      },
+      "current_server": {
+        "items": [
+          {
+            "store_id": "00000000-0000-0000-0000-000000000002",
+            "supplier_id": "00000000-0000-0000-0000-000000000003",
+            "period_id": "00000000-0000-0000-0000-000000000001",
+            "line_id": "delivery-line",
+            "transaction_id": "16c82781-fc37-5a17-bda5-2d4802b9c930",
+            "delivery_no": "delivery-number",
+            "delivery_date": "2026-11-13",
+            "item": "eel",
+            "spec": "trimmed",
+            "unit": "kg",
+            "declared_qty": "40",
+            "evidence_refs": [
+              {
+                "document_id": "delivery",
+                "line_id": "delivery-line",
+                "kind": "DELIVERY",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              },
+              {
+                "document_id": "receipt",
+                "line_id": "receipt-line",
+                "kind": "RECEIPT",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              },
+              {
+                "document_id": "invoice",
+                "line_id": "invoice-line",
+                "kind": "INVOICE",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              }
+            ],
+            "billed_qty": "40",
+            "unit_price": "20000",
+            "billed_amount": 800000,
+            "received_qty": "36",
+            "units_comparable": true,
+            "receipt_ids": [
+              "confirmed-receipt"
+            ],
+            "delta_qty": "4",
+            "check_amount": 80000,
+            "match_result": "MISMATCH",
+            "can_approve": false,
+            "memos": [],
+            "fact_status": "OWNER_CONFIRMED",
+            "work_status": "WAITING_REPLY",
+            "blockers": [
+              "QTY_MISMATCH"
+            ],
+            "receipts": [
+              {
+                "store_id": "00000000-0000-0000-0000-000000000002",
+                "supplier_id": "00000000-0000-0000-0000-000000000003",
+                "period_id": "00000000-0000-0000-0000-000000000001",
+                "receipt_id": "confirmed-receipt",
+                "source_line_id": "receipt-line",
+                "target_delivery_line_id": "delivery-line",
+                "delivery_no": "delivery-number",
+                "received_qty": "36",
+                "unit": "kg",
+                "confirmed_by": "local-owner",
+                "confirmed_at": "2026-11-21T11:00:00+09:00",
+                "supersedes_receipt_id": null,
+                "evidence_refs": [
+                  {
+                    "document_id": "receipt",
+                    "line_id": "receipt-line",
+                    "kind": "RECEIPT",
+                    "source_location": {
+                      "page": 1,
+                      "row": 1
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "summary": {
+          "declared_qty": "40",
+          "billed_qty": "40",
+          "received_qty": "36",
+          "unit": "kg",
+          "delta_qty": "4",
+          "check_amount": 80000,
+          "billed_amount": 800000
+        },
+        "confirmation_scope": "RECEIPTS_INCLUDED",
+        "match_result": "MISMATCH",
+        "can_approve": false,
+        "approvable_amount": null,
+        "approved_amount": null,
+        "store_id": "00000000-0000-0000-0000-000000000002",
+        "supplier_id": "00000000-0000-0000-0000-000000000003",
+        "period_id": "00000000-0000-0000-0000-000000000001",
+        "receipt_links": [
+          {
+            "receipt": {
+              "store_id": "00000000-0000-0000-0000-000000000002",
+              "supplier_id": "00000000-0000-0000-0000-000000000003",
+              "period_id": "00000000-0000-0000-0000-000000000001",
+              "receipt_id": "confirmed-receipt",
+              "source_line_id": "receipt-line",
+              "target_delivery_line_id": "delivery-line",
+              "delivery_no": "delivery-number",
+              "received_qty": "36",
+              "unit": "kg",
+              "confirmed_by": "local-owner",
+              "confirmed_at": "2026-11-21T11:00:00+09:00",
+              "supersedes_receipt_id": null,
+              "evidence_refs": [
+                {
+                  "document_id": "receipt",
+                  "line_id": "receipt-line",
+                  "kind": "RECEIPT",
+                  "source_location": {
+                    "page": 1,
+                    "row": 1
+                  }
+                }
+              ]
+            },
+            "receipt_id": "confirmed-receipt",
+            "target_delivery_line_id": "delivery-line",
+            "candidates": [
+              {
+                "line_id": "delivery-line",
+                "delivery_no": "delivery-number",
+                "delivery_date": "2026-11-13",
+                "item": "eel",
+                "spec": "trimmed",
+                "unit": "kg",
+                "evidence_refs": [
+                  {
+                    "document_id": "delivery",
+                    "line_id": "delivery-line",
+                    "kind": "DELIVERY",
+                    "source_location": {
+                      "page": 1,
+                      "row": 1
+                    }
+                  },
+                  {
+                    "document_id": "invoice",
+                    "line_id": "invoice-line",
+                    "kind": "INVOICE",
+                    "source_location": {
+                      "page": 1,
+                      "row": 1
+                    }
+                  }
+                ]
+              }
+            ],
+            "status": "LINKED",
+            "reason": null
+          }
+        ],
+        "blockers": [
+          "QTY_MISMATCH"
+        ],
+        "input_revision": 8,
+        "period_start": "2026-11-09",
+        "period_end": "2026-11-15",
+        "fact_status": "OWNER_CONFIRMED",
+        "work_status": "WAITING_REPLY",
+        "payment_status": "UNCONFIRMED",
+        "memos": [],
+        "invoice_history": [],
+        "active_invoice_ids": [
+          "invoice"
+        ],
+        "pending_invoices": [],
+        "excluded_invoices": [],
+        "approval_history": [],
+        "is_example": false
+      },
+      "proposed_patch": {
+        "items": [
+          {
+            "store_id": "00000000-0000-0000-0000-000000000002",
+            "supplier_id": "00000000-0000-0000-0000-000000000003",
+            "period_id": "00000000-0000-0000-0000-000000000001",
+            "line_id": "delivery-line",
+            "transaction_id": "16c82781-fc37-5a17-bda5-2d4802b9c930",
+            "delivery_no": "delivery-number",
+            "delivery_date": "2026-11-13",
+            "item": "eel",
+            "spec": "trimmed",
+            "unit": "kg",
+            "declared_qty": "40",
+            "evidence_refs": [
+              {
+                "document_id": "delivery",
+                "line_id": "delivery-line",
+                "kind": "DELIVERY",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              },
+              {
+                "document_id": "receipt",
+                "line_id": "receipt-line",
+                "kind": "RECEIPT",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              },
+              {
+                "document_id": "invoice",
+                "line_id": "invoice-line",
+                "kind": "INVOICE",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              }
+            ],
+            "billed_qty": "40",
+            "unit_price": "20000",
+            "billed_amount": 800000,
+            "received_qty": "36",
+            "units_comparable": true,
+            "receipt_ids": [
+              "confirmed-receipt"
+            ],
+            "delta_qty": "4",
+            "check_amount": 80000,
+            "match_result": "MISMATCH",
+            "can_approve": false,
+            "memos": [],
+            "fact_status": "OWNER_CONFIRMED",
+            "work_status": "WAITING_REPLY",
+            "blockers": [
+              "QTY_MISMATCH"
+            ],
+            "receipts": [
+              {
+                "store_id": "00000000-0000-0000-0000-000000000002",
+                "supplier_id": "00000000-0000-0000-0000-000000000003",
+                "period_id": "00000000-0000-0000-0000-000000000001",
+                "receipt_id": "confirmed-receipt",
+                "source_line_id": "receipt-line",
+                "target_delivery_line_id": "delivery-line",
+                "delivery_no": "delivery-number",
+                "received_qty": "36",
+                "unit": "kg",
+                "confirmed_by": "local-owner",
+                "confirmed_at": "2026-11-21T11:00:00+09:00",
+                "supersedes_receipt_id": null,
+                "evidence_refs": [
+                  {
+                    "document_id": "receipt",
+                    "line_id": "receipt-line",
+                    "kind": "RECEIPT",
+                    "source_location": {
+                      "page": 1,
+                      "row": 1
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "summary": {
+          "declared_qty": "40",
+          "billed_qty": "40",
+          "received_qty": "36",
+          "unit": "kg",
+          "delta_qty": "4",
+          "check_amount": 80000,
+          "billed_amount": 800000
+        },
+        "confirmation_scope": "RECEIPTS_INCLUDED",
+        "match_result": "MISMATCH",
+        "can_approve": false,
+        "approvable_amount": null,
+        "approved_amount": null,
+        "store_id": "00000000-0000-0000-0000-000000000002",
+        "supplier_id": "00000000-0000-0000-0000-000000000003",
+        "period_id": "00000000-0000-0000-0000-000000000001",
+        "receipt_links": [
+          {
+            "receipt": {
+              "store_id": "00000000-0000-0000-0000-000000000002",
+              "supplier_id": "00000000-0000-0000-0000-000000000003",
+              "period_id": "00000000-0000-0000-0000-000000000001",
+              "receipt_id": "confirmed-receipt",
+              "source_line_id": "receipt-line",
+              "target_delivery_line_id": "delivery-line",
+              "delivery_no": "delivery-number",
+              "received_qty": "36",
+              "unit": "kg",
+              "confirmed_by": "local-owner",
+              "confirmed_at": "2026-11-21T11:00:00+09:00",
+              "supersedes_receipt_id": null,
+              "evidence_refs": [
+                {
+                  "document_id": "receipt",
+                  "line_id": "receipt-line",
+                  "kind": "RECEIPT",
+                  "source_location": {
+                    "page": 1,
+                    "row": 1
+                  }
+                }
+              ]
+            },
+            "receipt_id": "confirmed-receipt",
+            "target_delivery_line_id": "delivery-line",
+            "candidates": [
+              {
+                "line_id": "delivery-line",
+                "delivery_no": "delivery-number",
+                "delivery_date": "2026-11-13",
+                "item": "eel",
+                "spec": "trimmed",
+                "unit": "kg",
+                "evidence_refs": [
+                  {
+                    "document_id": "delivery",
+                    "line_id": "delivery-line",
+                    "kind": "DELIVERY",
+                    "source_location": {
+                      "page": 1,
+                      "row": 1
+                    }
+                  },
+                  {
+                    "document_id": "invoice",
+                    "line_id": "invoice-line",
+                    "kind": "INVOICE",
+                    "source_location": {
+                      "page": 1,
+                      "row": 1
+                    }
+                  }
+                ]
+              }
+            ],
+            "status": "LINKED",
+            "reason": null
+          }
+        ],
+        "blockers": [
+          "QTY_MISMATCH"
+        ],
+        "input_revision": 8,
+        "period_start": "2026-11-09",
+        "period_end": "2026-11-15",
+        "fact_status": "OWNER_CONFIRMED",
+        "work_status": "WAITING_REPLY",
+        "payment_status": "UNCONFIRMED",
+        "memos": [],
+        "invoice_history": [],
+        "active_invoice_ids": [
+          "invoice"
+        ],
+        "pending_invoices": [],
+        "excluded_invoices": [],
+        "approval_history": [],
+        "is_example": false
+      }
+    },
+    "matched": {
+      "input": {
+        "period": {
+          "id": "00000000-0000-0000-0000-000000000001",
+          "store_id": "00000000-0000-0000-0000-000000000002",
+          "supplier_id": "00000000-0000-0000-0000-000000000003",
+          "period_start": "2026-11-09",
+          "period_end": "2026-11-15",
+          "input_revision": 8
+        },
+        "documents": [
+          {
+            "id": "delivery",
+            "doc_type": "DELIVERY",
+            "doc_no": "delivery-number",
+            "supplier_id": "00000000-0000-0000-0000-000000000003",
+            "source_mode": "FILE",
+            "extraction_status": "COMPLETED",
+            "link_status": "LINKED",
+            "metadata": {
+              "doc_type_read": "DELIVERY"
+            },
+            "period_start": "2026-11-09",
+            "period_end": "2026-11-15",
+            "replaces_doc_no": null,
+            "agreement_text": null,
+            "agreement_source_location": null
+          },
+          {
+            "id": "invoice",
+            "doc_type": "INVOICE",
+            "doc_no": "invoice-number",
+            "supplier_id": "00000000-0000-0000-0000-000000000003",
+            "source_mode": "FILE",
+            "extraction_status": "COMPLETED",
+            "link_status": "LINKED",
+            "metadata": {
+              "doc_type_read": "INVOICE"
+            },
+            "period_start": "2026-11-09",
+            "period_end": "2026-11-15",
+            "replaces_doc_no": null,
+            "agreement_text": null,
+            "agreement_source_location": null
+          },
+          {
+            "id": "receipt",
+            "doc_type": "RECEIPT",
+            "doc_no": "receipt-number",
+            "supplier_id": "00000000-0000-0000-0000-000000000003",
+            "source_mode": "FILE",
+            "extraction_status": "COMPLETED",
+            "link_status": "LINKED",
+            "metadata": {
+              "doc_type_read": "RECEIPT"
+            },
+            "period_start": "2026-11-09",
+            "period_end": "2026-11-15",
+            "replaces_doc_no": null,
+            "agreement_text": null,
+            "agreement_source_location": null
+          }
+        ],
+        "lines": [
+          {
+            "id": "delivery-line",
+            "document_id": "delivery",
+            "delivery_no": "delivery-number",
+            "delivery_date": "2026-11-13",
+            "raw_name": "eel",
+            "raw_spec": "trimmed",
+            "raw_unit": "kg",
+            "qty_read": "40",
+            "unit_price_read": "20000",
+            "amount_read": 800000,
+            "source_location": {
+              "page": 1,
+              "row": 1
+            }
+          },
+          {
+            "id": "invoice-line",
+            "document_id": "invoice",
+            "delivery_no": "delivery-number",
+            "delivery_date": "2026-11-13",
+            "raw_name": "eel",
+            "raw_spec": "trimmed",
+            "raw_unit": "kg",
+            "qty_read": "40",
+            "unit_price_read": "20000",
+            "amount_read": 800000,
+            "source_location": {
+              "page": 1,
+              "row": 1
+            }
+          },
+          {
+            "id": "receipt-line",
+            "document_id": "receipt",
+            "delivery_no": "delivery-number",
+            "delivery_date": "2026-11-13",
+            "raw_name": "eel",
+            "raw_spec": "trimmed",
+            "raw_unit": "kg",
+            "qty_read": "40",
+            "unit_price_read": "20000",
+            "amount_read": 800000,
+            "source_location": {
+              "page": 1,
+              "row": 1
+            }
+          }
+        ],
+        "receipts": [
+          {
+            "id": "confirmed-receipt",
+            "source_line_id": "receipt-line",
+            "doc_line_id": "delivery-line",
+            "received_qty": "40",
+            "unit": "kg",
+            "confirmed_by": "local-owner",
+            "actor_label": "local-owner",
+            "confirmed_at": "2026-11-21T11:00:00+09:00",
+            "supersedes_id": null
+          }
+        ],
+        "confirmations": [],
+        "memos": [],
+        "approvals": []
+      },
+      "current_server": {
+        "items": [
+          {
+            "store_id": "00000000-0000-0000-0000-000000000002",
+            "supplier_id": "00000000-0000-0000-0000-000000000003",
+            "period_id": "00000000-0000-0000-0000-000000000001",
+            "line_id": "delivery-line",
+            "transaction_id": "16c82781-fc37-5a17-bda5-2d4802b9c930",
+            "delivery_no": "delivery-number",
+            "delivery_date": "2026-11-13",
+            "item": "eel",
+            "spec": "trimmed",
+            "unit": "kg",
+            "declared_qty": "40",
+            "evidence_refs": [
+              {
+                "document_id": "delivery",
+                "line_id": "delivery-line",
+                "kind": "DELIVERY",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              },
+              {
+                "document_id": "receipt",
+                "line_id": "receipt-line",
+                "kind": "RECEIPT",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              },
+              {
+                "document_id": "invoice",
+                "line_id": "invoice-line",
+                "kind": "INVOICE",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              }
+            ],
+            "billed_qty": "40",
+            "unit_price": "20000",
+            "billed_amount": 800000,
+            "received_qty": "40",
+            "units_comparable": true,
+            "receipt_ids": [
+              "confirmed-receipt"
+            ],
+            "delta_qty": "0",
+            "check_amount": 0,
+            "match_result": "MATCHED",
+            "can_approve": false,
+            "memos": [],
+            "fact_status": "OWNER_CONFIRMED",
+            "work_status": "OPEN",
+            "blockers": [],
+            "receipts": [
+              {
+                "store_id": "00000000-0000-0000-0000-000000000002",
+                "supplier_id": "00000000-0000-0000-0000-000000000003",
+                "period_id": "00000000-0000-0000-0000-000000000001",
+                "receipt_id": "confirmed-receipt",
+                "source_line_id": "receipt-line",
+                "target_delivery_line_id": "delivery-line",
+                "delivery_no": "delivery-number",
+                "received_qty": "40",
+                "unit": "kg",
+                "confirmed_by": "local-owner",
+                "confirmed_at": "2026-11-21T11:00:00+09:00",
+                "supersedes_receipt_id": null,
+                "evidence_refs": [
+                  {
+                    "document_id": "receipt",
+                    "line_id": "receipt-line",
+                    "kind": "RECEIPT",
+                    "source_location": {
+                      "page": 1,
+                      "row": 1
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "summary": {
+          "declared_qty": "40",
+          "billed_qty": "40",
+          "received_qty": "40",
+          "unit": "kg",
+          "delta_qty": "0",
+          "check_amount": 0,
+          "billed_amount": 800000
+        },
+        "confirmation_scope": "RECEIPTS_INCLUDED",
+        "match_result": "MATCHED",
+        "can_approve": true,
+        "approvable_amount": 800000,
+        "approved_amount": null,
+        "store_id": "00000000-0000-0000-0000-000000000002",
+        "supplier_id": "00000000-0000-0000-0000-000000000003",
+        "period_id": "00000000-0000-0000-0000-000000000001",
+        "receipt_links": [
+          {
+            "receipt": {
+              "store_id": "00000000-0000-0000-0000-000000000002",
+              "supplier_id": "00000000-0000-0000-0000-000000000003",
+              "period_id": "00000000-0000-0000-0000-000000000001",
+              "receipt_id": "confirmed-receipt",
+              "source_line_id": "receipt-line",
+              "target_delivery_line_id": "delivery-line",
+              "delivery_no": "delivery-number",
+              "received_qty": "40",
+              "unit": "kg",
+              "confirmed_by": "local-owner",
+              "confirmed_at": "2026-11-21T11:00:00+09:00",
+              "supersedes_receipt_id": null,
+              "evidence_refs": [
+                {
+                  "document_id": "receipt",
+                  "line_id": "receipt-line",
+                  "kind": "RECEIPT",
+                  "source_location": {
+                    "page": 1,
+                    "row": 1
+                  }
+                }
+              ]
+            },
+            "receipt_id": "confirmed-receipt",
+            "target_delivery_line_id": "delivery-line",
+            "candidates": [
+              {
+                "line_id": "delivery-line",
+                "delivery_no": "delivery-number",
+                "delivery_date": "2026-11-13",
+                "item": "eel",
+                "spec": "trimmed",
+                "unit": "kg",
+                "evidence_refs": [
+                  {
+                    "document_id": "delivery",
+                    "line_id": "delivery-line",
+                    "kind": "DELIVERY",
+                    "source_location": {
+                      "page": 1,
+                      "row": 1
+                    }
+                  },
+                  {
+                    "document_id": "invoice",
+                    "line_id": "invoice-line",
+                    "kind": "INVOICE",
+                    "source_location": {
+                      "page": 1,
+                      "row": 1
+                    }
+                  }
+                ]
+              }
+            ],
+            "status": "LINKED",
+            "reason": null
+          }
+        ],
+        "blockers": [],
+        "input_revision": 8,
+        "period_start": "2026-11-09",
+        "period_end": "2026-11-15",
+        "fact_status": "OWNER_CONFIRMED",
+        "work_status": "OPEN",
+        "payment_status": "UNCONFIRMED",
+        "memos": [],
+        "invoice_history": [],
+        "active_invoice_ids": [
+          "invoice"
+        ],
+        "pending_invoices": [],
+        "excluded_invoices": [],
+        "approval_history": [],
+        "is_example": false
+      },
+      "proposed_patch": {
+        "items": [
+          {
+            "store_id": "00000000-0000-0000-0000-000000000002",
+            "supplier_id": "00000000-0000-0000-0000-000000000003",
+            "period_id": "00000000-0000-0000-0000-000000000001",
+            "line_id": "delivery-line",
+            "transaction_id": "16c82781-fc37-5a17-bda5-2d4802b9c930",
+            "delivery_no": "delivery-number",
+            "delivery_date": "2026-11-13",
+            "item": "eel",
+            "spec": "trimmed",
+            "unit": "kg",
+            "declared_qty": "40",
+            "evidence_refs": [
+              {
+                "document_id": "delivery",
+                "line_id": "delivery-line",
+                "kind": "DELIVERY",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              },
+              {
+                "document_id": "receipt",
+                "line_id": "receipt-line",
+                "kind": "RECEIPT",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              },
+              {
+                "document_id": "invoice",
+                "line_id": "invoice-line",
+                "kind": "INVOICE",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              }
+            ],
+            "billed_qty": "40",
+            "unit_price": "20000",
+            "billed_amount": 800000,
+            "received_qty": "40",
+            "units_comparable": true,
+            "receipt_ids": [
+              "confirmed-receipt"
+            ],
+            "delta_qty": "0",
+            "check_amount": 0,
+            "match_result": "MATCHED",
+            "can_approve": false,
+            "memos": [],
+            "fact_status": "OWNER_CONFIRMED",
+            "work_status": "OPEN",
+            "blockers": [],
+            "receipts": [
+              {
+                "store_id": "00000000-0000-0000-0000-000000000002",
+                "supplier_id": "00000000-0000-0000-0000-000000000003",
+                "period_id": "00000000-0000-0000-0000-000000000001",
+                "receipt_id": "confirmed-receipt",
+                "source_line_id": "receipt-line",
+                "target_delivery_line_id": "delivery-line",
+                "delivery_no": "delivery-number",
+                "received_qty": "40",
+                "unit": "kg",
+                "confirmed_by": "local-owner",
+                "confirmed_at": "2026-11-21T11:00:00+09:00",
+                "supersedes_receipt_id": null,
+                "evidence_refs": [
+                  {
+                    "document_id": "receipt",
+                    "line_id": "receipt-line",
+                    "kind": "RECEIPT",
+                    "source_location": {
+                      "page": 1,
+                      "row": 1
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "summary": {
+          "declared_qty": "40",
+          "billed_qty": "40",
+          "received_qty": "40",
+          "unit": "kg",
+          "delta_qty": "0",
+          "check_amount": 0,
+          "billed_amount": 800000
+        },
+        "confirmation_scope": "RECEIPTS_INCLUDED",
+        "match_result": "MATCHED",
+        "can_approve": true,
+        "approvable_amount": 800000,
+        "approved_amount": null,
+        "store_id": "00000000-0000-0000-0000-000000000002",
+        "supplier_id": "00000000-0000-0000-0000-000000000003",
+        "period_id": "00000000-0000-0000-0000-000000000001",
+        "receipt_links": [
+          {
+            "receipt": {
+              "store_id": "00000000-0000-0000-0000-000000000002",
+              "supplier_id": "00000000-0000-0000-0000-000000000003",
+              "period_id": "00000000-0000-0000-0000-000000000001",
+              "receipt_id": "confirmed-receipt",
+              "source_line_id": "receipt-line",
+              "target_delivery_line_id": "delivery-line",
+              "delivery_no": "delivery-number",
+              "received_qty": "40",
+              "unit": "kg",
+              "confirmed_by": "local-owner",
+              "confirmed_at": "2026-11-21T11:00:00+09:00",
+              "supersedes_receipt_id": null,
+              "evidence_refs": [
+                {
+                  "document_id": "receipt",
+                  "line_id": "receipt-line",
+                  "kind": "RECEIPT",
+                  "source_location": {
+                    "page": 1,
+                    "row": 1
+                  }
+                }
+              ]
+            },
+            "receipt_id": "confirmed-receipt",
+            "target_delivery_line_id": "delivery-line",
+            "candidates": [
+              {
+                "line_id": "delivery-line",
+                "delivery_no": "delivery-number",
+                "delivery_date": "2026-11-13",
+                "item": "eel",
+                "spec": "trimmed",
+                "unit": "kg",
+                "evidence_refs": [
+                  {
+                    "document_id": "delivery",
+                    "line_id": "delivery-line",
+                    "kind": "DELIVERY",
+                    "source_location": {
+                      "page": 1,
+                      "row": 1
+                    }
+                  },
+                  {
+                    "document_id": "invoice",
+                    "line_id": "invoice-line",
+                    "kind": "INVOICE",
+                    "source_location": {
+                      "page": 1,
+                      "row": 1
+                    }
+                  }
+                ]
+              }
+            ],
+            "status": "LINKED",
+            "reason": null
+          }
+        ],
+        "blockers": [],
+        "input_revision": 8,
+        "period_start": "2026-11-09",
+        "period_end": "2026-11-15",
+        "fact_status": "OWNER_CONFIRMED",
+        "work_status": "OPEN",
+        "payment_status": "UNCONFIRMED",
+        "memos": [],
+        "invoice_history": [],
+        "active_invoice_ids": [
+          "invoice"
+        ],
+        "pending_invoices": [],
+        "excluded_invoices": [],
+        "approval_history": [],
+        "is_example": false
+      }
+    },
+    "no_number": {
+      "input": {
+        "period": {
+          "id": "00000000-0000-0000-0000-000000000001",
+          "store_id": "00000000-0000-0000-0000-000000000002",
+          "supplier_id": "00000000-0000-0000-0000-000000000003",
+          "period_start": "2026-11-09",
+          "period_end": "2026-11-15",
+          "input_revision": 8
+        },
+        "documents": [
+          {
+            "id": "delivery",
+            "doc_type": "DELIVERY",
+            "doc_no": "delivery-number",
+            "supplier_id": "00000000-0000-0000-0000-000000000003",
+            "source_mode": "FILE",
+            "extraction_status": "COMPLETED",
+            "link_status": "LINKED",
+            "metadata": {
+              "doc_type_read": "DELIVERY"
+            },
+            "period_start": "2026-11-09",
+            "period_end": "2026-11-15",
+            "replaces_doc_no": null,
+            "agreement_text": null,
+            "agreement_source_location": null
+          },
+          {
+            "id": "invoice",
+            "doc_type": "INVOICE",
+            "doc_no": "invoice-number",
+            "supplier_id": "00000000-0000-0000-0000-000000000003",
+            "source_mode": "FILE",
+            "extraction_status": "COMPLETED",
+            "link_status": "LINKED",
+            "metadata": {
+              "doc_type_read": "INVOICE"
+            },
+            "period_start": "2026-11-09",
+            "period_end": "2026-11-15",
+            "replaces_doc_no": null,
+            "agreement_text": null,
+            "agreement_source_location": null
+          },
+          {
+            "id": "receipt",
+            "doc_type": "RECEIPT",
+            "doc_no": "receipt-number",
+            "supplier_id": "00000000-0000-0000-0000-000000000003",
+            "source_mode": "FILE",
+            "extraction_status": "COMPLETED",
+            "link_status": "LINKED",
+            "metadata": {
+              "doc_type_read": "RECEIPT"
+            },
+            "period_start": "2026-11-09",
+            "period_end": "2026-11-15",
+            "replaces_doc_no": null,
+            "agreement_text": null,
+            "agreement_source_location": null
+          }
+        ],
+        "lines": [
+          {
+            "id": "delivery-line",
+            "document_id": "delivery",
+            "delivery_no": null,
+            "delivery_date": "2026-11-13",
+            "raw_name": "eel",
+            "raw_spec": "trimmed",
+            "raw_unit": "kg",
+            "qty_read": "40",
+            "unit_price_read": "20000",
+            "amount_read": 800000,
+            "source_location": {
+              "page": 1,
+              "row": 1
+            }
+          },
+          {
+            "id": "invoice-line",
+            "document_id": "invoice",
+            "delivery_no": null,
+            "delivery_date": "2026-11-13",
+            "raw_name": "eel",
+            "raw_spec": "trimmed",
+            "raw_unit": "kg",
+            "qty_read": "40",
+            "unit_price_read": "20000",
+            "amount_read": 800000,
+            "source_location": {
+              "page": 1,
+              "row": 1
+            }
+          },
+          {
+            "id": "receipt-line",
+            "document_id": "receipt",
+            "delivery_no": null,
+            "delivery_date": "2026-11-13",
+            "raw_name": "eel",
+            "raw_spec": "trimmed",
+            "raw_unit": "kg",
+            "qty_read": "40",
+            "unit_price_read": "20000",
+            "amount_read": 800000,
+            "source_location": {
+              "page": 1,
+              "row": 1
+            }
+          }
+        ],
+        "receipts": [
+          {
+            "id": "confirmed-receipt",
+            "source_line_id": "receipt-line",
+            "doc_line_id": "delivery-line",
+            "received_qty": "40",
+            "unit": "kg",
+            "confirmed_by": "local-owner",
+            "actor_label": "local-owner",
+            "confirmed_at": "2026-11-21T11:00:00+09:00",
+            "supersedes_id": null
+          }
+        ],
+        "confirmations": [],
+        "memos": [],
+        "approvals": []
+      },
+      "current_server": {
+        "items": [
+          {
+            "store_id": "00000000-0000-0000-0000-000000000002",
+            "supplier_id": "00000000-0000-0000-0000-000000000003",
+            "period_id": "00000000-0000-0000-0000-000000000001",
+            "line_id": "delivery-line",
+            "transaction_id": "16c82781-fc37-5a17-bda5-2d4802b9c930",
+            "delivery_no": null,
+            "delivery_date": "2026-11-13",
+            "item": "eel",
+            "spec": "trimmed",
+            "unit": "kg",
+            "declared_qty": "40",
+            "evidence_refs": [
+              {
+                "document_id": "delivery",
+                "line_id": "delivery-line",
+                "kind": "DELIVERY",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              },
+              {
+                "document_id": "receipt",
+                "line_id": "receipt-line",
+                "kind": "RECEIPT",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              }
+            ],
+            "billed_qty": null,
+            "unit_price": null,
+            "billed_amount": null,
+            "received_qty": "40",
+            "units_comparable": true,
+            "receipt_ids": [
+              "confirmed-receipt"
+            ],
+            "delta_qty": null,
+            "check_amount": null,
+            "match_result": "MISSING_DATA",
+            "can_approve": false,
+            "memos": [],
+            "fact_status": "OWNER_CONFIRMED",
+            "work_status": "NEEDS_INFO",
+            "blockers": [
+              "AMBIGUOUS_BILLING_LINE",
+              "MISSING_BILLED_AMOUNT",
+              "MISSING_BILLING_LINE",
+              "MISSING_DOCUMENT_QUANTITY",
+              "MISSING_SOURCE_EVIDENCE",
+              "UNCONFIRMED_AMOUNT"
+            ],
+            "receipts": [
+              {
+                "store_id": "00000000-0000-0000-0000-000000000002",
+                "supplier_id": "00000000-0000-0000-0000-000000000003",
+                "period_id": "00000000-0000-0000-0000-000000000001",
+                "receipt_id": "confirmed-receipt",
+                "source_line_id": "receipt-line",
+                "target_delivery_line_id": "delivery-line",
+                "delivery_no": null,
+                "received_qty": "40",
+                "unit": "kg",
+                "confirmed_by": "local-owner",
+                "confirmed_at": "2026-11-21T11:00:00+09:00",
+                "supersedes_receipt_id": null,
+                "evidence_refs": [
+                  {
+                    "document_id": "receipt",
+                    "line_id": "receipt-line",
+                    "kind": "RECEIPT",
+                    "source_location": {
+                      "page": 1,
+                      "row": 1
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "summary": {
+          "declared_qty": "40",
+          "billed_qty": null,
+          "received_qty": null,
+          "unit": "kg",
+          "delta_qty": null,
+          "check_amount": null,
+          "billed_amount": null
+        },
+        "confirmation_scope": "RECEIPTS_INCLUDED",
+        "match_result": "MISSING_DATA",
+        "can_approve": false,
+        "approvable_amount": null,
+        "approved_amount": null,
+        "store_id": "00000000-0000-0000-0000-000000000002",
+        "supplier_id": "00000000-0000-0000-0000-000000000003",
+        "period_id": "00000000-0000-0000-0000-000000000001",
+        "receipt_links": [
+          {
+            "receipt": {
+              "store_id": "00000000-0000-0000-0000-000000000002",
+              "supplier_id": "00000000-0000-0000-0000-000000000003",
+              "period_id": "00000000-0000-0000-0000-000000000001",
+              "receipt_id": "confirmed-receipt",
+              "source_line_id": "receipt-line",
+              "target_delivery_line_id": "delivery-line",
+              "delivery_no": null,
+              "received_qty": "40",
+              "unit": "kg",
+              "confirmed_by": "local-owner",
+              "confirmed_at": "2026-11-21T11:00:00+09:00",
+              "supersedes_receipt_id": null,
+              "evidence_refs": [
+                {
+                  "document_id": "receipt",
+                  "line_id": "receipt-line",
+                  "kind": "RECEIPT",
+                  "source_location": {
+                    "page": 1,
+                    "row": 1
+                  }
+                }
+              ]
+            },
+            "receipt_id": "confirmed-receipt",
+            "target_delivery_line_id": "delivery-line",
+            "candidates": [
+              {
+                "line_id": "delivery-line",
+                "delivery_no": null,
+                "delivery_date": "2026-11-13",
+                "item": "eel",
+                "spec": "trimmed",
+                "unit": "kg",
+                "evidence_refs": [
+                  {
+                    "document_id": "delivery",
+                    "line_id": "delivery-line",
+                    "kind": "DELIVERY",
+                    "source_location": {
+                      "page": 1,
+                      "row": 1
+                    }
+                  }
+                ]
+              }
+            ],
+            "status": "LINKED",
+            "reason": null
+          }
+        ],
+        "blockers": [
+          "AMBIGUOUS_BILLING_LINE",
+          "MISSING_BILLED_AMOUNT",
+          "MISSING_BILLING_LINE",
+          "MISSING_DOCUMENT_QUANTITY",
+          "MISSING_SOURCE_EVIDENCE",
+          "UNCONFIRMED_AMOUNT"
+        ],
+        "input_revision": 8,
+        "period_start": "2026-11-09",
+        "period_end": "2026-11-15",
+        "fact_status": "UNCONFIRMED",
+        "work_status": "NEEDS_INFO",
+        "payment_status": "UNCONFIRMED",
+        "memos": [],
+        "invoice_history": [],
+        "active_invoice_ids": [
+          "invoice"
+        ],
+        "pending_invoices": [],
+        "excluded_invoices": [],
+        "approval_history": [],
+        "is_example": false
+      },
+      "proposed_patch": {
+        "items": [
+          {
+            "store_id": "00000000-0000-0000-0000-000000000002",
+            "supplier_id": "00000000-0000-0000-0000-000000000003",
+            "period_id": "00000000-0000-0000-0000-000000000001",
+            "line_id": "delivery-line",
+            "transaction_id": "16c82781-fc37-5a17-bda5-2d4802b9c930",
+            "delivery_no": null,
+            "delivery_date": "2026-11-13",
+            "item": "eel",
+            "spec": "trimmed",
+            "unit": "kg",
+            "declared_qty": "40",
+            "evidence_refs": [
+              {
+                "document_id": "delivery",
+                "line_id": "delivery-line",
+                "kind": "DELIVERY",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              },
+              {
+                "document_id": "receipt",
+                "line_id": "receipt-line",
+                "kind": "RECEIPT",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              },
+              {
+                "document_id": "invoice",
+                "line_id": "invoice-line",
+                "kind": "INVOICE",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              }
+            ],
+            "billed_qty": "40",
+            "unit_price": "20000",
+            "billed_amount": 800000,
+            "received_qty": "40",
+            "units_comparable": true,
+            "receipt_ids": [
+              "confirmed-receipt"
+            ],
+            "delta_qty": "0",
+            "check_amount": 0,
+            "match_result": "MATCHED",
+            "can_approve": false,
+            "memos": [],
+            "fact_status": "OWNER_CONFIRMED",
+            "work_status": "OPEN",
+            "blockers": [],
+            "receipts": [
+              {
+                "store_id": "00000000-0000-0000-0000-000000000002",
+                "supplier_id": "00000000-0000-0000-0000-000000000003",
+                "period_id": "00000000-0000-0000-0000-000000000001",
+                "receipt_id": "confirmed-receipt",
+                "source_line_id": "receipt-line",
+                "target_delivery_line_id": "delivery-line",
+                "delivery_no": null,
+                "received_qty": "40",
+                "unit": "kg",
+                "confirmed_by": "local-owner",
+                "confirmed_at": "2026-11-21T11:00:00+09:00",
+                "supersedes_receipt_id": null,
+                "evidence_refs": [
+                  {
+                    "document_id": "receipt",
+                    "line_id": "receipt-line",
+                    "kind": "RECEIPT",
+                    "source_location": {
+                      "page": 1,
+                      "row": 1
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "summary": {
+          "declared_qty": "40",
+          "billed_qty": "40",
+          "received_qty": "40",
+          "unit": "kg",
+          "delta_qty": "0",
+          "check_amount": 0,
+          "billed_amount": 800000
+        },
+        "confirmation_scope": "RECEIPTS_INCLUDED",
+        "match_result": "MATCHED",
+        "can_approve": true,
+        "approvable_amount": 800000,
+        "approved_amount": null,
+        "store_id": "00000000-0000-0000-0000-000000000002",
+        "supplier_id": "00000000-0000-0000-0000-000000000003",
+        "period_id": "00000000-0000-0000-0000-000000000001",
+        "receipt_links": [
+          {
+            "receipt": {
+              "store_id": "00000000-0000-0000-0000-000000000002",
+              "supplier_id": "00000000-0000-0000-0000-000000000003",
+              "period_id": "00000000-0000-0000-0000-000000000001",
+              "receipt_id": "confirmed-receipt",
+              "source_line_id": "receipt-line",
+              "target_delivery_line_id": "delivery-line",
+              "delivery_no": null,
+              "received_qty": "40",
+              "unit": "kg",
+              "confirmed_by": "local-owner",
+              "confirmed_at": "2026-11-21T11:00:00+09:00",
+              "supersedes_receipt_id": null,
+              "evidence_refs": [
+                {
+                  "document_id": "receipt",
+                  "line_id": "receipt-line",
+                  "kind": "RECEIPT",
+                  "source_location": {
+                    "page": 1,
+                    "row": 1
+                  }
+                }
+              ]
+            },
+            "receipt_id": "confirmed-receipt",
+            "target_delivery_line_id": "delivery-line",
+            "candidates": [
+              {
+                "line_id": "delivery-line",
+                "delivery_no": null,
+                "delivery_date": "2026-11-13",
+                "item": "eel",
+                "spec": "trimmed",
+                "unit": "kg",
+                "evidence_refs": [
+                  {
+                    "document_id": "delivery",
+                    "line_id": "delivery-line",
+                    "kind": "DELIVERY",
+                    "source_location": {
+                      "page": 1,
+                      "row": 1
+                    }
+                  },
+                  {
+                    "document_id": "invoice",
+                    "line_id": "invoice-line",
+                    "kind": "INVOICE",
+                    "source_location": {
+                      "page": 1,
+                      "row": 1
+                    }
+                  }
+                ]
+              }
+            ],
+            "status": "LINKED",
+            "reason": null
+          }
+        ],
+        "blockers": [],
+        "input_revision": 8,
+        "period_start": "2026-11-09",
+        "period_end": "2026-11-15",
+        "fact_status": "OWNER_CONFIRMED",
+        "work_status": "OPEN",
+        "payment_status": "UNCONFIRMED",
+        "memos": [],
+        "invoice_history": [],
+        "active_invoice_ids": [
+          "invoice"
+        ],
+        "pending_invoices": [],
+        "excluded_invoices": [],
+        "approval_history": [],
+        "is_example": false
+      }
+    },
+    "different_spec": {
+      "input": {
+        "period": {
+          "id": "00000000-0000-0000-0000-000000000001",
+          "store_id": "00000000-0000-0000-0000-000000000002",
+          "supplier_id": "00000000-0000-0000-0000-000000000003",
+          "period_start": "2026-11-09",
+          "period_end": "2026-11-15",
+          "input_revision": 8
+        },
+        "documents": [
+          {
+            "id": "delivery",
+            "doc_type": "DELIVERY",
+            "doc_no": "delivery-number",
+            "supplier_id": "00000000-0000-0000-0000-000000000003",
+            "source_mode": "FILE",
+            "extraction_status": "COMPLETED",
+            "link_status": "LINKED",
+            "metadata": {
+              "doc_type_read": "DELIVERY"
+            },
+            "period_start": "2026-11-09",
+            "period_end": "2026-11-15",
+            "replaces_doc_no": null,
+            "agreement_text": null,
+            "agreement_source_location": null
+          },
+          {
+            "id": "invoice",
+            "doc_type": "INVOICE",
+            "doc_no": "invoice-number",
+            "supplier_id": "00000000-0000-0000-0000-000000000003",
+            "source_mode": "FILE",
+            "extraction_status": "COMPLETED",
+            "link_status": "LINKED",
+            "metadata": {
+              "doc_type_read": "INVOICE"
+            },
+            "period_start": "2026-11-09",
+            "period_end": "2026-11-15",
+            "replaces_doc_no": null,
+            "agreement_text": null,
+            "agreement_source_location": null
+          },
+          {
+            "id": "receipt",
+            "doc_type": "RECEIPT",
+            "doc_no": "receipt-number",
+            "supplier_id": "00000000-0000-0000-0000-000000000003",
+            "source_mode": "FILE",
+            "extraction_status": "COMPLETED",
+            "link_status": "LINKED",
+            "metadata": {
+              "doc_type_read": "RECEIPT"
+            },
+            "period_start": "2026-11-09",
+            "period_end": "2026-11-15",
+            "replaces_doc_no": null,
+            "agreement_text": null,
+            "agreement_source_location": null
+          }
+        ],
+        "lines": [
+          {
+            "id": "delivery-line",
+            "document_id": "delivery",
+            "delivery_no": "delivery-number",
+            "delivery_date": "2026-11-13",
+            "raw_name": "eel",
+            "raw_spec": "trimmed",
+            "raw_unit": "kg",
+            "qty_read": "40",
+            "unit_price_read": "20000",
+            "amount_read": 800000,
+            "source_location": {
+              "page": 1,
+              "row": 1
+            }
+          },
+          {
+            "id": "invoice-line",
+            "document_id": "invoice",
+            "delivery_no": "delivery-number",
+            "delivery_date": "2026-11-13",
+            "raw_name": "eel",
+            "raw_spec": "other-grade",
+            "raw_unit": "kg",
+            "qty_read": "40",
+            "unit_price_read": "20000",
+            "amount_read": 800000,
+            "source_location": {
+              "page": 1,
+              "row": 1
+            }
+          },
+          {
+            "id": "receipt-line",
+            "document_id": "receipt",
+            "delivery_no": "delivery-number",
+            "delivery_date": "2026-11-13",
+            "raw_name": "eel",
+            "raw_spec": "trimmed",
+            "raw_unit": "kg",
+            "qty_read": "40",
+            "unit_price_read": "20000",
+            "amount_read": 800000,
+            "source_location": {
+              "page": 1,
+              "row": 1
+            }
+          }
+        ],
+        "receipts": [
+          {
+            "id": "confirmed-receipt",
+            "source_line_id": "receipt-line",
+            "doc_line_id": "delivery-line",
+            "received_qty": "40",
+            "unit": "kg",
+            "confirmed_by": "local-owner",
+            "actor_label": "local-owner",
+            "confirmed_at": "2026-11-21T11:00:00+09:00",
+            "supersedes_id": null
+          }
+        ],
+        "confirmations": [],
+        "memos": [],
+        "approvals": []
+      },
+      "current_server": {
+        "items": [
+          {
+            "store_id": "00000000-0000-0000-0000-000000000002",
+            "supplier_id": "00000000-0000-0000-0000-000000000003",
+            "period_id": "00000000-0000-0000-0000-000000000001",
+            "line_id": "delivery-line",
+            "transaction_id": "16c82781-fc37-5a17-bda5-2d4802b9c930",
+            "delivery_no": "delivery-number",
+            "delivery_date": "2026-11-13",
+            "item": "eel",
+            "spec": "trimmed",
+            "unit": "kg",
+            "declared_qty": "40",
+            "evidence_refs": [
+              {
+                "document_id": "delivery",
+                "line_id": "delivery-line",
+                "kind": "DELIVERY",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              },
+              {
+                "document_id": "receipt",
+                "line_id": "receipt-line",
+                "kind": "RECEIPT",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              },
+              {
+                "document_id": "invoice",
+                "line_id": "invoice-line",
+                "kind": "INVOICE",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              }
+            ],
+            "billed_qty": "40",
+            "unit_price": "20000",
+            "billed_amount": 800000,
+            "received_qty": "40",
+            "units_comparable": true,
+            "receipt_ids": [
+              "confirmed-receipt"
+            ],
+            "delta_qty": "0",
+            "check_amount": 0,
+            "match_result": "MATCHED",
+            "can_approve": false,
+            "memos": [],
+            "fact_status": "OWNER_CONFIRMED",
+            "work_status": "OPEN",
+            "blockers": [],
+            "receipts": [
+              {
+                "store_id": "00000000-0000-0000-0000-000000000002",
+                "supplier_id": "00000000-0000-0000-0000-000000000003",
+                "period_id": "00000000-0000-0000-0000-000000000001",
+                "receipt_id": "confirmed-receipt",
+                "source_line_id": "receipt-line",
+                "target_delivery_line_id": "delivery-line",
+                "delivery_no": "delivery-number",
+                "received_qty": "40",
+                "unit": "kg",
+                "confirmed_by": "local-owner",
+                "confirmed_at": "2026-11-21T11:00:00+09:00",
+                "supersedes_receipt_id": null,
+                "evidence_refs": [
+                  {
+                    "document_id": "receipt",
+                    "line_id": "receipt-line",
+                    "kind": "RECEIPT",
+                    "source_location": {
+                      "page": 1,
+                      "row": 1
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "summary": {
+          "declared_qty": "40",
+          "billed_qty": "40",
+          "received_qty": "40",
+          "unit": "kg",
+          "delta_qty": "0",
+          "check_amount": 0,
+          "billed_amount": 800000
+        },
+        "confirmation_scope": "RECEIPTS_INCLUDED",
+        "match_result": "MATCHED",
+        "can_approve": true,
+        "approvable_amount": 800000,
+        "approved_amount": null,
+        "store_id": "00000000-0000-0000-0000-000000000002",
+        "supplier_id": "00000000-0000-0000-0000-000000000003",
+        "period_id": "00000000-0000-0000-0000-000000000001",
+        "receipt_links": [
+          {
+            "receipt": {
+              "store_id": "00000000-0000-0000-0000-000000000002",
+              "supplier_id": "00000000-0000-0000-0000-000000000003",
+              "period_id": "00000000-0000-0000-0000-000000000001",
+              "receipt_id": "confirmed-receipt",
+              "source_line_id": "receipt-line",
+              "target_delivery_line_id": "delivery-line",
+              "delivery_no": "delivery-number",
+              "received_qty": "40",
+              "unit": "kg",
+              "confirmed_by": "local-owner",
+              "confirmed_at": "2026-11-21T11:00:00+09:00",
+              "supersedes_receipt_id": null,
+              "evidence_refs": [
+                {
+                  "document_id": "receipt",
+                  "line_id": "receipt-line",
+                  "kind": "RECEIPT",
+                  "source_location": {
+                    "page": 1,
+                    "row": 1
+                  }
+                }
+              ]
+            },
+            "receipt_id": "confirmed-receipt",
+            "target_delivery_line_id": "delivery-line",
+            "candidates": [
+              {
+                "line_id": "delivery-line",
+                "delivery_no": "delivery-number",
+                "delivery_date": "2026-11-13",
+                "item": "eel",
+                "spec": "trimmed",
+                "unit": "kg",
+                "evidence_refs": [
+                  {
+                    "document_id": "delivery",
+                    "line_id": "delivery-line",
+                    "kind": "DELIVERY",
+                    "source_location": {
+                      "page": 1,
+                      "row": 1
+                    }
+                  },
+                  {
+                    "document_id": "invoice",
+                    "line_id": "invoice-line",
+                    "kind": "INVOICE",
+                    "source_location": {
+                      "page": 1,
+                      "row": 1
+                    }
+                  }
+                ]
+              }
+            ],
+            "status": "LINKED",
+            "reason": null
+          }
+        ],
+        "blockers": [],
+        "input_revision": 8,
+        "period_start": "2026-11-09",
+        "period_end": "2026-11-15",
+        "fact_status": "OWNER_CONFIRMED",
+        "work_status": "OPEN",
+        "payment_status": "UNCONFIRMED",
+        "memos": [],
+        "invoice_history": [],
+        "active_invoice_ids": [
+          "invoice"
+        ],
+        "pending_invoices": [],
+        "excluded_invoices": [],
+        "approval_history": [],
+        "is_example": false
+      },
+      "proposed_patch": {
+        "items": [
+          {
+            "store_id": "00000000-0000-0000-0000-000000000002",
+            "supplier_id": "00000000-0000-0000-0000-000000000003",
+            "period_id": "00000000-0000-0000-0000-000000000001",
+            "line_id": "delivery-line",
+            "transaction_id": "16c82781-fc37-5a17-bda5-2d4802b9c930",
+            "delivery_no": "delivery-number",
+            "delivery_date": "2026-11-13",
+            "item": "eel",
+            "spec": "trimmed",
+            "unit": "kg",
+            "declared_qty": "40",
+            "evidence_refs": [
+              {
+                "document_id": "delivery",
+                "line_id": "delivery-line",
+                "kind": "DELIVERY",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              },
+              {
+                "document_id": "receipt",
+                "line_id": "receipt-line",
+                "kind": "RECEIPT",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              }
+            ],
+            "billed_qty": null,
+            "unit_price": null,
+            "billed_amount": null,
+            "received_qty": "40",
+            "units_comparable": true,
+            "receipt_ids": [
+              "confirmed-receipt"
+            ],
+            "delta_qty": null,
+            "check_amount": null,
+            "match_result": "MISSING_DATA",
+            "can_approve": false,
+            "memos": [],
+            "fact_status": "OWNER_CONFIRMED",
+            "work_status": "NEEDS_INFO",
+            "blockers": [
+              "AMBIGUOUS_BILLING_LINE",
+              "MISSING_BILLED_AMOUNT",
+              "MISSING_BILLING_LINE",
+              "MISSING_DOCUMENT_QUANTITY",
+              "MISSING_SOURCE_EVIDENCE",
+              "UNCONFIRMED_AMOUNT",
+              "UNRESOLVED_BILLING_MATCH"
+            ],
+            "receipts": [
+              {
+                "store_id": "00000000-0000-0000-0000-000000000002",
+                "supplier_id": "00000000-0000-0000-0000-000000000003",
+                "period_id": "00000000-0000-0000-0000-000000000001",
+                "receipt_id": "confirmed-receipt",
+                "source_line_id": "receipt-line",
+                "target_delivery_line_id": "delivery-line",
+                "delivery_no": "delivery-number",
+                "received_qty": "40",
+                "unit": "kg",
+                "confirmed_by": "local-owner",
+                "confirmed_at": "2026-11-21T11:00:00+09:00",
+                "supersedes_receipt_id": null,
+                "evidence_refs": [
+                  {
+                    "document_id": "receipt",
+                    "line_id": "receipt-line",
+                    "kind": "RECEIPT",
+                    "source_location": {
+                      "page": 1,
+                      "row": 1
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "summary": {
+          "declared_qty": "40",
+          "billed_qty": null,
+          "received_qty": null,
+          "unit": "kg",
+          "delta_qty": null,
+          "check_amount": null,
+          "billed_amount": null
+        },
+        "confirmation_scope": "RECEIPTS_INCLUDED",
+        "match_result": "MISSING_DATA",
+        "can_approve": false,
+        "approvable_amount": null,
+        "approved_amount": null,
+        "store_id": "00000000-0000-0000-0000-000000000002",
+        "supplier_id": "00000000-0000-0000-0000-000000000003",
+        "period_id": "00000000-0000-0000-0000-000000000001",
+        "receipt_links": [
+          {
+            "receipt": {
+              "store_id": "00000000-0000-0000-0000-000000000002",
+              "supplier_id": "00000000-0000-0000-0000-000000000003",
+              "period_id": "00000000-0000-0000-0000-000000000001",
+              "receipt_id": "confirmed-receipt",
+              "source_line_id": "receipt-line",
+              "target_delivery_line_id": "delivery-line",
+              "delivery_no": "delivery-number",
+              "received_qty": "40",
+              "unit": "kg",
+              "confirmed_by": "local-owner",
+              "confirmed_at": "2026-11-21T11:00:00+09:00",
+              "supersedes_receipt_id": null,
+              "evidence_refs": [
+                {
+                  "document_id": "receipt",
+                  "line_id": "receipt-line",
+                  "kind": "RECEIPT",
+                  "source_location": {
+                    "page": 1,
+                    "row": 1
+                  }
+                }
+              ]
+            },
+            "receipt_id": "confirmed-receipt",
+            "target_delivery_line_id": "delivery-line",
+            "candidates": [
+              {
+                "line_id": "delivery-line",
+                "delivery_no": "delivery-number",
+                "delivery_date": "2026-11-13",
+                "item": "eel",
+                "spec": "trimmed",
+                "unit": "kg",
+                "evidence_refs": [
+                  {
+                    "document_id": "delivery",
+                    "line_id": "delivery-line",
+                    "kind": "DELIVERY",
+                    "source_location": {
+                      "page": 1,
+                      "row": 1
+                    }
+                  }
+                ]
+              }
+            ],
+            "status": "LINKED",
+            "reason": null
+          }
+        ],
+        "blockers": [
+          "AMBIGUOUS_BILLING_LINE",
+          "MISSING_BILLED_AMOUNT",
+          "MISSING_BILLING_LINE",
+          "MISSING_DOCUMENT_QUANTITY",
+          "MISSING_SOURCE_EVIDENCE",
+          "UNCONFIRMED_AMOUNT",
+          "UNRESOLVED_BILLING_MATCH"
+        ],
+        "input_revision": 8,
+        "period_start": "2026-11-09",
+        "period_end": "2026-11-15",
+        "fact_status": "UNCONFIRMED",
+        "work_status": "NEEDS_INFO",
+        "payment_status": "UNCONFIRMED",
+        "memos": [],
+        "invoice_history": [],
+        "active_invoice_ids": [
+          "invoice"
+        ],
+        "pending_invoices": [],
+        "excluded_invoices": [],
+        "approval_history": [],
+        "is_example": false
+      }
+    },
+    "different_delivery_date": {
+      "input": {
+        "period": {
+          "id": "00000000-0000-0000-0000-000000000001",
+          "store_id": "00000000-0000-0000-0000-000000000002",
+          "supplier_id": "00000000-0000-0000-0000-000000000003",
+          "period_start": "2026-11-09",
+          "period_end": "2026-11-15",
+          "input_revision": 8
+        },
+        "documents": [
+          {
+            "id": "delivery",
+            "doc_type": "DELIVERY",
+            "doc_no": "delivery-number",
+            "supplier_id": "00000000-0000-0000-0000-000000000003",
+            "source_mode": "FILE",
+            "extraction_status": "COMPLETED",
+            "link_status": "LINKED",
+            "metadata": {
+              "doc_type_read": "DELIVERY"
+            },
+            "period_start": "2026-11-09",
+            "period_end": "2026-11-15",
+            "replaces_doc_no": null,
+            "agreement_text": null,
+            "agreement_source_location": null
+          },
+          {
+            "id": "invoice",
+            "doc_type": "INVOICE",
+            "doc_no": "invoice-number",
+            "supplier_id": "00000000-0000-0000-0000-000000000003",
+            "source_mode": "FILE",
+            "extraction_status": "COMPLETED",
+            "link_status": "LINKED",
+            "metadata": {
+              "doc_type_read": "INVOICE"
+            },
+            "period_start": "2026-11-09",
+            "period_end": "2026-11-15",
+            "replaces_doc_no": null,
+            "agreement_text": null,
+            "agreement_source_location": null
+          },
+          {
+            "id": "receipt",
+            "doc_type": "RECEIPT",
+            "doc_no": "receipt-number",
+            "supplier_id": "00000000-0000-0000-0000-000000000003",
+            "source_mode": "FILE",
+            "extraction_status": "COMPLETED",
+            "link_status": "LINKED",
+            "metadata": {
+              "doc_type_read": "RECEIPT"
+            },
+            "period_start": "2026-11-09",
+            "period_end": "2026-11-15",
+            "replaces_doc_no": null,
+            "agreement_text": null,
+            "agreement_source_location": null
+          }
+        ],
+        "lines": [
+          {
+            "id": "delivery-line",
+            "document_id": "delivery",
+            "delivery_no": "delivery-number",
+            "delivery_date": "2026-11-13",
+            "raw_name": "eel",
+            "raw_spec": "trimmed",
+            "raw_unit": "kg",
+            "qty_read": "40",
+            "unit_price_read": "20000",
+            "amount_read": 800000,
+            "source_location": {
+              "page": 1,
+              "row": 1
+            }
+          },
+          {
+            "id": "invoice-line",
+            "document_id": "invoice",
+            "delivery_no": "delivery-number",
+            "delivery_date": "2026-11-14",
+            "raw_name": "eel",
+            "raw_spec": "trimmed",
+            "raw_unit": "kg",
+            "qty_read": "40",
+            "unit_price_read": "20000",
+            "amount_read": 800000,
+            "source_location": {
+              "page": 1,
+              "row": 1
+            }
+          },
+          {
+            "id": "receipt-line",
+            "document_id": "receipt",
+            "delivery_no": "delivery-number",
+            "delivery_date": "2026-11-13",
+            "raw_name": "eel",
+            "raw_spec": "trimmed",
+            "raw_unit": "kg",
+            "qty_read": "40",
+            "unit_price_read": "20000",
+            "amount_read": 800000,
+            "source_location": {
+              "page": 1,
+              "row": 1
+            }
+          }
+        ],
+        "receipts": [
+          {
+            "id": "confirmed-receipt",
+            "source_line_id": "receipt-line",
+            "doc_line_id": "delivery-line",
+            "received_qty": "40",
+            "unit": "kg",
+            "confirmed_by": "local-owner",
+            "actor_label": "local-owner",
+            "confirmed_at": "2026-11-21T11:00:00+09:00",
+            "supersedes_id": null
+          }
+        ],
+        "confirmations": [],
+        "memos": [],
+        "approvals": []
+      },
+      "current_server": {
+        "items": [
+          {
+            "store_id": "00000000-0000-0000-0000-000000000002",
+            "supplier_id": "00000000-0000-0000-0000-000000000003",
+            "period_id": "00000000-0000-0000-0000-000000000001",
+            "line_id": "delivery-line",
+            "transaction_id": "16c82781-fc37-5a17-bda5-2d4802b9c930",
+            "delivery_no": "delivery-number",
+            "delivery_date": "2026-11-13",
+            "item": "eel",
+            "spec": "trimmed",
+            "unit": "kg",
+            "declared_qty": "40",
+            "evidence_refs": [
+              {
+                "document_id": "delivery",
+                "line_id": "delivery-line",
+                "kind": "DELIVERY",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              },
+              {
+                "document_id": "receipt",
+                "line_id": "receipt-line",
+                "kind": "RECEIPT",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              },
+              {
+                "document_id": "invoice",
+                "line_id": "invoice-line",
+                "kind": "INVOICE",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              }
+            ],
+            "billed_qty": "40",
+            "unit_price": "20000",
+            "billed_amount": 800000,
+            "received_qty": "40",
+            "units_comparable": true,
+            "receipt_ids": [
+              "confirmed-receipt"
+            ],
+            "delta_qty": "0",
+            "check_amount": 0,
+            "match_result": "MATCHED",
+            "can_approve": false,
+            "memos": [],
+            "fact_status": "OWNER_CONFIRMED",
+            "work_status": "OPEN",
+            "blockers": [],
+            "receipts": [
+              {
+                "store_id": "00000000-0000-0000-0000-000000000002",
+                "supplier_id": "00000000-0000-0000-0000-000000000003",
+                "period_id": "00000000-0000-0000-0000-000000000001",
+                "receipt_id": "confirmed-receipt",
+                "source_line_id": "receipt-line",
+                "target_delivery_line_id": "delivery-line",
+                "delivery_no": "delivery-number",
+                "received_qty": "40",
+                "unit": "kg",
+                "confirmed_by": "local-owner",
+                "confirmed_at": "2026-11-21T11:00:00+09:00",
+                "supersedes_receipt_id": null,
+                "evidence_refs": [
+                  {
+                    "document_id": "receipt",
+                    "line_id": "receipt-line",
+                    "kind": "RECEIPT",
+                    "source_location": {
+                      "page": 1,
+                      "row": 1
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "summary": {
+          "declared_qty": "40",
+          "billed_qty": "40",
+          "received_qty": "40",
+          "unit": "kg",
+          "delta_qty": "0",
+          "check_amount": 0,
+          "billed_amount": 800000
+        },
+        "confirmation_scope": "RECEIPTS_INCLUDED",
+        "match_result": "MATCHED",
+        "can_approve": true,
+        "approvable_amount": 800000,
+        "approved_amount": null,
+        "store_id": "00000000-0000-0000-0000-000000000002",
+        "supplier_id": "00000000-0000-0000-0000-000000000003",
+        "period_id": "00000000-0000-0000-0000-000000000001",
+        "receipt_links": [
+          {
+            "receipt": {
+              "store_id": "00000000-0000-0000-0000-000000000002",
+              "supplier_id": "00000000-0000-0000-0000-000000000003",
+              "period_id": "00000000-0000-0000-0000-000000000001",
+              "receipt_id": "confirmed-receipt",
+              "source_line_id": "receipt-line",
+              "target_delivery_line_id": "delivery-line",
+              "delivery_no": "delivery-number",
+              "received_qty": "40",
+              "unit": "kg",
+              "confirmed_by": "local-owner",
+              "confirmed_at": "2026-11-21T11:00:00+09:00",
+              "supersedes_receipt_id": null,
+              "evidence_refs": [
+                {
+                  "document_id": "receipt",
+                  "line_id": "receipt-line",
+                  "kind": "RECEIPT",
+                  "source_location": {
+                    "page": 1,
+                    "row": 1
+                  }
+                }
+              ]
+            },
+            "receipt_id": "confirmed-receipt",
+            "target_delivery_line_id": "delivery-line",
+            "candidates": [
+              {
+                "line_id": "delivery-line",
+                "delivery_no": "delivery-number",
+                "delivery_date": "2026-11-13",
+                "item": "eel",
+                "spec": "trimmed",
+                "unit": "kg",
+                "evidence_refs": [
+                  {
+                    "document_id": "delivery",
+                    "line_id": "delivery-line",
+                    "kind": "DELIVERY",
+                    "source_location": {
+                      "page": 1,
+                      "row": 1
+                    }
+                  },
+                  {
+                    "document_id": "invoice",
+                    "line_id": "invoice-line",
+                    "kind": "INVOICE",
+                    "source_location": {
+                      "page": 1,
+                      "row": 1
+                    }
+                  }
+                ]
+              }
+            ],
+            "status": "LINKED",
+            "reason": null
+          }
+        ],
+        "blockers": [],
+        "input_revision": 8,
+        "period_start": "2026-11-09",
+        "period_end": "2026-11-15",
+        "fact_status": "OWNER_CONFIRMED",
+        "work_status": "OPEN",
+        "payment_status": "UNCONFIRMED",
+        "memos": [],
+        "invoice_history": [],
+        "active_invoice_ids": [
+          "invoice"
+        ],
+        "pending_invoices": [],
+        "excluded_invoices": [],
+        "approval_history": [],
+        "is_example": false
+      },
+      "proposed_patch": {
+        "items": [
+          {
+            "store_id": "00000000-0000-0000-0000-000000000002",
+            "supplier_id": "00000000-0000-0000-0000-000000000003",
+            "period_id": "00000000-0000-0000-0000-000000000001",
+            "line_id": "delivery-line",
+            "transaction_id": "16c82781-fc37-5a17-bda5-2d4802b9c930",
+            "delivery_no": "delivery-number",
+            "delivery_date": "2026-11-13",
+            "item": "eel",
+            "spec": "trimmed",
+            "unit": "kg",
+            "declared_qty": "40",
+            "evidence_refs": [
+              {
+                "document_id": "delivery",
+                "line_id": "delivery-line",
+                "kind": "DELIVERY",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              },
+              {
+                "document_id": "receipt",
+                "line_id": "receipt-line",
+                "kind": "RECEIPT",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              }
+            ],
+            "billed_qty": null,
+            "unit_price": null,
+            "billed_amount": null,
+            "received_qty": "40",
+            "units_comparable": true,
+            "receipt_ids": [
+              "confirmed-receipt"
+            ],
+            "delta_qty": null,
+            "check_amount": null,
+            "match_result": "MISSING_DATA",
+            "can_approve": false,
+            "memos": [],
+            "fact_status": "OWNER_CONFIRMED",
+            "work_status": "NEEDS_INFO",
+            "blockers": [
+              "AMBIGUOUS_BILLING_LINE",
+              "MISSING_BILLED_AMOUNT",
+              "MISSING_BILLING_LINE",
+              "MISSING_DOCUMENT_QUANTITY",
+              "MISSING_SOURCE_EVIDENCE",
+              "UNCONFIRMED_AMOUNT",
+              "UNRESOLVED_BILLING_MATCH"
+            ],
+            "receipts": [
+              {
+                "store_id": "00000000-0000-0000-0000-000000000002",
+                "supplier_id": "00000000-0000-0000-0000-000000000003",
+                "period_id": "00000000-0000-0000-0000-000000000001",
+                "receipt_id": "confirmed-receipt",
+                "source_line_id": "receipt-line",
+                "target_delivery_line_id": "delivery-line",
+                "delivery_no": "delivery-number",
+                "received_qty": "40",
+                "unit": "kg",
+                "confirmed_by": "local-owner",
+                "confirmed_at": "2026-11-21T11:00:00+09:00",
+                "supersedes_receipt_id": null,
+                "evidence_refs": [
+                  {
+                    "document_id": "receipt",
+                    "line_id": "receipt-line",
+                    "kind": "RECEIPT",
+                    "source_location": {
+                      "page": 1,
+                      "row": 1
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "summary": {
+          "declared_qty": "40",
+          "billed_qty": null,
+          "received_qty": null,
+          "unit": "kg",
+          "delta_qty": null,
+          "check_amount": null,
+          "billed_amount": null
+        },
+        "confirmation_scope": "RECEIPTS_INCLUDED",
+        "match_result": "MISSING_DATA",
+        "can_approve": false,
+        "approvable_amount": null,
+        "approved_amount": null,
+        "store_id": "00000000-0000-0000-0000-000000000002",
+        "supplier_id": "00000000-0000-0000-0000-000000000003",
+        "period_id": "00000000-0000-0000-0000-000000000001",
+        "receipt_links": [
+          {
+            "receipt": {
+              "store_id": "00000000-0000-0000-0000-000000000002",
+              "supplier_id": "00000000-0000-0000-0000-000000000003",
+              "period_id": "00000000-0000-0000-0000-000000000001",
+              "receipt_id": "confirmed-receipt",
+              "source_line_id": "receipt-line",
+              "target_delivery_line_id": "delivery-line",
+              "delivery_no": "delivery-number",
+              "received_qty": "40",
+              "unit": "kg",
+              "confirmed_by": "local-owner",
+              "confirmed_at": "2026-11-21T11:00:00+09:00",
+              "supersedes_receipt_id": null,
+              "evidence_refs": [
+                {
+                  "document_id": "receipt",
+                  "line_id": "receipt-line",
+                  "kind": "RECEIPT",
+                  "source_location": {
+                    "page": 1,
+                    "row": 1
+                  }
+                }
+              ]
+            },
+            "receipt_id": "confirmed-receipt",
+            "target_delivery_line_id": "delivery-line",
+            "candidates": [
+              {
+                "line_id": "delivery-line",
+                "delivery_no": "delivery-number",
+                "delivery_date": "2026-11-13",
+                "item": "eel",
+                "spec": "trimmed",
+                "unit": "kg",
+                "evidence_refs": [
+                  {
+                    "document_id": "delivery",
+                    "line_id": "delivery-line",
+                    "kind": "DELIVERY",
+                    "source_location": {
+                      "page": 1,
+                      "row": 1
+                    }
+                  }
+                ]
+              }
+            ],
+            "status": "LINKED",
+            "reason": null
+          }
+        ],
+        "blockers": [
+          "AMBIGUOUS_BILLING_LINE",
+          "MISSING_BILLED_AMOUNT",
+          "MISSING_BILLING_LINE",
+          "MISSING_DOCUMENT_QUANTITY",
+          "MISSING_SOURCE_EVIDENCE",
+          "UNCONFIRMED_AMOUNT",
+          "UNRESOLVED_BILLING_MATCH"
+        ],
+        "input_revision": 8,
+        "period_start": "2026-11-09",
+        "period_end": "2026-11-15",
+        "fact_status": "UNCONFIRMED",
+        "work_status": "NEEDS_INFO",
+        "payment_status": "UNCONFIRMED",
+        "memos": [],
+        "invoice_history": [],
+        "active_invoice_ids": [
+          "invoice"
+        ],
+        "pending_invoices": [],
+        "excluded_invoices": [],
+        "approval_history": [],
+        "is_example": false
+      }
+    },
+    "incomplete_fallback": {
+      "input": {
+        "period": {
+          "id": "00000000-0000-0000-0000-000000000001",
+          "store_id": "00000000-0000-0000-0000-000000000002",
+          "supplier_id": "00000000-0000-0000-0000-000000000003",
+          "period_start": "2026-11-09",
+          "period_end": "2026-11-15",
+          "input_revision": 8
+        },
+        "documents": [
+          {
+            "id": "delivery",
+            "doc_type": "DELIVERY",
+            "doc_no": "delivery-number",
+            "supplier_id": "00000000-0000-0000-0000-000000000003",
+            "source_mode": "FILE",
+            "extraction_status": "COMPLETED",
+            "link_status": "LINKED",
+            "metadata": {
+              "doc_type_read": "DELIVERY"
+            },
+            "period_start": "2026-11-09",
+            "period_end": "2026-11-15",
+            "replaces_doc_no": null,
+            "agreement_text": null,
+            "agreement_source_location": null
+          },
+          {
+            "id": "invoice",
+            "doc_type": "INVOICE",
+            "doc_no": "invoice-number",
+            "supplier_id": "00000000-0000-0000-0000-000000000003",
+            "source_mode": "FILE",
+            "extraction_status": "COMPLETED",
+            "link_status": "LINKED",
+            "metadata": {
+              "doc_type_read": "INVOICE"
+            },
+            "period_start": "2026-11-09",
+            "period_end": "2026-11-15",
+            "replaces_doc_no": null,
+            "agreement_text": null,
+            "agreement_source_location": null
+          },
+          {
+            "id": "receipt",
+            "doc_type": "RECEIPT",
+            "doc_no": "receipt-number",
+            "supplier_id": "00000000-0000-0000-0000-000000000003",
+            "source_mode": "FILE",
+            "extraction_status": "COMPLETED",
+            "link_status": "LINKED",
+            "metadata": {
+              "doc_type_read": "RECEIPT"
+            },
+            "period_start": "2026-11-09",
+            "period_end": "2026-11-15",
+            "replaces_doc_no": null,
+            "agreement_text": null,
+            "agreement_source_location": null
+          }
+        ],
+        "lines": [
+          {
+            "id": "delivery-line",
+            "document_id": "delivery",
+            "delivery_no": null,
+            "delivery_date": "2026-11-13",
+            "raw_name": "eel",
+            "raw_spec": null,
+            "raw_unit": "kg",
+            "qty_read": "40",
+            "unit_price_read": "20000",
+            "amount_read": 800000,
+            "source_location": {
+              "page": 1,
+              "row": 1
+            }
+          },
+          {
+            "id": "invoice-line",
+            "document_id": "invoice",
+            "delivery_no": null,
+            "delivery_date": "2026-11-13",
+            "raw_name": "eel",
+            "raw_spec": null,
+            "raw_unit": "kg",
+            "qty_read": "40",
+            "unit_price_read": "20000",
+            "amount_read": 800000,
+            "source_location": {
+              "page": 1,
+              "row": 1
+            }
+          },
+          {
+            "id": "receipt-line",
+            "document_id": "receipt",
+            "delivery_no": null,
+            "delivery_date": "2026-11-13",
+            "raw_name": "eel",
+            "raw_spec": null,
+            "raw_unit": "kg",
+            "qty_read": "40",
+            "unit_price_read": "20000",
+            "amount_read": 800000,
+            "source_location": {
+              "page": 1,
+              "row": 1
+            }
+          }
+        ],
+        "receipts": [
+          {
+            "id": "confirmed-receipt",
+            "source_line_id": "receipt-line",
+            "doc_line_id": "delivery-line",
+            "received_qty": "40",
+            "unit": "kg",
+            "confirmed_by": "local-owner",
+            "actor_label": "local-owner",
+            "confirmed_at": "2026-11-21T11:00:00+09:00",
+            "supersedes_id": null
+          }
+        ],
+        "confirmations": [],
+        "memos": [],
+        "approvals": []
+      },
+      "current_server": {
+        "items": [
+          {
+            "store_id": "00000000-0000-0000-0000-000000000002",
+            "supplier_id": "00000000-0000-0000-0000-000000000003",
+            "period_id": "00000000-0000-0000-0000-000000000001",
+            "line_id": "delivery-line",
+            "transaction_id": "16c82781-fc37-5a17-bda5-2d4802b9c930",
+            "delivery_no": null,
+            "delivery_date": "2026-11-13",
+            "item": "eel",
+            "spec": null,
+            "unit": "kg",
+            "declared_qty": "40",
+            "evidence_refs": [
+              {
+                "document_id": "delivery",
+                "line_id": "delivery-line",
+                "kind": "DELIVERY",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              },
+              {
+                "document_id": "receipt",
+                "line_id": "receipt-line",
+                "kind": "RECEIPT",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              }
+            ],
+            "billed_qty": null,
+            "unit_price": null,
+            "billed_amount": null,
+            "received_qty": "40",
+            "units_comparable": true,
+            "receipt_ids": [
+              "confirmed-receipt"
+            ],
+            "delta_qty": null,
+            "check_amount": null,
+            "match_result": "MISSING_DATA",
+            "can_approve": false,
+            "memos": [],
+            "fact_status": "OWNER_CONFIRMED",
+            "work_status": "NEEDS_INFO",
+            "blockers": [
+              "AMBIGUOUS_BILLING_LINE",
+              "MISSING_BILLED_AMOUNT",
+              "MISSING_BILLING_LINE",
+              "MISSING_DOCUMENT_QUANTITY",
+              "MISSING_SOURCE_EVIDENCE",
+              "UNCONFIRMED_AMOUNT"
+            ],
+            "receipts": [
+              {
+                "store_id": "00000000-0000-0000-0000-000000000002",
+                "supplier_id": "00000000-0000-0000-0000-000000000003",
+                "period_id": "00000000-0000-0000-0000-000000000001",
+                "receipt_id": "confirmed-receipt",
+                "source_line_id": "receipt-line",
+                "target_delivery_line_id": "delivery-line",
+                "delivery_no": null,
+                "received_qty": "40",
+                "unit": "kg",
+                "confirmed_by": "local-owner",
+                "confirmed_at": "2026-11-21T11:00:00+09:00",
+                "supersedes_receipt_id": null,
+                "evidence_refs": [
+                  {
+                    "document_id": "receipt",
+                    "line_id": "receipt-line",
+                    "kind": "RECEIPT",
+                    "source_location": {
+                      "page": 1,
+                      "row": 1
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "summary": {
+          "declared_qty": "40",
+          "billed_qty": null,
+          "received_qty": null,
+          "unit": "kg",
+          "delta_qty": null,
+          "check_amount": null,
+          "billed_amount": null
+        },
+        "confirmation_scope": "RECEIPTS_INCLUDED",
+        "match_result": "MISSING_DATA",
+        "can_approve": false,
+        "approvable_amount": null,
+        "approved_amount": null,
+        "store_id": "00000000-0000-0000-0000-000000000002",
+        "supplier_id": "00000000-0000-0000-0000-000000000003",
+        "period_id": "00000000-0000-0000-0000-000000000001",
+        "receipt_links": [
+          {
+            "receipt": {
+              "store_id": "00000000-0000-0000-0000-000000000002",
+              "supplier_id": "00000000-0000-0000-0000-000000000003",
+              "period_id": "00000000-0000-0000-0000-000000000001",
+              "receipt_id": "confirmed-receipt",
+              "source_line_id": "receipt-line",
+              "target_delivery_line_id": "delivery-line",
+              "delivery_no": null,
+              "received_qty": "40",
+              "unit": "kg",
+              "confirmed_by": "local-owner",
+              "confirmed_at": "2026-11-21T11:00:00+09:00",
+              "supersedes_receipt_id": null,
+              "evidence_refs": [
+                {
+                  "document_id": "receipt",
+                  "line_id": "receipt-line",
+                  "kind": "RECEIPT",
+                  "source_location": {
+                    "page": 1,
+                    "row": 1
+                  }
+                }
+              ]
+            },
+            "receipt_id": "confirmed-receipt",
+            "target_delivery_line_id": "delivery-line",
+            "candidates": [
+              {
+                "line_id": "delivery-line",
+                "delivery_no": null,
+                "delivery_date": "2026-11-13",
+                "item": "eel",
+                "spec": null,
+                "unit": "kg",
+                "evidence_refs": [
+                  {
+                    "document_id": "delivery",
+                    "line_id": "delivery-line",
+                    "kind": "DELIVERY",
+                    "source_location": {
+                      "page": 1,
+                      "row": 1
+                    }
+                  }
+                ]
+              }
+            ],
+            "status": "LINKED",
+            "reason": null
+          }
+        ],
+        "blockers": [
+          "AMBIGUOUS_BILLING_LINE",
+          "MISSING_BILLED_AMOUNT",
+          "MISSING_BILLING_LINE",
+          "MISSING_DOCUMENT_QUANTITY",
+          "MISSING_SOURCE_EVIDENCE",
+          "UNCONFIRMED_AMOUNT"
+        ],
+        "input_revision": 8,
+        "period_start": "2026-11-09",
+        "period_end": "2026-11-15",
+        "fact_status": "UNCONFIRMED",
+        "work_status": "NEEDS_INFO",
+        "payment_status": "UNCONFIRMED",
+        "memos": [],
+        "invoice_history": [],
+        "active_invoice_ids": [
+          "invoice"
+        ],
+        "pending_invoices": [],
+        "excluded_invoices": [],
+        "approval_history": [],
+        "is_example": false
+      },
+      "proposed_patch": {
+        "items": [
+          {
+            "store_id": "00000000-0000-0000-0000-000000000002",
+            "supplier_id": "00000000-0000-0000-0000-000000000003",
+            "period_id": "00000000-0000-0000-0000-000000000001",
+            "line_id": "delivery-line",
+            "transaction_id": "16c82781-fc37-5a17-bda5-2d4802b9c930",
+            "delivery_no": null,
+            "delivery_date": "2026-11-13",
+            "item": "eel",
+            "spec": null,
+            "unit": "kg",
+            "declared_qty": "40",
+            "evidence_refs": [
+              {
+                "document_id": "delivery",
+                "line_id": "delivery-line",
+                "kind": "DELIVERY",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              },
+              {
+                "document_id": "receipt",
+                "line_id": "receipt-line",
+                "kind": "RECEIPT",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              }
+            ],
+            "billed_qty": null,
+            "unit_price": null,
+            "billed_amount": null,
+            "received_qty": "40",
+            "units_comparable": true,
+            "receipt_ids": [
+              "confirmed-receipt"
+            ],
+            "delta_qty": null,
+            "check_amount": null,
+            "match_result": "MISSING_DATA",
+            "can_approve": false,
+            "memos": [],
+            "fact_status": "OWNER_CONFIRMED",
+            "work_status": "NEEDS_INFO",
+            "blockers": [
+              "AMBIGUOUS_BILLING_LINE",
+              "INCOMPLETE_BILLING_MATCH",
+              "MISSING_BILLED_AMOUNT",
+              "MISSING_BILLING_LINE",
+              "MISSING_DOCUMENT_QUANTITY",
+              "MISSING_SOURCE_EVIDENCE",
+              "UNCONFIRMED_AMOUNT"
+            ],
+            "receipts": [
+              {
+                "store_id": "00000000-0000-0000-0000-000000000002",
+                "supplier_id": "00000000-0000-0000-0000-000000000003",
+                "period_id": "00000000-0000-0000-0000-000000000001",
+                "receipt_id": "confirmed-receipt",
+                "source_line_id": "receipt-line",
+                "target_delivery_line_id": "delivery-line",
+                "delivery_no": null,
+                "received_qty": "40",
+                "unit": "kg",
+                "confirmed_by": "local-owner",
+                "confirmed_at": "2026-11-21T11:00:00+09:00",
+                "supersedes_receipt_id": null,
+                "evidence_refs": [
+                  {
+                    "document_id": "receipt",
+                    "line_id": "receipt-line",
+                    "kind": "RECEIPT",
+                    "source_location": {
+                      "page": 1,
+                      "row": 1
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "summary": {
+          "declared_qty": "40",
+          "billed_qty": null,
+          "received_qty": null,
+          "unit": "kg",
+          "delta_qty": null,
+          "check_amount": null,
+          "billed_amount": null
+        },
+        "confirmation_scope": "RECEIPTS_INCLUDED",
+        "match_result": "MISSING_DATA",
+        "can_approve": false,
+        "approvable_amount": null,
+        "approved_amount": null,
+        "store_id": "00000000-0000-0000-0000-000000000002",
+        "supplier_id": "00000000-0000-0000-0000-000000000003",
+        "period_id": "00000000-0000-0000-0000-000000000001",
+        "receipt_links": [
+          {
+            "receipt": {
+              "store_id": "00000000-0000-0000-0000-000000000002",
+              "supplier_id": "00000000-0000-0000-0000-000000000003",
+              "period_id": "00000000-0000-0000-0000-000000000001",
+              "receipt_id": "confirmed-receipt",
+              "source_line_id": "receipt-line",
+              "target_delivery_line_id": "delivery-line",
+              "delivery_no": null,
+              "received_qty": "40",
+              "unit": "kg",
+              "confirmed_by": "local-owner",
+              "confirmed_at": "2026-11-21T11:00:00+09:00",
+              "supersedes_receipt_id": null,
+              "evidence_refs": [
+                {
+                  "document_id": "receipt",
+                  "line_id": "receipt-line",
+                  "kind": "RECEIPT",
+                  "source_location": {
+                    "page": 1,
+                    "row": 1
+                  }
+                }
+              ]
+            },
+            "receipt_id": "confirmed-receipt",
+            "target_delivery_line_id": "delivery-line",
+            "candidates": [
+              {
+                "line_id": "delivery-line",
+                "delivery_no": null,
+                "delivery_date": "2026-11-13",
+                "item": "eel",
+                "spec": null,
+                "unit": "kg",
+                "evidence_refs": [
+                  {
+                    "document_id": "delivery",
+                    "line_id": "delivery-line",
+                    "kind": "DELIVERY",
+                    "source_location": {
+                      "page": 1,
+                      "row": 1
+                    }
+                  }
+                ]
+              }
+            ],
+            "status": "LINKED",
+            "reason": null
+          }
+        ],
+        "blockers": [
+          "AMBIGUOUS_BILLING_LINE",
+          "INCOMPLETE_BILLING_MATCH",
+          "MISSING_BILLED_AMOUNT",
+          "MISSING_BILLING_LINE",
+          "MISSING_DOCUMENT_QUANTITY",
+          "MISSING_SOURCE_EVIDENCE",
+          "UNCONFIRMED_AMOUNT"
+        ],
+        "input_revision": 8,
+        "period_start": "2026-11-09",
+        "period_end": "2026-11-15",
+        "fact_status": "UNCONFIRMED",
+        "work_status": "NEEDS_INFO",
+        "payment_status": "UNCONFIRMED",
+        "memos": [],
+        "invoice_history": [],
+        "active_invoice_ids": [
+          "invoice"
+        ],
+        "pending_invoices": [],
+        "excluded_invoices": [],
+        "approval_history": [],
+        "is_example": false
+      }
+    }
+  }
+}

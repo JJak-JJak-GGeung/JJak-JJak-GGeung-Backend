@@ -1,0 +1,3378 @@
+{
+  "created_at": "2026-11-21T03:37:25.005813+00:00",
+  "code_commit": "80b11436bdc98f46b00d88b7d22b1ee26a9c925c",
+  "A091_source_commit": "209e33a4448688691c37ec13857784c3e4fe439e",
+  "network_or_db_called": false,
+  "cases": {
+    "B2_received_sources": {
+      "mode": "Actual supplied OCR values; A091 reported confirmation retained; A131 remains unconfirmed. Offline scope aliases.",
+      "input": {
+        "lines": [
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "line_id": "offline:DL-A091",
+            "transaction_id": "offline:transaction:DL-A091",
+            "delivery_no": "DL-A091",
+            "delivery_date": "2026-11-09",
+            "item": "손질장어",
+            "spec": null,
+            "unit": "kg",
+            "declared_qty": "60",
+            "billed_qty": "60",
+            "unit_price": "20000",
+            "billed_amount": 1200000,
+            "evidence_refs": [
+              {
+                "document_id": "ff8c8d71-9ff7-4d98-9469-8d5dc37dbc9a",
+                "line_id": "bc8f4252-1514-54ac-ba71-8dcfbd78b081",
+                "kind": "DELIVERY",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              },
+              {
+                "document_id": "a2182bea-7a62-4284-823b-4b4e117524b3",
+                "line_id": "795f21a1-ea43-55ce-b352-0b55693ee3e3",
+                "kind": "INVOICE",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              }
+            ]
+          },
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "line_id": "offline:DL-A131",
+            "transaction_id": "offline:transaction:DL-A131",
+            "delivery_no": "DL-A131",
+            "delivery_date": "2026-11-13",
+            "item": "손질장어",
+            "spec": null,
+            "unit": "kg",
+            "declared_qty": "40",
+            "billed_qty": "40",
+            "unit_price": "20000",
+            "billed_amount": 800000,
+            "evidence_refs": [
+              {
+                "document_id": "fb844e75-67ee-47ef-8d0a-c7c090e78096",
+                "line_id": null,
+                "kind": "DELIVERY",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              },
+              {
+                "document_id": "offline:A04",
+                "line_id": null,
+                "kind": "INVOICE",
+                "source_location": {
+                  "page": 1,
+                  "row": 2
+                }
+              }
+            ]
+          }
+        ],
+        "receipts": [
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "candidate_fixture_ref": "A03",
+            "candidate_qty_read": "60",
+            "unit": "kg",
+            "owner_confirmed": true,
+            "receipt_id": "364c235a-bc95-4a8a-96cd-2a6517914d46",
+            "received_qty": "60",
+            "confirmed_by": "검수 점주",
+            "confirmed_at": "2026-11-21T11:25:08.346543+09:00",
+            "target_delivery_line_id": "offline:DL-A091",
+            "include_in_received_totals": true,
+            "source_line_id": "87dfde82-74cd-5055-ac01-8160fe76c022",
+            "delivery_no": "DL-A091",
+            "qty_read": "60",
+            "evidence_refs": [
+              {
+                "document_id": "b292095a-e43a-46ed-befb-726eeafdcb72",
+                "line_id": "87dfde82-74cd-5055-ac01-8160fe76c022",
+                "kind": "RECEIPT",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              }
+            ]
+          },
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "candidate_fixture_ref": "A03",
+            "candidate_qty_read": "36",
+            "unit": "kg",
+            "owner_confirmed": null,
+            "receipt_id": null,
+            "received_qty": null,
+            "confirmed_by": null,
+            "confirmed_at": null,
+            "target_delivery_line_id": null,
+            "include_in_received_totals": false,
+            "delivery_no": "DL-A131",
+            "qty_read": "36",
+            "evidence_refs": [
+              {
+                "document_id": "offline:A03",
+                "line_id": null,
+                "kind": "RECEIPT",
+                "source_location": {
+                  "page": 1,
+                  "row": 2
+                }
+              }
+            ]
+          }
+        ],
+        "store_id": "offline-store",
+        "supplier_id": "offline-supplier",
+        "period_id": "offline-period"
+      },
+      "output": {
+        "items": [
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "line_id": "offline:DL-A091",
+            "transaction_id": "offline:transaction:DL-A091",
+            "delivery_no": "DL-A091",
+            "delivery_date": "2026-11-09",
+            "item": "손질장어",
+            "spec": null,
+            "unit": "kg",
+            "declared_qty": "60",
+            "billed_qty": "60",
+            "unit_price": "20000",
+            "billed_amount": 1200000,
+            "evidence_refs": [
+              {
+                "document_id": "ff8c8d71-9ff7-4d98-9469-8d5dc37dbc9a",
+                "line_id": "bc8f4252-1514-54ac-ba71-8dcfbd78b081",
+                "kind": "DELIVERY",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              },
+              {
+                "document_id": "a2182bea-7a62-4284-823b-4b4e117524b3",
+                "line_id": "795f21a1-ea43-55ce-b352-0b55693ee3e3",
+                "kind": "INVOICE",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              },
+              {
+                "document_id": "b292095a-e43a-46ed-befb-726eeafdcb72",
+                "line_id": "87dfde82-74cd-5055-ac01-8160fe76c022",
+                "kind": "RECEIPT",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              }
+            ],
+            "received_qty": "60",
+            "units_comparable": true,
+            "receipt_ids": [
+              "364c235a-bc95-4a8a-96cd-2a6517914d46"
+            ],
+            "delta_qty": "0",
+            "check_amount": 0,
+            "match_result": "MATCHED",
+            "can_approve": false
+          },
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "line_id": "offline:DL-A131",
+            "transaction_id": "offline:transaction:DL-A131",
+            "delivery_no": "DL-A131",
+            "delivery_date": "2026-11-13",
+            "item": "손질장어",
+            "spec": null,
+            "unit": "kg",
+            "declared_qty": "40",
+            "billed_qty": "40",
+            "unit_price": "20000",
+            "billed_amount": 800000,
+            "evidence_refs": [
+              {
+                "document_id": "fb844e75-67ee-47ef-8d0a-c7c090e78096",
+                "line_id": null,
+                "kind": "DELIVERY",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              },
+              {
+                "document_id": "offline:A04",
+                "line_id": null,
+                "kind": "INVOICE",
+                "source_location": {
+                  "page": 1,
+                  "row": 2
+                }
+              }
+            ],
+            "received_qty": null,
+            "units_comparable": false,
+            "receipt_ids": [],
+            "delta_qty": null,
+            "check_amount": null,
+            "match_result": "MISSING_DATA",
+            "can_approve": false
+          }
+        ],
+        "summary": {
+          "declared_qty": "100",
+          "billed_qty": "100",
+          "received_qty": null,
+          "unit": "kg",
+          "delta_qty": null,
+          "check_amount": null,
+          "billed_amount": 2000000
+        },
+        "confirmation_scope": "RECEIPTS_INCLUDED",
+        "match_result": "MISSING_DATA",
+        "can_approve": false,
+        "approvable_amount": null,
+        "approved_amount": null,
+        "store_id": "offline-store",
+        "supplier_id": "offline-supplier",
+        "period_id": "offline-period",
+        "receipt_links": [
+          {
+            "receipt": {
+              "store_id": "offline-store",
+              "supplier_id": "offline-supplier",
+              "period_id": "offline-period",
+              "candidate_fixture_ref": "A03",
+              "candidate_qty_read": "60",
+              "unit": "kg",
+              "owner_confirmed": true,
+              "receipt_id": "364c235a-bc95-4a8a-96cd-2a6517914d46",
+              "received_qty": "60",
+              "confirmed_by": "검수 점주",
+              "confirmed_at": "2026-11-21T11:25:08.346543+09:00",
+              "target_delivery_line_id": "offline:DL-A091",
+              "include_in_received_totals": true,
+              "source_line_id": "87dfde82-74cd-5055-ac01-8160fe76c022",
+              "delivery_no": "DL-A091",
+              "qty_read": "60",
+              "evidence_refs": [
+                {
+                  "document_id": "b292095a-e43a-46ed-befb-726eeafdcb72",
+                  "line_id": "87dfde82-74cd-5055-ac01-8160fe76c022",
+                  "kind": "RECEIPT",
+                  "source_location": {
+                    "page": 1,
+                    "row": 1
+                  }
+                }
+              ]
+            },
+            "receipt_id": "364c235a-bc95-4a8a-96cd-2a6517914d46",
+            "target_delivery_line_id": "offline:DL-A091",
+            "candidates": [
+              {
+                "line_id": "offline:DL-A091",
+                "delivery_no": "DL-A091",
+                "delivery_date": "2026-11-09",
+                "item": "손질장어",
+                "spec": null,
+                "unit": "kg",
+                "evidence_refs": [
+                  {
+                    "document_id": "ff8c8d71-9ff7-4d98-9469-8d5dc37dbc9a",
+                    "line_id": "bc8f4252-1514-54ac-ba71-8dcfbd78b081",
+                    "kind": "DELIVERY",
+                    "source_location": {
+                      "page": 1,
+                      "row": 1
+                    }
+                  },
+                  {
+                    "document_id": "a2182bea-7a62-4284-823b-4b4e117524b3",
+                    "line_id": "795f21a1-ea43-55ce-b352-0b55693ee3e3",
+                    "kind": "INVOICE",
+                    "source_location": {
+                      "page": 1,
+                      "row": 1
+                    }
+                  }
+                ]
+              }
+            ],
+            "status": "LINKED",
+            "reason": null
+          },
+          {
+            "receipt": {
+              "store_id": "offline-store",
+              "supplier_id": "offline-supplier",
+              "period_id": "offline-period",
+              "candidate_fixture_ref": "A03",
+              "candidate_qty_read": "36",
+              "unit": "kg",
+              "owner_confirmed": null,
+              "receipt_id": null,
+              "received_qty": null,
+              "confirmed_by": null,
+              "confirmed_at": null,
+              "target_delivery_line_id": null,
+              "include_in_received_totals": false,
+              "delivery_no": "DL-A131",
+              "qty_read": "36",
+              "evidence_refs": [
+                {
+                  "document_id": "offline:A03",
+                  "line_id": null,
+                  "kind": "RECEIPT",
+                  "source_location": {
+                    "page": 1,
+                    "row": 2
+                  }
+                }
+              ]
+            },
+            "receipt_id": null,
+            "target_delivery_line_id": null,
+            "candidates": [
+              {
+                "line_id": "offline:DL-A131",
+                "delivery_no": "DL-A131",
+                "delivery_date": "2026-11-13",
+                "item": "손질장어",
+                "spec": null,
+                "unit": "kg",
+                "evidence_refs": [
+                  {
+                    "document_id": "fb844e75-67ee-47ef-8d0a-c7c090e78096",
+                    "line_id": null,
+                    "kind": "DELIVERY",
+                    "source_location": {
+                      "page": 1,
+                      "row": 1
+                    }
+                  },
+                  {
+                    "document_id": "offline:A04",
+                    "line_id": null,
+                    "kind": "INVOICE",
+                    "source_location": {
+                      "page": 1,
+                      "row": 2
+                    }
+                  }
+                ]
+              }
+            ],
+            "status": "UNCONFIRMED",
+            "reason": "RECEIPT_NOT_CONFIRMED"
+          }
+        ],
+        "blockers": [
+          "MISSING_CONFIRMED_RECEIPT"
+        ]
+      }
+    },
+    "B2_simulated_both_confirmed": {
+      "mode": "Actual OCR quantities plus explicitly simulated A131 owner confirmation; not server proof.",
+      "input": {
+        "lines": [
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "line_id": "offline:DL-A091",
+            "transaction_id": "offline:transaction:DL-A091",
+            "delivery_no": "DL-A091",
+            "delivery_date": "2026-11-09",
+            "item": "손질장어",
+            "spec": null,
+            "unit": "kg",
+            "declared_qty": "60",
+            "billed_qty": "60",
+            "unit_price": "20000",
+            "billed_amount": 1200000,
+            "evidence_refs": [
+              {
+                "document_id": "ff8c8d71-9ff7-4d98-9469-8d5dc37dbc9a",
+                "line_id": "bc8f4252-1514-54ac-ba71-8dcfbd78b081",
+                "kind": "DELIVERY",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              },
+              {
+                "document_id": "a2182bea-7a62-4284-823b-4b4e117524b3",
+                "line_id": "795f21a1-ea43-55ce-b352-0b55693ee3e3",
+                "kind": "INVOICE",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              }
+            ]
+          },
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "line_id": "offline:DL-A131",
+            "transaction_id": "offline:transaction:DL-A131",
+            "delivery_no": "DL-A131",
+            "delivery_date": "2026-11-13",
+            "item": "손질장어",
+            "spec": null,
+            "unit": "kg",
+            "declared_qty": "40",
+            "billed_qty": "40",
+            "unit_price": "20000",
+            "billed_amount": 800000,
+            "evidence_refs": [
+              {
+                "document_id": "fb844e75-67ee-47ef-8d0a-c7c090e78096",
+                "line_id": null,
+                "kind": "DELIVERY",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              },
+              {
+                "document_id": "offline:A04",
+                "line_id": null,
+                "kind": "INVOICE",
+                "source_location": {
+                  "page": 1,
+                  "row": 2
+                }
+              }
+            ]
+          }
+        ],
+        "receipts": [
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "candidate_fixture_ref": "A03",
+            "candidate_qty_read": "60",
+            "unit": "kg",
+            "owner_confirmed": true,
+            "receipt_id": "364c235a-bc95-4a8a-96cd-2a6517914d46",
+            "received_qty": "60",
+            "confirmed_by": "검수 점주",
+            "confirmed_at": "2026-11-21T11:25:08.346543+09:00",
+            "target_delivery_line_id": "offline:DL-A091",
+            "include_in_received_totals": true,
+            "source_line_id": "87dfde82-74cd-5055-ac01-8160fe76c022",
+            "delivery_no": "DL-A091",
+            "qty_read": "60",
+            "evidence_refs": [
+              {
+                "document_id": "b292095a-e43a-46ed-befb-726eeafdcb72",
+                "line_id": "87dfde82-74cd-5055-ac01-8160fe76c022",
+                "kind": "RECEIPT",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              }
+            ]
+          },
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "candidate_fixture_ref": "A03",
+            "candidate_qty_read": "36",
+            "unit": "kg",
+            "owner_confirmed": null,
+            "receipt_id": "simulated:A131",
+            "received_qty": "36",
+            "confirmed_by": "SIMULATED_OWNER",
+            "confirmed_at": "2026-11-21T00:00:00+00:00",
+            "target_delivery_line_id": "offline:DL-A131",
+            "include_in_received_totals": false,
+            "delivery_no": "DL-A131",
+            "qty_read": "36",
+            "evidence_refs": [
+              {
+                "document_id": "offline:A03",
+                "line_id": null,
+                "kind": "RECEIPT",
+                "source_location": {
+                  "page": 1,
+                  "row": 2
+                }
+              }
+            ],
+            "source_line_id": "simulated:A03:2"
+          }
+        ],
+        "store_id": "offline-store",
+        "supplier_id": "offline-supplier",
+        "period_id": "offline-period"
+      },
+      "output": {
+        "items": [
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "line_id": "offline:DL-A091",
+            "transaction_id": "offline:transaction:DL-A091",
+            "delivery_no": "DL-A091",
+            "delivery_date": "2026-11-09",
+            "item": "손질장어",
+            "spec": null,
+            "unit": "kg",
+            "declared_qty": "60",
+            "billed_qty": "60",
+            "unit_price": "20000",
+            "billed_amount": 1200000,
+            "evidence_refs": [
+              {
+                "document_id": "ff8c8d71-9ff7-4d98-9469-8d5dc37dbc9a",
+                "line_id": "bc8f4252-1514-54ac-ba71-8dcfbd78b081",
+                "kind": "DELIVERY",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              },
+              {
+                "document_id": "a2182bea-7a62-4284-823b-4b4e117524b3",
+                "line_id": "795f21a1-ea43-55ce-b352-0b55693ee3e3",
+                "kind": "INVOICE",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              },
+              {
+                "document_id": "b292095a-e43a-46ed-befb-726eeafdcb72",
+                "line_id": "87dfde82-74cd-5055-ac01-8160fe76c022",
+                "kind": "RECEIPT",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              }
+            ],
+            "received_qty": "60",
+            "units_comparable": true,
+            "receipt_ids": [
+              "364c235a-bc95-4a8a-96cd-2a6517914d46"
+            ],
+            "delta_qty": "0",
+            "check_amount": 0,
+            "match_result": "MATCHED",
+            "can_approve": false
+          },
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "line_id": "offline:DL-A131",
+            "transaction_id": "offline:transaction:DL-A131",
+            "delivery_no": "DL-A131",
+            "delivery_date": "2026-11-13",
+            "item": "손질장어",
+            "spec": null,
+            "unit": "kg",
+            "declared_qty": "40",
+            "billed_qty": "40",
+            "unit_price": "20000",
+            "billed_amount": 800000,
+            "evidence_refs": [
+              {
+                "document_id": "fb844e75-67ee-47ef-8d0a-c7c090e78096",
+                "line_id": null,
+                "kind": "DELIVERY",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              },
+              {
+                "document_id": "offline:A04",
+                "line_id": null,
+                "kind": "INVOICE",
+                "source_location": {
+                  "page": 1,
+                  "row": 2
+                }
+              },
+              {
+                "document_id": "offline:A03",
+                "line_id": null,
+                "kind": "RECEIPT",
+                "source_location": {
+                  "page": 1,
+                  "row": 2
+                }
+              }
+            ],
+            "received_qty": "36",
+            "units_comparable": true,
+            "receipt_ids": [
+              "simulated:A131"
+            ],
+            "delta_qty": "4",
+            "check_amount": 80000,
+            "match_result": "MISMATCH",
+            "can_approve": false
+          }
+        ],
+        "summary": {
+          "declared_qty": "100",
+          "billed_qty": "100",
+          "received_qty": "96",
+          "unit": "kg",
+          "delta_qty": "4",
+          "check_amount": 80000,
+          "billed_amount": 2000000
+        },
+        "confirmation_scope": "RECEIPTS_INCLUDED",
+        "match_result": "MISMATCH",
+        "can_approve": false,
+        "approvable_amount": null,
+        "approved_amount": null,
+        "store_id": "offline-store",
+        "supplier_id": "offline-supplier",
+        "period_id": "offline-period",
+        "receipt_links": [
+          {
+            "receipt": {
+              "store_id": "offline-store",
+              "supplier_id": "offline-supplier",
+              "period_id": "offline-period",
+              "candidate_fixture_ref": "A03",
+              "candidate_qty_read": "60",
+              "unit": "kg",
+              "owner_confirmed": true,
+              "receipt_id": "364c235a-bc95-4a8a-96cd-2a6517914d46",
+              "received_qty": "60",
+              "confirmed_by": "검수 점주",
+              "confirmed_at": "2026-11-21T11:25:08.346543+09:00",
+              "target_delivery_line_id": "offline:DL-A091",
+              "include_in_received_totals": true,
+              "source_line_id": "87dfde82-74cd-5055-ac01-8160fe76c022",
+              "delivery_no": "DL-A091",
+              "qty_read": "60",
+              "evidence_refs": [
+                {
+                  "document_id": "b292095a-e43a-46ed-befb-726eeafdcb72",
+                  "line_id": "87dfde82-74cd-5055-ac01-8160fe76c022",
+                  "kind": "RECEIPT",
+                  "source_location": {
+                    "page": 1,
+                    "row": 1
+                  }
+                }
+              ]
+            },
+            "receipt_id": "364c235a-bc95-4a8a-96cd-2a6517914d46",
+            "target_delivery_line_id": "offline:DL-A091",
+            "candidates": [
+              {
+                "line_id": "offline:DL-A091",
+                "delivery_no": "DL-A091",
+                "delivery_date": "2026-11-09",
+                "item": "손질장어",
+                "spec": null,
+                "unit": "kg",
+                "evidence_refs": [
+                  {
+                    "document_id": "ff8c8d71-9ff7-4d98-9469-8d5dc37dbc9a",
+                    "line_id": "bc8f4252-1514-54ac-ba71-8dcfbd78b081",
+                    "kind": "DELIVERY",
+                    "source_location": {
+                      "page": 1,
+                      "row": 1
+                    }
+                  },
+                  {
+                    "document_id": "a2182bea-7a62-4284-823b-4b4e117524b3",
+                    "line_id": "795f21a1-ea43-55ce-b352-0b55693ee3e3",
+                    "kind": "INVOICE",
+                    "source_location": {
+                      "page": 1,
+                      "row": 1
+                    }
+                  }
+                ]
+              }
+            ],
+            "status": "LINKED",
+            "reason": null
+          },
+          {
+            "receipt": {
+              "store_id": "offline-store",
+              "supplier_id": "offline-supplier",
+              "period_id": "offline-period",
+              "candidate_fixture_ref": "A03",
+              "candidate_qty_read": "36",
+              "unit": "kg",
+              "owner_confirmed": null,
+              "receipt_id": "simulated:A131",
+              "received_qty": "36",
+              "confirmed_by": "SIMULATED_OWNER",
+              "confirmed_at": "2026-11-21T00:00:00+00:00",
+              "target_delivery_line_id": "offline:DL-A131",
+              "include_in_received_totals": false,
+              "delivery_no": "DL-A131",
+              "qty_read": "36",
+              "evidence_refs": [
+                {
+                  "document_id": "offline:A03",
+                  "line_id": null,
+                  "kind": "RECEIPT",
+                  "source_location": {
+                    "page": 1,
+                    "row": 2
+                  }
+                }
+              ],
+              "source_line_id": "simulated:A03:2"
+            },
+            "receipt_id": "simulated:A131",
+            "target_delivery_line_id": "offline:DL-A131",
+            "candidates": [
+              {
+                "line_id": "offline:DL-A131",
+                "delivery_no": "DL-A131",
+                "delivery_date": "2026-11-13",
+                "item": "손질장어",
+                "spec": null,
+                "unit": "kg",
+                "evidence_refs": [
+                  {
+                    "document_id": "fb844e75-67ee-47ef-8d0a-c7c090e78096",
+                    "line_id": null,
+                    "kind": "DELIVERY",
+                    "source_location": {
+                      "page": 1,
+                      "row": 1
+                    }
+                  },
+                  {
+                    "document_id": "offline:A04",
+                    "line_id": null,
+                    "kind": "INVOICE",
+                    "source_location": {
+                      "page": 1,
+                      "row": 2
+                    }
+                  }
+                ]
+              }
+            ],
+            "status": "LINKED",
+            "reason": null
+          }
+        ],
+        "blockers": [
+          "QTY_MISMATCH"
+        ]
+      }
+    },
+    "C1_A06_text_simulated_confirmation": {
+      "mode": "Provided A06 text, manually structured claim 40kg, simulated confirmation. No audio transcription/NLP/API/DB verified.",
+      "input": {
+        "store_id": "offline-store",
+        "supplier_id": "offline-supplier",
+        "period_id": "offline-period",
+        "period_start": "2026-11-09",
+        "period_end": "2026-11-15",
+        "input_revision": 1,
+        "deliveries": [
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "line_id": "offline:DL-A091",
+            "transaction_id": "offline:transaction:DL-A091",
+            "delivery_no": "DL-A091",
+            "delivery_date": "2026-11-09",
+            "item": "손질장어",
+            "spec": null,
+            "unit": "kg",
+            "declared_qty": "60",
+            "billed_qty": "60",
+            "unit_price": "20000",
+            "billed_amount": 1200000,
+            "evidence_refs": [
+              {
+                "document_id": "ff8c8d71-9ff7-4d98-9469-8d5dc37dbc9a",
+                "line_id": "bc8f4252-1514-54ac-ba71-8dcfbd78b081",
+                "kind": "DELIVERY",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              }
+            ]
+          },
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "line_id": "offline:DL-A131",
+            "transaction_id": "offline:transaction:DL-A131",
+            "delivery_no": "DL-A131",
+            "delivery_date": "2026-11-13",
+            "item": "손질장어",
+            "spec": null,
+            "unit": "kg",
+            "declared_qty": "40",
+            "billed_qty": "40",
+            "unit_price": "20000",
+            "billed_amount": 800000,
+            "evidence_refs": [
+              {
+                "document_id": "fb844e75-67ee-47ef-8d0a-c7c090e78096",
+                "line_id": null,
+                "kind": "DELIVERY",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              }
+            ]
+          }
+        ],
+        "invoices": [
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "document_id": "offline:A04",
+            "doc_no": "INV-A01",
+            "doc_type": "INVOICE",
+            "period_start": "2026-11-09",
+            "period_end": "2026-11-15",
+            "evidence_refs": [
+              {
+                "document_id": "offline:A04",
+                "line_id": null,
+                "kind": "INVOICE",
+                "source_location": {
+                  "page": 1,
+                  "text": "invoice header"
+                }
+              }
+            ],
+            "lines": [
+              {
+                "target_delivery_line_id": "offline:DL-A091",
+                "billed_qty": "60",
+                "unit_price": "20000",
+                "unit": "kg",
+                "billed_amount": 1200000
+              },
+              {
+                "target_delivery_line_id": "offline:DL-A131",
+                "billed_qty": "40",
+                "unit_price": "20000",
+                "unit": "kg",
+                "billed_amount": 800000
+              }
+            ]
+          }
+        ],
+        "receipts": [
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "candidate_fixture_ref": "A03",
+            "candidate_qty_read": "60",
+            "unit": "kg",
+            "owner_confirmed": true,
+            "receipt_id": "364c235a-bc95-4a8a-96cd-2a6517914d46",
+            "received_qty": "60",
+            "confirmed_by": "검수 점주",
+            "confirmed_at": "2026-11-21T11:25:08.346543+09:00",
+            "target_delivery_line_id": "offline:DL-A091",
+            "include_in_received_totals": true,
+            "source_line_id": "87dfde82-74cd-5055-ac01-8160fe76c022",
+            "delivery_no": "DL-A091",
+            "qty_read": "60",
+            "evidence_refs": [
+              {
+                "document_id": "b292095a-e43a-46ed-befb-726eeafdcb72",
+                "line_id": "87dfde82-74cd-5055-ac01-8160fe76c022",
+                "kind": "RECEIPT",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              }
+            ]
+          },
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "candidate_fixture_ref": "A03",
+            "candidate_qty_read": "36",
+            "unit": "kg",
+            "owner_confirmed": null,
+            "receipt_id": "simulated:A131",
+            "received_qty": "36",
+            "confirmed_by": "SIMULATED_OWNER",
+            "confirmed_at": "2026-11-21T00:00:00+00:00",
+            "target_delivery_line_id": "offline:DL-A131",
+            "include_in_received_totals": false,
+            "delivery_no": "DL-A131",
+            "qty_read": "36",
+            "evidence_refs": [
+              {
+                "document_id": "offline:A03",
+                "line_id": null,
+                "kind": "RECEIPT",
+                "source_location": {
+                  "page": 1,
+                  "row": 2
+                }
+              }
+            ],
+            "source_line_id": "simulated:A03:2"
+          }
+        ],
+        "memos": [
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "memo_id": "simulated:memo:A06",
+            "transaction_id": "offline:transaction:DL-A131",
+            "confirmed_text": "거래처는 11월 13일에 장어 40킬로를 다 보냈다고 합니다. 우리 가게 기록에는 36킬로입니다.",
+            "source_mode": "TYPED_TEXT",
+            "supplier_claim_qty": "40",
+            "unit": "kg",
+            "confirmed_by": "SIMULATED_OWNER",
+            "confirmed_at": "2026-11-21T00:00:00+00:00"
+          },
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "memo_id": "simulated:memo:A06",
+            "transaction_id": "offline:transaction:DL-A131",
+            "confirmed_text": "거래처는 11월 13일에 장어 40킬로를 다 보냈다고 합니다. 우리 가게 기록에는 36킬로입니다.",
+            "source_mode": "TYPED_TEXT",
+            "supplier_claim_qty": "40",
+            "unit": "kg",
+            "confirmed_by": "SIMULATED_OWNER",
+            "confirmed_at": "2026-11-21T00:00:00+00:00"
+          }
+        ]
+      },
+      "output": {
+        "items": [
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "line_id": "offline:DL-A091",
+            "transaction_id": "offline:transaction:DL-A091",
+            "delivery_no": "DL-A091",
+            "delivery_date": "2026-11-09",
+            "item": "손질장어",
+            "spec": null,
+            "unit": "kg",
+            "declared_qty": "60",
+            "billed_qty": "60",
+            "unit_price": "20000",
+            "billed_amount": 1200000,
+            "evidence_refs": [
+              {
+                "document_id": "ff8c8d71-9ff7-4d98-9469-8d5dc37dbc9a",
+                "line_id": "bc8f4252-1514-54ac-ba71-8dcfbd78b081",
+                "kind": "DELIVERY",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              },
+              {
+                "document_id": "offline:A04",
+                "line_id": null,
+                "kind": "INVOICE",
+                "source_location": {
+                  "page": 1,
+                  "text": "invoice header"
+                }
+              },
+              {
+                "document_id": "b292095a-e43a-46ed-befb-726eeafdcb72",
+                "line_id": "87dfde82-74cd-5055-ac01-8160fe76c022",
+                "kind": "RECEIPT",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              }
+            ],
+            "received_qty": "60",
+            "units_comparable": true,
+            "receipt_ids": [
+              "364c235a-bc95-4a8a-96cd-2a6517914d46"
+            ],
+            "delta_qty": "0",
+            "check_amount": 0,
+            "match_result": "MATCHED",
+            "can_approve": false,
+            "memos": [],
+            "fact_status": "OWNER_CONFIRMED"
+          },
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "line_id": "offline:DL-A131",
+            "transaction_id": "offline:transaction:DL-A131",
+            "delivery_no": "DL-A131",
+            "delivery_date": "2026-11-13",
+            "item": "손질장어",
+            "spec": null,
+            "unit": "kg",
+            "declared_qty": "40",
+            "billed_qty": "40",
+            "unit_price": "20000",
+            "billed_amount": 800000,
+            "evidence_refs": [
+              {
+                "document_id": "fb844e75-67ee-47ef-8d0a-c7c090e78096",
+                "line_id": null,
+                "kind": "DELIVERY",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              },
+              {
+                "document_id": "offline:A04",
+                "line_id": null,
+                "kind": "INVOICE",
+                "source_location": {
+                  "page": 1,
+                  "text": "invoice header"
+                }
+              },
+              {
+                "document_id": "offline:A03",
+                "line_id": null,
+                "kind": "RECEIPT",
+                "source_location": {
+                  "page": 1,
+                  "row": 2
+                }
+              }
+            ],
+            "received_qty": "36",
+            "units_comparable": true,
+            "receipt_ids": [
+              "simulated:A131"
+            ],
+            "delta_qty": "4",
+            "check_amount": 80000,
+            "match_result": "MISMATCH",
+            "can_approve": false,
+            "memos": [
+              {
+                "store_id": "offline-store",
+                "supplier_id": "offline-supplier",
+                "period_id": "offline-period",
+                "memo_id": "simulated:memo:A06",
+                "transaction_id": "offline:transaction:DL-A131",
+                "confirmed_text": "거래처는 11월 13일에 장어 40킬로를 다 보냈다고 합니다. 우리 가게 기록에는 36킬로입니다.",
+                "source_mode": "TYPED_TEXT",
+                "supplier_claim_qty": "40",
+                "unit": "kg",
+                "confirmed_by": "SIMULATED_OWNER",
+                "confirmed_at": "2026-11-21T00:00:00+00:00"
+              }
+            ],
+            "fact_status": "CONFLICTING"
+          }
+        ],
+        "summary": {
+          "declared_qty": "100",
+          "billed_qty": "100",
+          "received_qty": "96",
+          "unit": "kg",
+          "delta_qty": "4",
+          "check_amount": 80000,
+          "billed_amount": 2000000
+        },
+        "confirmation_scope": "RECEIPTS_INCLUDED",
+        "match_result": "MISMATCH",
+        "can_approve": false,
+        "approvable_amount": null,
+        "approved_amount": null,
+        "store_id": "offline-store",
+        "supplier_id": "offline-supplier",
+        "period_id": "offline-period",
+        "receipt_links": [
+          {
+            "receipt": {
+              "store_id": "offline-store",
+              "supplier_id": "offline-supplier",
+              "period_id": "offline-period",
+              "candidate_fixture_ref": "A03",
+              "candidate_qty_read": "60",
+              "unit": "kg",
+              "owner_confirmed": true,
+              "receipt_id": "364c235a-bc95-4a8a-96cd-2a6517914d46",
+              "received_qty": "60",
+              "confirmed_by": "검수 점주",
+              "confirmed_at": "2026-11-21T11:25:08.346543+09:00",
+              "target_delivery_line_id": "offline:DL-A091",
+              "include_in_received_totals": true,
+              "source_line_id": "87dfde82-74cd-5055-ac01-8160fe76c022",
+              "delivery_no": "DL-A091",
+              "qty_read": "60",
+              "evidence_refs": [
+                {
+                  "document_id": "b292095a-e43a-46ed-befb-726eeafdcb72",
+                  "line_id": "87dfde82-74cd-5055-ac01-8160fe76c022",
+                  "kind": "RECEIPT",
+                  "source_location": {
+                    "page": 1,
+                    "row": 1
+                  }
+                }
+              ]
+            },
+            "receipt_id": "364c235a-bc95-4a8a-96cd-2a6517914d46",
+            "target_delivery_line_id": "offline:DL-A091",
+            "candidates": [
+              {
+                "line_id": "offline:DL-A091",
+                "delivery_no": "DL-A091",
+                "delivery_date": "2026-11-09",
+                "item": "손질장어",
+                "spec": null,
+                "unit": "kg",
+                "evidence_refs": [
+                  {
+                    "document_id": "ff8c8d71-9ff7-4d98-9469-8d5dc37dbc9a",
+                    "line_id": "bc8f4252-1514-54ac-ba71-8dcfbd78b081",
+                    "kind": "DELIVERY",
+                    "source_location": {
+                      "page": 1,
+                      "row": 1
+                    }
+                  },
+                  {
+                    "document_id": "offline:A04",
+                    "line_id": null,
+                    "kind": "INVOICE",
+                    "source_location": {
+                      "page": 1,
+                      "text": "invoice header"
+                    }
+                  }
+                ]
+              }
+            ],
+            "status": "LINKED",
+            "reason": null
+          },
+          {
+            "receipt": {
+              "store_id": "offline-store",
+              "supplier_id": "offline-supplier",
+              "period_id": "offline-period",
+              "candidate_fixture_ref": "A03",
+              "candidate_qty_read": "36",
+              "unit": "kg",
+              "owner_confirmed": null,
+              "receipt_id": "simulated:A131",
+              "received_qty": "36",
+              "confirmed_by": "SIMULATED_OWNER",
+              "confirmed_at": "2026-11-21T00:00:00+00:00",
+              "target_delivery_line_id": "offline:DL-A131",
+              "include_in_received_totals": false,
+              "delivery_no": "DL-A131",
+              "qty_read": "36",
+              "evidence_refs": [
+                {
+                  "document_id": "offline:A03",
+                  "line_id": null,
+                  "kind": "RECEIPT",
+                  "source_location": {
+                    "page": 1,
+                    "row": 2
+                  }
+                }
+              ],
+              "source_line_id": "simulated:A03:2"
+            },
+            "receipt_id": "simulated:A131",
+            "target_delivery_line_id": "offline:DL-A131",
+            "candidates": [
+              {
+                "line_id": "offline:DL-A131",
+                "delivery_no": "DL-A131",
+                "delivery_date": "2026-11-13",
+                "item": "손질장어",
+                "spec": null,
+                "unit": "kg",
+                "evidence_refs": [
+                  {
+                    "document_id": "fb844e75-67ee-47ef-8d0a-c7c090e78096",
+                    "line_id": null,
+                    "kind": "DELIVERY",
+                    "source_location": {
+                      "page": 1,
+                      "row": 1
+                    }
+                  },
+                  {
+                    "document_id": "offline:A04",
+                    "line_id": null,
+                    "kind": "INVOICE",
+                    "source_location": {
+                      "page": 1,
+                      "text": "invoice header"
+                    }
+                  }
+                ]
+              }
+            ],
+            "status": "LINKED",
+            "reason": null
+          }
+        ],
+        "blockers": [
+          "CONFLICTING_CLAIM",
+          "QTY_MISMATCH"
+        ],
+        "input_revision": 1,
+        "period_start": "2026-11-09",
+        "period_end": "2026-11-15",
+        "fact_status": "CONFLICTING",
+        "work_status": "WAITING_REPLY",
+        "payment_status": "UNCONFIRMED",
+        "memos": [
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "memo_id": "simulated:memo:A06",
+            "transaction_id": "offline:transaction:DL-A131",
+            "confirmed_text": "거래처는 11월 13일에 장어 40킬로를 다 보냈다고 합니다. 우리 가게 기록에는 36킬로입니다.",
+            "source_mode": "TYPED_TEXT",
+            "supplier_claim_qty": "40",
+            "unit": "kg",
+            "confirmed_by": "SIMULATED_OWNER",
+            "confirmed_at": "2026-11-21T00:00:00+00:00"
+          }
+        ],
+        "invoice_history": [],
+        "active_invoice_ids": [
+          "offline:A04"
+        ],
+        "pending_invoices": [],
+        "excluded_invoices": [],
+        "approval_history": []
+      }
+    },
+    "C2_A05_unconfirmed": {
+      "mode": "A05 manually transcribed; replacement/agreement events simulated, no actual owner confirmation.",
+      "input": {
+        "store_id": "offline-store",
+        "supplier_id": "offline-supplier",
+        "period_id": "offline-period",
+        "period_start": "2026-11-09",
+        "period_end": "2026-11-15",
+        "input_revision": 1,
+        "deliveries": [
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "line_id": "offline:DL-A091",
+            "transaction_id": "offline:transaction:DL-A091",
+            "delivery_no": "DL-A091",
+            "delivery_date": "2026-11-09",
+            "item": "손질장어",
+            "spec": null,
+            "unit": "kg",
+            "declared_qty": "60",
+            "billed_qty": "60",
+            "unit_price": "20000",
+            "billed_amount": 1200000,
+            "evidence_refs": [
+              {
+                "document_id": "ff8c8d71-9ff7-4d98-9469-8d5dc37dbc9a",
+                "line_id": "bc8f4252-1514-54ac-ba71-8dcfbd78b081",
+                "kind": "DELIVERY",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              }
+            ]
+          },
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "line_id": "offline:DL-A131",
+            "transaction_id": "offline:transaction:DL-A131",
+            "delivery_no": "DL-A131",
+            "delivery_date": "2026-11-13",
+            "item": "손질장어",
+            "spec": null,
+            "unit": "kg",
+            "declared_qty": "40",
+            "billed_qty": "40",
+            "unit_price": "20000",
+            "billed_amount": 800000,
+            "evidence_refs": [
+              {
+                "document_id": "fb844e75-67ee-47ef-8d0a-c7c090e78096",
+                "line_id": null,
+                "kind": "DELIVERY",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              }
+            ]
+          }
+        ],
+        "invoices": [
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "document_id": "offline:A04",
+            "doc_no": "INV-A01",
+            "doc_type": "INVOICE",
+            "period_start": "2026-11-09",
+            "period_end": "2026-11-15",
+            "evidence_refs": [
+              {
+                "document_id": "offline:A04",
+                "line_id": null,
+                "kind": "INVOICE",
+                "source_location": {
+                  "page": 1,
+                  "text": "invoice header"
+                }
+              }
+            ],
+            "lines": [
+              {
+                "target_delivery_line_id": "offline:DL-A091",
+                "billed_qty": "60",
+                "unit_price": "20000",
+                "unit": "kg",
+                "billed_amount": 1200000
+              },
+              {
+                "target_delivery_line_id": "offline:DL-A131",
+                "billed_qty": "40",
+                "unit_price": "20000",
+                "unit": "kg",
+                "billed_amount": 800000
+              }
+            ]
+          },
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "document_id": "offline:A05",
+            "doc_no": "INV-A01-R1",
+            "doc_type": "CORRECTED_INVOICE",
+            "period_start": "2026-11-09",
+            "period_end": "2026-11-15",
+            "evidence_refs": [
+              {
+                "document_id": "offline:A05",
+                "line_id": null,
+                "kind": "INVOICE",
+                "source_location": {
+                  "page": 1,
+                  "text": "11월 13일 납품분을 양측 확인 후 36kg으로 수정했습니다."
+                }
+              }
+            ],
+            "lines": [
+              {
+                "target_delivery_line_id": "offline:DL-A091",
+                "billed_qty": "60",
+                "unit_price": "20000",
+                "unit": "kg",
+                "billed_amount": 1200000
+              },
+              {
+                "target_delivery_line_id": "offline:DL-A131",
+                "billed_qty": "36",
+                "unit_price": "20000",
+                "unit": "kg",
+                "billed_amount": 720000
+              }
+            ],
+            "doc_date": "2026-11-17",
+            "replaces_doc_no": "INV-A01"
+          }
+        ],
+        "receipts": [
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "candidate_fixture_ref": "A03",
+            "candidate_qty_read": "60",
+            "unit": "kg",
+            "owner_confirmed": true,
+            "receipt_id": "364c235a-bc95-4a8a-96cd-2a6517914d46",
+            "received_qty": "60",
+            "confirmed_by": "검수 점주",
+            "confirmed_at": "2026-11-21T11:25:08.346543+09:00",
+            "target_delivery_line_id": "offline:DL-A091",
+            "include_in_received_totals": true,
+            "source_line_id": "87dfde82-74cd-5055-ac01-8160fe76c022",
+            "delivery_no": "DL-A091",
+            "qty_read": "60",
+            "evidence_refs": [
+              {
+                "document_id": "b292095a-e43a-46ed-befb-726eeafdcb72",
+                "line_id": "87dfde82-74cd-5055-ac01-8160fe76c022",
+                "kind": "RECEIPT",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              }
+            ]
+          },
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "candidate_fixture_ref": "A03",
+            "candidate_qty_read": "36",
+            "unit": "kg",
+            "owner_confirmed": null,
+            "receipt_id": "simulated:A131",
+            "received_qty": "36",
+            "confirmed_by": "SIMULATED_OWNER",
+            "confirmed_at": "2026-11-21T00:00:00+00:00",
+            "target_delivery_line_id": "offline:DL-A131",
+            "include_in_received_totals": false,
+            "delivery_no": "DL-A131",
+            "qty_read": "36",
+            "evidence_refs": [
+              {
+                "document_id": "offline:A03",
+                "line_id": null,
+                "kind": "RECEIPT",
+                "source_location": {
+                  "page": 1,
+                  "row": 2
+                }
+              }
+            ],
+            "source_line_id": "simulated:A03:2"
+          }
+        ],
+        "memos": [
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "memo_id": "simulated:memo:A06",
+            "transaction_id": "offline:transaction:DL-A131",
+            "confirmed_text": "거래처는 11월 13일에 장어 40킬로를 다 보냈다고 합니다. 우리 가게 기록에는 36킬로입니다.",
+            "source_mode": "TYPED_TEXT",
+            "supplier_claim_qty": "40",
+            "unit": "kg",
+            "confirmed_by": "SIMULATED_OWNER",
+            "confirmed_at": "2026-11-21T00:00:00+00:00"
+          },
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "memo_id": "simulated:memo:A06",
+            "transaction_id": "offline:transaction:DL-A131",
+            "confirmed_text": "거래처는 11월 13일에 장어 40킬로를 다 보냈다고 합니다. 우리 가게 기록에는 36킬로입니다.",
+            "source_mode": "TYPED_TEXT",
+            "supplier_claim_qty": "40",
+            "unit": "kg",
+            "confirmed_by": "SIMULATED_OWNER",
+            "confirmed_at": "2026-11-21T00:00:00+00:00"
+          }
+        ]
+      },
+      "output": {
+        "items": [
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "line_id": "offline:DL-A091",
+            "transaction_id": "offline:transaction:DL-A091",
+            "delivery_no": "DL-A091",
+            "delivery_date": "2026-11-09",
+            "item": "손질장어",
+            "spec": null,
+            "unit": "kg",
+            "declared_qty": "60",
+            "billed_qty": "60",
+            "unit_price": "20000",
+            "billed_amount": 1200000,
+            "evidence_refs": [
+              {
+                "document_id": "ff8c8d71-9ff7-4d98-9469-8d5dc37dbc9a",
+                "line_id": "bc8f4252-1514-54ac-ba71-8dcfbd78b081",
+                "kind": "DELIVERY",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              },
+              {
+                "document_id": "offline:A04",
+                "line_id": null,
+                "kind": "INVOICE",
+                "source_location": {
+                  "page": 1,
+                  "text": "invoice header"
+                }
+              },
+              {
+                "document_id": "b292095a-e43a-46ed-befb-726eeafdcb72",
+                "line_id": "87dfde82-74cd-5055-ac01-8160fe76c022",
+                "kind": "RECEIPT",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              }
+            ],
+            "received_qty": "60",
+            "units_comparable": true,
+            "receipt_ids": [
+              "364c235a-bc95-4a8a-96cd-2a6517914d46"
+            ],
+            "delta_qty": "0",
+            "check_amount": 0,
+            "match_result": "MATCHED",
+            "can_approve": false,
+            "memos": [],
+            "fact_status": "OWNER_CONFIRMED"
+          },
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "line_id": "offline:DL-A131",
+            "transaction_id": "offline:transaction:DL-A131",
+            "delivery_no": "DL-A131",
+            "delivery_date": "2026-11-13",
+            "item": "손질장어",
+            "spec": null,
+            "unit": "kg",
+            "declared_qty": "40",
+            "billed_qty": "40",
+            "unit_price": "20000",
+            "billed_amount": 800000,
+            "evidence_refs": [
+              {
+                "document_id": "fb844e75-67ee-47ef-8d0a-c7c090e78096",
+                "line_id": null,
+                "kind": "DELIVERY",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              },
+              {
+                "document_id": "offline:A04",
+                "line_id": null,
+                "kind": "INVOICE",
+                "source_location": {
+                  "page": 1,
+                  "text": "invoice header"
+                }
+              },
+              {
+                "document_id": "offline:A03",
+                "line_id": null,
+                "kind": "RECEIPT",
+                "source_location": {
+                  "page": 1,
+                  "row": 2
+                }
+              }
+            ],
+            "received_qty": "36",
+            "units_comparable": true,
+            "receipt_ids": [
+              "simulated:A131"
+            ],
+            "delta_qty": "4",
+            "check_amount": 80000,
+            "match_result": "MISMATCH",
+            "can_approve": false,
+            "memos": [
+              {
+                "store_id": "offline-store",
+                "supplier_id": "offline-supplier",
+                "period_id": "offline-period",
+                "memo_id": "simulated:memo:A06",
+                "transaction_id": "offline:transaction:DL-A131",
+                "confirmed_text": "거래처는 11월 13일에 장어 40킬로를 다 보냈다고 합니다. 우리 가게 기록에는 36킬로입니다.",
+                "source_mode": "TYPED_TEXT",
+                "supplier_claim_qty": "40",
+                "unit": "kg",
+                "confirmed_by": "SIMULATED_OWNER",
+                "confirmed_at": "2026-11-21T00:00:00+00:00"
+              }
+            ],
+            "fact_status": "CONFLICTING"
+          }
+        ],
+        "summary": {
+          "declared_qty": "100",
+          "billed_qty": "100",
+          "received_qty": "96",
+          "unit": "kg",
+          "delta_qty": "4",
+          "check_amount": 80000,
+          "billed_amount": 2000000
+        },
+        "confirmation_scope": "RECEIPTS_INCLUDED",
+        "match_result": "MISMATCH",
+        "can_approve": false,
+        "approvable_amount": null,
+        "approved_amount": null,
+        "store_id": "offline-store",
+        "supplier_id": "offline-supplier",
+        "period_id": "offline-period",
+        "receipt_links": [
+          {
+            "receipt": {
+              "store_id": "offline-store",
+              "supplier_id": "offline-supplier",
+              "period_id": "offline-period",
+              "candidate_fixture_ref": "A03",
+              "candidate_qty_read": "60",
+              "unit": "kg",
+              "owner_confirmed": true,
+              "receipt_id": "364c235a-bc95-4a8a-96cd-2a6517914d46",
+              "received_qty": "60",
+              "confirmed_by": "검수 점주",
+              "confirmed_at": "2026-11-21T11:25:08.346543+09:00",
+              "target_delivery_line_id": "offline:DL-A091",
+              "include_in_received_totals": true,
+              "source_line_id": "87dfde82-74cd-5055-ac01-8160fe76c022",
+              "delivery_no": "DL-A091",
+              "qty_read": "60",
+              "evidence_refs": [
+                {
+                  "document_id": "b292095a-e43a-46ed-befb-726eeafdcb72",
+                  "line_id": "87dfde82-74cd-5055-ac01-8160fe76c022",
+                  "kind": "RECEIPT",
+                  "source_location": {
+                    "page": 1,
+                    "row": 1
+                  }
+                }
+              ]
+            },
+            "receipt_id": "364c235a-bc95-4a8a-96cd-2a6517914d46",
+            "target_delivery_line_id": "offline:DL-A091",
+            "candidates": [
+              {
+                "line_id": "offline:DL-A091",
+                "delivery_no": "DL-A091",
+                "delivery_date": "2026-11-09",
+                "item": "손질장어",
+                "spec": null,
+                "unit": "kg",
+                "evidence_refs": [
+                  {
+                    "document_id": "ff8c8d71-9ff7-4d98-9469-8d5dc37dbc9a",
+                    "line_id": "bc8f4252-1514-54ac-ba71-8dcfbd78b081",
+                    "kind": "DELIVERY",
+                    "source_location": {
+                      "page": 1,
+                      "row": 1
+                    }
+                  },
+                  {
+                    "document_id": "offline:A04",
+                    "line_id": null,
+                    "kind": "INVOICE",
+                    "source_location": {
+                      "page": 1,
+                      "text": "invoice header"
+                    }
+                  }
+                ]
+              }
+            ],
+            "status": "LINKED",
+            "reason": null
+          },
+          {
+            "receipt": {
+              "store_id": "offline-store",
+              "supplier_id": "offline-supplier",
+              "period_id": "offline-period",
+              "candidate_fixture_ref": "A03",
+              "candidate_qty_read": "36",
+              "unit": "kg",
+              "owner_confirmed": null,
+              "receipt_id": "simulated:A131",
+              "received_qty": "36",
+              "confirmed_by": "SIMULATED_OWNER",
+              "confirmed_at": "2026-11-21T00:00:00+00:00",
+              "target_delivery_line_id": "offline:DL-A131",
+              "include_in_received_totals": false,
+              "delivery_no": "DL-A131",
+              "qty_read": "36",
+              "evidence_refs": [
+                {
+                  "document_id": "offline:A03",
+                  "line_id": null,
+                  "kind": "RECEIPT",
+                  "source_location": {
+                    "page": 1,
+                    "row": 2
+                  }
+                }
+              ],
+              "source_line_id": "simulated:A03:2"
+            },
+            "receipt_id": "simulated:A131",
+            "target_delivery_line_id": "offline:DL-A131",
+            "candidates": [
+              {
+                "line_id": "offline:DL-A131",
+                "delivery_no": "DL-A131",
+                "delivery_date": "2026-11-13",
+                "item": "손질장어",
+                "spec": null,
+                "unit": "kg",
+                "evidence_refs": [
+                  {
+                    "document_id": "fb844e75-67ee-47ef-8d0a-c7c090e78096",
+                    "line_id": null,
+                    "kind": "DELIVERY",
+                    "source_location": {
+                      "page": 1,
+                      "row": 1
+                    }
+                  },
+                  {
+                    "document_id": "offline:A04",
+                    "line_id": null,
+                    "kind": "INVOICE",
+                    "source_location": {
+                      "page": 1,
+                      "text": "invoice header"
+                    }
+                  }
+                ]
+              }
+            ],
+            "status": "LINKED",
+            "reason": null
+          }
+        ],
+        "blockers": [
+          "CONFLICTING_CLAIM",
+          "QTY_MISMATCH",
+          "UNCONFIRMED_REPLACEMENT"
+        ],
+        "input_revision": 1,
+        "period_start": "2026-11-09",
+        "period_end": "2026-11-15",
+        "fact_status": "CONFLICTING",
+        "work_status": "WAITING_REPLY",
+        "payment_status": "UNCONFIRMED",
+        "memos": [
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "memo_id": "simulated:memo:A06",
+            "transaction_id": "offline:transaction:DL-A131",
+            "confirmed_text": "거래처는 11월 13일에 장어 40킬로를 다 보냈다고 합니다. 우리 가게 기록에는 36킬로입니다.",
+            "source_mode": "TYPED_TEXT",
+            "supplier_claim_qty": "40",
+            "unit": "kg",
+            "confirmed_by": "SIMULATED_OWNER",
+            "confirmed_at": "2026-11-21T00:00:00+00:00"
+          }
+        ],
+        "invoice_history": [],
+        "active_invoice_ids": [
+          "offline:A04"
+        ],
+        "pending_invoices": [
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "document_id": "offline:A05",
+            "doc_no": "INV-A01-R1",
+            "doc_type": "CORRECTED_INVOICE",
+            "period_start": "2026-11-09",
+            "period_end": "2026-11-15",
+            "evidence_refs": [
+              {
+                "document_id": "offline:A05",
+                "line_id": null,
+                "kind": "INVOICE",
+                "source_location": {
+                  "page": 1,
+                  "text": "11월 13일 납품분을 양측 확인 후 36kg으로 수정했습니다."
+                }
+              }
+            ],
+            "lines": [
+              {
+                "target_delivery_line_id": "offline:DL-A091",
+                "billed_qty": "60",
+                "unit_price": "20000",
+                "unit": "kg",
+                "billed_amount": 1200000
+              },
+              {
+                "target_delivery_line_id": "offline:DL-A131",
+                "billed_qty": "36",
+                "unit_price": "20000",
+                "unit": "kg",
+                "billed_amount": 720000
+              }
+            ],
+            "doc_date": "2026-11-17",
+            "replaces_doc_no": "INV-A01"
+          }
+        ],
+        "excluded_invoices": [],
+        "approval_history": []
+      }
+    },
+    "C2_A05_replacement_only": {
+      "mode": "A05 manually transcribed; replacement/agreement events simulated, no actual owner confirmation.",
+      "input": {
+        "store_id": "offline-store",
+        "supplier_id": "offline-supplier",
+        "period_id": "offline-period",
+        "period_start": "2026-11-09",
+        "period_end": "2026-11-15",
+        "input_revision": 1,
+        "deliveries": [
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "line_id": "offline:DL-A091",
+            "transaction_id": "offline:transaction:DL-A091",
+            "delivery_no": "DL-A091",
+            "delivery_date": "2026-11-09",
+            "item": "손질장어",
+            "spec": null,
+            "unit": "kg",
+            "declared_qty": "60",
+            "billed_qty": "60",
+            "unit_price": "20000",
+            "billed_amount": 1200000,
+            "evidence_refs": [
+              {
+                "document_id": "ff8c8d71-9ff7-4d98-9469-8d5dc37dbc9a",
+                "line_id": "bc8f4252-1514-54ac-ba71-8dcfbd78b081",
+                "kind": "DELIVERY",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              }
+            ]
+          },
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "line_id": "offline:DL-A131",
+            "transaction_id": "offline:transaction:DL-A131",
+            "delivery_no": "DL-A131",
+            "delivery_date": "2026-11-13",
+            "item": "손질장어",
+            "spec": null,
+            "unit": "kg",
+            "declared_qty": "40",
+            "billed_qty": "40",
+            "unit_price": "20000",
+            "billed_amount": 800000,
+            "evidence_refs": [
+              {
+                "document_id": "fb844e75-67ee-47ef-8d0a-c7c090e78096",
+                "line_id": null,
+                "kind": "DELIVERY",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              }
+            ]
+          }
+        ],
+        "invoices": [
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "document_id": "offline:A04",
+            "doc_no": "INV-A01",
+            "doc_type": "INVOICE",
+            "period_start": "2026-11-09",
+            "period_end": "2026-11-15",
+            "evidence_refs": [
+              {
+                "document_id": "offline:A04",
+                "line_id": null,
+                "kind": "INVOICE",
+                "source_location": {
+                  "page": 1,
+                  "text": "invoice header"
+                }
+              }
+            ],
+            "lines": [
+              {
+                "target_delivery_line_id": "offline:DL-A091",
+                "billed_qty": "60",
+                "unit_price": "20000",
+                "unit": "kg",
+                "billed_amount": 1200000
+              },
+              {
+                "target_delivery_line_id": "offline:DL-A131",
+                "billed_qty": "40",
+                "unit_price": "20000",
+                "unit": "kg",
+                "billed_amount": 800000
+              }
+            ]
+          },
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "document_id": "offline:A05",
+            "doc_no": "INV-A01-R1",
+            "doc_type": "CORRECTED_INVOICE",
+            "period_start": "2026-11-09",
+            "period_end": "2026-11-15",
+            "evidence_refs": [
+              {
+                "document_id": "offline:A05",
+                "line_id": null,
+                "kind": "INVOICE",
+                "source_location": {
+                  "page": 1,
+                  "text": "11월 13일 납품분을 양측 확인 후 36kg으로 수정했습니다."
+                }
+              }
+            ],
+            "lines": [
+              {
+                "target_delivery_line_id": "offline:DL-A091",
+                "billed_qty": "60",
+                "unit_price": "20000",
+                "unit": "kg",
+                "billed_amount": 1200000
+              },
+              {
+                "target_delivery_line_id": "offline:DL-A131",
+                "billed_qty": "36",
+                "unit_price": "20000",
+                "unit": "kg",
+                "billed_amount": 720000
+              }
+            ],
+            "doc_date": "2026-11-17",
+            "replaces_doc_no": "INV-A01",
+            "replacement": {
+              "confirmed_by": "SIMULATED_OWNER",
+              "confirmed_at": "2026-11-21T00:00:00+00:00",
+              "evidence_refs": [
+                {
+                  "document_id": "offline:A05",
+                  "line_id": null,
+                  "kind": "INVOICE",
+                  "source_location": {
+                    "page": 1,
+                    "text": "11월 13일 납품분을 양측 확인 후 36kg으로 수정했습니다."
+                  }
+                }
+              ],
+              "target_document_id": "offline:A04"
+            }
+          }
+        ],
+        "receipts": [
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "candidate_fixture_ref": "A03",
+            "candidate_qty_read": "60",
+            "unit": "kg",
+            "owner_confirmed": true,
+            "receipt_id": "364c235a-bc95-4a8a-96cd-2a6517914d46",
+            "received_qty": "60",
+            "confirmed_by": "검수 점주",
+            "confirmed_at": "2026-11-21T11:25:08.346543+09:00",
+            "target_delivery_line_id": "offline:DL-A091",
+            "include_in_received_totals": true,
+            "source_line_id": "87dfde82-74cd-5055-ac01-8160fe76c022",
+            "delivery_no": "DL-A091",
+            "qty_read": "60",
+            "evidence_refs": [
+              {
+                "document_id": "b292095a-e43a-46ed-befb-726eeafdcb72",
+                "line_id": "87dfde82-74cd-5055-ac01-8160fe76c022",
+                "kind": "RECEIPT",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              }
+            ]
+          },
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "candidate_fixture_ref": "A03",
+            "candidate_qty_read": "36",
+            "unit": "kg",
+            "owner_confirmed": null,
+            "receipt_id": "simulated:A131",
+            "received_qty": "36",
+            "confirmed_by": "SIMULATED_OWNER",
+            "confirmed_at": "2026-11-21T00:00:00+00:00",
+            "target_delivery_line_id": "offline:DL-A131",
+            "include_in_received_totals": false,
+            "delivery_no": "DL-A131",
+            "qty_read": "36",
+            "evidence_refs": [
+              {
+                "document_id": "offline:A03",
+                "line_id": null,
+                "kind": "RECEIPT",
+                "source_location": {
+                  "page": 1,
+                  "row": 2
+                }
+              }
+            ],
+            "source_line_id": "simulated:A03:2"
+          }
+        ],
+        "memos": [
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "memo_id": "simulated:memo:A06",
+            "transaction_id": "offline:transaction:DL-A131",
+            "confirmed_text": "거래처는 11월 13일에 장어 40킬로를 다 보냈다고 합니다. 우리 가게 기록에는 36킬로입니다.",
+            "source_mode": "TYPED_TEXT",
+            "supplier_claim_qty": "40",
+            "unit": "kg",
+            "confirmed_by": "SIMULATED_OWNER",
+            "confirmed_at": "2026-11-21T00:00:00+00:00"
+          },
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "memo_id": "simulated:memo:A06",
+            "transaction_id": "offline:transaction:DL-A131",
+            "confirmed_text": "거래처는 11월 13일에 장어 40킬로를 다 보냈다고 합니다. 우리 가게 기록에는 36킬로입니다.",
+            "source_mode": "TYPED_TEXT",
+            "supplier_claim_qty": "40",
+            "unit": "kg",
+            "confirmed_by": "SIMULATED_OWNER",
+            "confirmed_at": "2026-11-21T00:00:00+00:00"
+          }
+        ]
+      },
+      "output": {
+        "items": [
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "line_id": "offline:DL-A091",
+            "transaction_id": "offline:transaction:DL-A091",
+            "delivery_no": "DL-A091",
+            "delivery_date": "2026-11-09",
+            "item": "손질장어",
+            "spec": null,
+            "unit": "kg",
+            "declared_qty": "60",
+            "billed_qty": "60",
+            "unit_price": "20000",
+            "billed_amount": 1200000,
+            "evidence_refs": [
+              {
+                "document_id": "ff8c8d71-9ff7-4d98-9469-8d5dc37dbc9a",
+                "line_id": "bc8f4252-1514-54ac-ba71-8dcfbd78b081",
+                "kind": "DELIVERY",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              },
+              {
+                "document_id": "offline:A05",
+                "line_id": null,
+                "kind": "INVOICE",
+                "source_location": {
+                  "page": 1,
+                  "text": "11월 13일 납품분을 양측 확인 후 36kg으로 수정했습니다."
+                }
+              },
+              {
+                "document_id": "b292095a-e43a-46ed-befb-726eeafdcb72",
+                "line_id": "87dfde82-74cd-5055-ac01-8160fe76c022",
+                "kind": "RECEIPT",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              }
+            ],
+            "received_qty": "60",
+            "units_comparable": true,
+            "receipt_ids": [
+              "364c235a-bc95-4a8a-96cd-2a6517914d46"
+            ],
+            "delta_qty": "0",
+            "check_amount": 0,
+            "match_result": "MATCHED",
+            "can_approve": false,
+            "memos": [],
+            "fact_status": "OWNER_CONFIRMED"
+          },
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "line_id": "offline:DL-A131",
+            "transaction_id": "offline:transaction:DL-A131",
+            "delivery_no": "DL-A131",
+            "delivery_date": "2026-11-13",
+            "item": "손질장어",
+            "spec": null,
+            "unit": "kg",
+            "declared_qty": "40",
+            "billed_qty": "36",
+            "unit_price": "20000",
+            "billed_amount": 720000,
+            "evidence_refs": [
+              {
+                "document_id": "fb844e75-67ee-47ef-8d0a-c7c090e78096",
+                "line_id": null,
+                "kind": "DELIVERY",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              },
+              {
+                "document_id": "offline:A05",
+                "line_id": null,
+                "kind": "INVOICE",
+                "source_location": {
+                  "page": 1,
+                  "text": "11월 13일 납품분을 양측 확인 후 36kg으로 수정했습니다."
+                }
+              },
+              {
+                "document_id": "offline:A03",
+                "line_id": null,
+                "kind": "RECEIPT",
+                "source_location": {
+                  "page": 1,
+                  "row": 2
+                }
+              }
+            ],
+            "received_qty": "36",
+            "units_comparable": true,
+            "receipt_ids": [
+              "simulated:A131"
+            ],
+            "delta_qty": "0",
+            "check_amount": 0,
+            "match_result": "MATCHED",
+            "can_approve": false,
+            "memos": [
+              {
+                "store_id": "offline-store",
+                "supplier_id": "offline-supplier",
+                "period_id": "offline-period",
+                "memo_id": "simulated:memo:A06",
+                "transaction_id": "offline:transaction:DL-A131",
+                "confirmed_text": "거래처는 11월 13일에 장어 40킬로를 다 보냈다고 합니다. 우리 가게 기록에는 36킬로입니다.",
+                "source_mode": "TYPED_TEXT",
+                "supplier_claim_qty": "40",
+                "unit": "kg",
+                "confirmed_by": "SIMULATED_OWNER",
+                "confirmed_at": "2026-11-21T00:00:00+00:00"
+              }
+            ],
+            "fact_status": "CONFLICTING"
+          }
+        ],
+        "summary": {
+          "declared_qty": "100",
+          "billed_qty": "96",
+          "received_qty": "96",
+          "unit": "kg",
+          "delta_qty": "0",
+          "check_amount": 0,
+          "billed_amount": 1920000
+        },
+        "confirmation_scope": "RECEIPTS_INCLUDED",
+        "match_result": "MATCHED",
+        "can_approve": false,
+        "approvable_amount": null,
+        "approved_amount": null,
+        "store_id": "offline-store",
+        "supplier_id": "offline-supplier",
+        "period_id": "offline-period",
+        "receipt_links": [
+          {
+            "receipt": {
+              "store_id": "offline-store",
+              "supplier_id": "offline-supplier",
+              "period_id": "offline-period",
+              "candidate_fixture_ref": "A03",
+              "candidate_qty_read": "60",
+              "unit": "kg",
+              "owner_confirmed": true,
+              "receipt_id": "364c235a-bc95-4a8a-96cd-2a6517914d46",
+              "received_qty": "60",
+              "confirmed_by": "검수 점주",
+              "confirmed_at": "2026-11-21T11:25:08.346543+09:00",
+              "target_delivery_line_id": "offline:DL-A091",
+              "include_in_received_totals": true,
+              "source_line_id": "87dfde82-74cd-5055-ac01-8160fe76c022",
+              "delivery_no": "DL-A091",
+              "qty_read": "60",
+              "evidence_refs": [
+                {
+                  "document_id": "b292095a-e43a-46ed-befb-726eeafdcb72",
+                  "line_id": "87dfde82-74cd-5055-ac01-8160fe76c022",
+                  "kind": "RECEIPT",
+                  "source_location": {
+                    "page": 1,
+                    "row": 1
+                  }
+                }
+              ]
+            },
+            "receipt_id": "364c235a-bc95-4a8a-96cd-2a6517914d46",
+            "target_delivery_line_id": "offline:DL-A091",
+            "candidates": [
+              {
+                "line_id": "offline:DL-A091",
+                "delivery_no": "DL-A091",
+                "delivery_date": "2026-11-09",
+                "item": "손질장어",
+                "spec": null,
+                "unit": "kg",
+                "evidence_refs": [
+                  {
+                    "document_id": "ff8c8d71-9ff7-4d98-9469-8d5dc37dbc9a",
+                    "line_id": "bc8f4252-1514-54ac-ba71-8dcfbd78b081",
+                    "kind": "DELIVERY",
+                    "source_location": {
+                      "page": 1,
+                      "row": 1
+                    }
+                  },
+                  {
+                    "document_id": "offline:A05",
+                    "line_id": null,
+                    "kind": "INVOICE",
+                    "source_location": {
+                      "page": 1,
+                      "text": "11월 13일 납품분을 양측 확인 후 36kg으로 수정했습니다."
+                    }
+                  }
+                ]
+              }
+            ],
+            "status": "LINKED",
+            "reason": null
+          },
+          {
+            "receipt": {
+              "store_id": "offline-store",
+              "supplier_id": "offline-supplier",
+              "period_id": "offline-period",
+              "candidate_fixture_ref": "A03",
+              "candidate_qty_read": "36",
+              "unit": "kg",
+              "owner_confirmed": null,
+              "receipt_id": "simulated:A131",
+              "received_qty": "36",
+              "confirmed_by": "SIMULATED_OWNER",
+              "confirmed_at": "2026-11-21T00:00:00+00:00",
+              "target_delivery_line_id": "offline:DL-A131",
+              "include_in_received_totals": false,
+              "delivery_no": "DL-A131",
+              "qty_read": "36",
+              "evidence_refs": [
+                {
+                  "document_id": "offline:A03",
+                  "line_id": null,
+                  "kind": "RECEIPT",
+                  "source_location": {
+                    "page": 1,
+                    "row": 2
+                  }
+                }
+              ],
+              "source_line_id": "simulated:A03:2"
+            },
+            "receipt_id": "simulated:A131",
+            "target_delivery_line_id": "offline:DL-A131",
+            "candidates": [
+              {
+                "line_id": "offline:DL-A131",
+                "delivery_no": "DL-A131",
+                "delivery_date": "2026-11-13",
+                "item": "손질장어",
+                "spec": null,
+                "unit": "kg",
+                "evidence_refs": [
+                  {
+                    "document_id": "fb844e75-67ee-47ef-8d0a-c7c090e78096",
+                    "line_id": null,
+                    "kind": "DELIVERY",
+                    "source_location": {
+                      "page": 1,
+                      "row": 1
+                    }
+                  },
+                  {
+                    "document_id": "offline:A05",
+                    "line_id": null,
+                    "kind": "INVOICE",
+                    "source_location": {
+                      "page": 1,
+                      "text": "11월 13일 납품분을 양측 확인 후 36kg으로 수정했습니다."
+                    }
+                  }
+                ]
+              }
+            ],
+            "status": "LINKED",
+            "reason": null
+          }
+        ],
+        "blockers": [
+          "CONFLICTING_CLAIM",
+          "UNCONFIRMED_QUANTITY_AGREEMENT",
+          "UNRESOLVED_DECLARED_QUANTITY"
+        ],
+        "input_revision": 1,
+        "period_start": "2026-11-09",
+        "period_end": "2026-11-15",
+        "fact_status": "CONFLICTING",
+        "work_status": "WAITING_REPLY",
+        "payment_status": "UNCONFIRMED",
+        "memos": [
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "memo_id": "simulated:memo:A06",
+            "transaction_id": "offline:transaction:DL-A131",
+            "confirmed_text": "거래처는 11월 13일에 장어 40킬로를 다 보냈다고 합니다. 우리 가게 기록에는 36킬로입니다.",
+            "source_mode": "TYPED_TEXT",
+            "supplier_claim_qty": "40",
+            "unit": "kg",
+            "confirmed_by": "SIMULATED_OWNER",
+            "confirmed_at": "2026-11-21T00:00:00+00:00"
+          }
+        ],
+        "invoice_history": [
+          {
+            "document": {
+              "store_id": "offline-store",
+              "supplier_id": "offline-supplier",
+              "period_id": "offline-period",
+              "document_id": "offline:A04",
+              "doc_no": "INV-A01",
+              "doc_type": "INVOICE",
+              "period_start": "2026-11-09",
+              "period_end": "2026-11-15",
+              "evidence_refs": [
+                {
+                  "document_id": "offline:A04",
+                  "line_id": null,
+                  "kind": "INVOICE",
+                  "source_location": {
+                    "page": 1,
+                    "text": "invoice header"
+                  }
+                }
+              ],
+              "lines": [
+                {
+                  "target_delivery_line_id": "offline:DL-A091",
+                  "billed_qty": "60",
+                  "unit_price": "20000",
+                  "unit": "kg",
+                  "billed_amount": 1200000
+                },
+                {
+                  "target_delivery_line_id": "offline:DL-A131",
+                  "billed_qty": "40",
+                  "unit_price": "20000",
+                  "unit": "kg",
+                  "billed_amount": 800000
+                }
+              ]
+            },
+            "replaced_by": "offline:A05",
+            "summary": {
+              "declared_qty": "100",
+              "billed_qty": "100",
+              "received_qty": "96",
+              "unit": "kg",
+              "delta_qty": "4",
+              "check_amount": 80000,
+              "billed_amount": 2000000
+            },
+            "items": [
+              {
+                "store_id": "offline-store",
+                "supplier_id": "offline-supplier",
+                "period_id": "offline-period",
+                "line_id": "offline:DL-A091",
+                "transaction_id": "offline:transaction:DL-A091",
+                "delivery_no": "DL-A091",
+                "delivery_date": "2026-11-09",
+                "item": "손질장어",
+                "spec": null,
+                "unit": "kg",
+                "declared_qty": "60",
+                "billed_qty": "60",
+                "unit_price": "20000",
+                "billed_amount": 1200000,
+                "evidence_refs": [
+                  {
+                    "document_id": "ff8c8d71-9ff7-4d98-9469-8d5dc37dbc9a",
+                    "line_id": "bc8f4252-1514-54ac-ba71-8dcfbd78b081",
+                    "kind": "DELIVERY",
+                    "source_location": {
+                      "page": 1,
+                      "row": 1
+                    }
+                  },
+                  {
+                    "document_id": "offline:A04",
+                    "line_id": null,
+                    "kind": "INVOICE",
+                    "source_location": {
+                      "page": 1,
+                      "text": "invoice header"
+                    }
+                  },
+                  {
+                    "document_id": "b292095a-e43a-46ed-befb-726eeafdcb72",
+                    "line_id": "87dfde82-74cd-5055-ac01-8160fe76c022",
+                    "kind": "RECEIPT",
+                    "source_location": {
+                      "page": 1,
+                      "row": 1
+                    }
+                  }
+                ],
+                "received_qty": "60",
+                "units_comparable": true,
+                "receipt_ids": [
+                  "364c235a-bc95-4a8a-96cd-2a6517914d46"
+                ],
+                "delta_qty": "0",
+                "check_amount": 0,
+                "match_result": "MATCHED",
+                "can_approve": false
+              },
+              {
+                "store_id": "offline-store",
+                "supplier_id": "offline-supplier",
+                "period_id": "offline-period",
+                "line_id": "offline:DL-A131",
+                "transaction_id": "offline:transaction:DL-A131",
+                "delivery_no": "DL-A131",
+                "delivery_date": "2026-11-13",
+                "item": "손질장어",
+                "spec": null,
+                "unit": "kg",
+                "declared_qty": "40",
+                "billed_qty": "40",
+                "unit_price": "20000",
+                "billed_amount": 800000,
+                "evidence_refs": [
+                  {
+                    "document_id": "fb844e75-67ee-47ef-8d0a-c7c090e78096",
+                    "line_id": null,
+                    "kind": "DELIVERY",
+                    "source_location": {
+                      "page": 1,
+                      "row": 1
+                    }
+                  },
+                  {
+                    "document_id": "offline:A04",
+                    "line_id": null,
+                    "kind": "INVOICE",
+                    "source_location": {
+                      "page": 1,
+                      "text": "invoice header"
+                    }
+                  },
+                  {
+                    "document_id": "offline:A03",
+                    "line_id": null,
+                    "kind": "RECEIPT",
+                    "source_location": {
+                      "page": 1,
+                      "row": 2
+                    }
+                  }
+                ],
+                "received_qty": "36",
+                "units_comparable": true,
+                "receipt_ids": [
+                  "simulated:A131"
+                ],
+                "delta_qty": "4",
+                "check_amount": 80000,
+                "match_result": "MISMATCH",
+                "can_approve": false
+              }
+            ]
+          }
+        ],
+        "active_invoice_ids": [
+          "offline:A05"
+        ],
+        "pending_invoices": [],
+        "excluded_invoices": [],
+        "approval_history": []
+      }
+    },
+    "C2_A05_bilateral_agreement": {
+      "mode": "A05 manually transcribed; replacement/agreement events simulated, no actual owner confirmation.",
+      "input": {
+        "store_id": "offline-store",
+        "supplier_id": "offline-supplier",
+        "period_id": "offline-period",
+        "period_start": "2026-11-09",
+        "period_end": "2026-11-15",
+        "input_revision": 1,
+        "deliveries": [
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "line_id": "offline:DL-A091",
+            "transaction_id": "offline:transaction:DL-A091",
+            "delivery_no": "DL-A091",
+            "delivery_date": "2026-11-09",
+            "item": "손질장어",
+            "spec": null,
+            "unit": "kg",
+            "declared_qty": "60",
+            "billed_qty": "60",
+            "unit_price": "20000",
+            "billed_amount": 1200000,
+            "evidence_refs": [
+              {
+                "document_id": "ff8c8d71-9ff7-4d98-9469-8d5dc37dbc9a",
+                "line_id": "bc8f4252-1514-54ac-ba71-8dcfbd78b081",
+                "kind": "DELIVERY",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              }
+            ]
+          },
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "line_id": "offline:DL-A131",
+            "transaction_id": "offline:transaction:DL-A131",
+            "delivery_no": "DL-A131",
+            "delivery_date": "2026-11-13",
+            "item": "손질장어",
+            "spec": null,
+            "unit": "kg",
+            "declared_qty": "40",
+            "billed_qty": "40",
+            "unit_price": "20000",
+            "billed_amount": 800000,
+            "evidence_refs": [
+              {
+                "document_id": "fb844e75-67ee-47ef-8d0a-c7c090e78096",
+                "line_id": null,
+                "kind": "DELIVERY",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              }
+            ]
+          }
+        ],
+        "invoices": [
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "document_id": "offline:A04",
+            "doc_no": "INV-A01",
+            "doc_type": "INVOICE",
+            "period_start": "2026-11-09",
+            "period_end": "2026-11-15",
+            "evidence_refs": [
+              {
+                "document_id": "offline:A04",
+                "line_id": null,
+                "kind": "INVOICE",
+                "source_location": {
+                  "page": 1,
+                  "text": "invoice header"
+                }
+              }
+            ],
+            "lines": [
+              {
+                "target_delivery_line_id": "offline:DL-A091",
+                "billed_qty": "60",
+                "unit_price": "20000",
+                "unit": "kg",
+                "billed_amount": 1200000
+              },
+              {
+                "target_delivery_line_id": "offline:DL-A131",
+                "billed_qty": "40",
+                "unit_price": "20000",
+                "unit": "kg",
+                "billed_amount": 800000
+              }
+            ]
+          },
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "document_id": "offline:A05",
+            "doc_no": "INV-A01-R1",
+            "doc_type": "CORRECTED_INVOICE",
+            "period_start": "2026-11-09",
+            "period_end": "2026-11-15",
+            "evidence_refs": [
+              {
+                "document_id": "offline:A05",
+                "line_id": null,
+                "kind": "INVOICE",
+                "source_location": {
+                  "page": 1,
+                  "text": "11월 13일 납품분을 양측 확인 후 36kg으로 수정했습니다."
+                }
+              }
+            ],
+            "lines": [
+              {
+                "target_delivery_line_id": "offline:DL-A091",
+                "billed_qty": "60",
+                "unit_price": "20000",
+                "unit": "kg",
+                "billed_amount": 1200000
+              },
+              {
+                "target_delivery_line_id": "offline:DL-A131",
+                "billed_qty": "36",
+                "unit_price": "20000",
+                "unit": "kg",
+                "billed_amount": 720000
+              }
+            ],
+            "doc_date": "2026-11-17",
+            "replaces_doc_no": "INV-A01",
+            "replacement": {
+              "confirmed_by": "SIMULATED_OWNER",
+              "confirmed_at": "2026-11-21T00:00:00+00:00",
+              "evidence_refs": [
+                {
+                  "document_id": "offline:A05",
+                  "line_id": null,
+                  "kind": "INVOICE",
+                  "source_location": {
+                    "page": 1,
+                    "text": "11월 13일 납품분을 양측 확인 후 36kg으로 수정했습니다."
+                  }
+                }
+              ],
+              "target_document_id": "offline:A04"
+            },
+            "agreement": {
+              "confirmed_by": "SIMULATED_OWNER",
+              "confirmed_at": "2026-11-21T00:00:00+00:00",
+              "evidence_refs": [
+                {
+                  "document_id": "offline:A05",
+                  "line_id": null,
+                  "kind": "INVOICE",
+                  "source_location": {
+                    "page": 1,
+                    "text": "11월 13일 납품분을 양측 확인 후 36kg으로 수정했습니다."
+                  }
+                }
+              ],
+              "supplier_confirmed": true,
+              "owner_confirmed": true
+            }
+          }
+        ],
+        "receipts": [
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "candidate_fixture_ref": "A03",
+            "candidate_qty_read": "60",
+            "unit": "kg",
+            "owner_confirmed": true,
+            "receipt_id": "364c235a-bc95-4a8a-96cd-2a6517914d46",
+            "received_qty": "60",
+            "confirmed_by": "검수 점주",
+            "confirmed_at": "2026-11-21T11:25:08.346543+09:00",
+            "target_delivery_line_id": "offline:DL-A091",
+            "include_in_received_totals": true,
+            "source_line_id": "87dfde82-74cd-5055-ac01-8160fe76c022",
+            "delivery_no": "DL-A091",
+            "qty_read": "60",
+            "evidence_refs": [
+              {
+                "document_id": "b292095a-e43a-46ed-befb-726eeafdcb72",
+                "line_id": "87dfde82-74cd-5055-ac01-8160fe76c022",
+                "kind": "RECEIPT",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              }
+            ]
+          },
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "candidate_fixture_ref": "A03",
+            "candidate_qty_read": "36",
+            "unit": "kg",
+            "owner_confirmed": null,
+            "receipt_id": "simulated:A131",
+            "received_qty": "36",
+            "confirmed_by": "SIMULATED_OWNER",
+            "confirmed_at": "2026-11-21T00:00:00+00:00",
+            "target_delivery_line_id": "offline:DL-A131",
+            "include_in_received_totals": false,
+            "delivery_no": "DL-A131",
+            "qty_read": "36",
+            "evidence_refs": [
+              {
+                "document_id": "offline:A03",
+                "line_id": null,
+                "kind": "RECEIPT",
+                "source_location": {
+                  "page": 1,
+                  "row": 2
+                }
+              }
+            ],
+            "source_line_id": "simulated:A03:2"
+          }
+        ],
+        "memos": [
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "memo_id": "simulated:memo:A06",
+            "transaction_id": "offline:transaction:DL-A131",
+            "confirmed_text": "거래처는 11월 13일에 장어 40킬로를 다 보냈다고 합니다. 우리 가게 기록에는 36킬로입니다.",
+            "source_mode": "TYPED_TEXT",
+            "supplier_claim_qty": "40",
+            "unit": "kg",
+            "confirmed_by": "SIMULATED_OWNER",
+            "confirmed_at": "2026-11-21T00:00:00+00:00"
+          },
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "memo_id": "simulated:memo:A06",
+            "transaction_id": "offline:transaction:DL-A131",
+            "confirmed_text": "거래처는 11월 13일에 장어 40킬로를 다 보냈다고 합니다. 우리 가게 기록에는 36킬로입니다.",
+            "source_mode": "TYPED_TEXT",
+            "supplier_claim_qty": "40",
+            "unit": "kg",
+            "confirmed_by": "SIMULATED_OWNER",
+            "confirmed_at": "2026-11-21T00:00:00+00:00"
+          }
+        ]
+      },
+      "output": {
+        "items": [
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "line_id": "offline:DL-A091",
+            "transaction_id": "offline:transaction:DL-A091",
+            "delivery_no": "DL-A091",
+            "delivery_date": "2026-11-09",
+            "item": "손질장어",
+            "spec": null,
+            "unit": "kg",
+            "declared_qty": "60",
+            "billed_qty": "60",
+            "unit_price": "20000",
+            "billed_amount": 1200000,
+            "evidence_refs": [
+              {
+                "document_id": "ff8c8d71-9ff7-4d98-9469-8d5dc37dbc9a",
+                "line_id": "bc8f4252-1514-54ac-ba71-8dcfbd78b081",
+                "kind": "DELIVERY",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              },
+              {
+                "document_id": "offline:A05",
+                "line_id": null,
+                "kind": "INVOICE",
+                "source_location": {
+                  "page": 1,
+                  "text": "11월 13일 납품분을 양측 확인 후 36kg으로 수정했습니다."
+                }
+              },
+              {
+                "document_id": "b292095a-e43a-46ed-befb-726eeafdcb72",
+                "line_id": "87dfde82-74cd-5055-ac01-8160fe76c022",
+                "kind": "RECEIPT",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              }
+            ],
+            "received_qty": "60",
+            "units_comparable": true,
+            "receipt_ids": [
+              "364c235a-bc95-4a8a-96cd-2a6517914d46"
+            ],
+            "delta_qty": "0",
+            "check_amount": 0,
+            "match_result": "MATCHED",
+            "can_approve": false,
+            "memos": [],
+            "fact_status": "OWNER_CONFIRMED"
+          },
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "line_id": "offline:DL-A131",
+            "transaction_id": "offline:transaction:DL-A131",
+            "delivery_no": "DL-A131",
+            "delivery_date": "2026-11-13",
+            "item": "손질장어",
+            "spec": null,
+            "unit": "kg",
+            "declared_qty": "40",
+            "billed_qty": "36",
+            "unit_price": "20000",
+            "billed_amount": 720000,
+            "evidence_refs": [
+              {
+                "document_id": "fb844e75-67ee-47ef-8d0a-c7c090e78096",
+                "line_id": null,
+                "kind": "DELIVERY",
+                "source_location": {
+                  "page": 1,
+                  "row": 1
+                }
+              },
+              {
+                "document_id": "offline:A05",
+                "line_id": null,
+                "kind": "INVOICE",
+                "source_location": {
+                  "page": 1,
+                  "text": "11월 13일 납품분을 양측 확인 후 36kg으로 수정했습니다."
+                }
+              },
+              {
+                "document_id": "offline:A03",
+                "line_id": null,
+                "kind": "RECEIPT",
+                "source_location": {
+                  "page": 1,
+                  "row": 2
+                }
+              }
+            ],
+            "received_qty": "36",
+            "units_comparable": true,
+            "receipt_ids": [
+              "simulated:A131"
+            ],
+            "delta_qty": "0",
+            "check_amount": 0,
+            "match_result": "MATCHED",
+            "can_approve": false,
+            "memos": [
+              {
+                "store_id": "offline-store",
+                "supplier_id": "offline-supplier",
+                "period_id": "offline-period",
+                "memo_id": "simulated:memo:A06",
+                "transaction_id": "offline:transaction:DL-A131",
+                "confirmed_text": "거래처는 11월 13일에 장어 40킬로를 다 보냈다고 합니다. 우리 가게 기록에는 36킬로입니다.",
+                "source_mode": "TYPED_TEXT",
+                "supplier_claim_qty": "40",
+                "unit": "kg",
+                "confirmed_by": "SIMULATED_OWNER",
+                "confirmed_at": "2026-11-21T00:00:00+00:00"
+              }
+            ],
+            "fact_status": "OWNER_CONFIRMED"
+          }
+        ],
+        "summary": {
+          "declared_qty": "100",
+          "billed_qty": "96",
+          "received_qty": "96",
+          "unit": "kg",
+          "delta_qty": "0",
+          "check_amount": 0,
+          "billed_amount": 1920000
+        },
+        "confirmation_scope": "RECEIPTS_INCLUDED",
+        "match_result": "MATCHED",
+        "can_approve": true,
+        "approvable_amount": 1920000,
+        "approved_amount": null,
+        "store_id": "offline-store",
+        "supplier_id": "offline-supplier",
+        "period_id": "offline-period",
+        "receipt_links": [
+          {
+            "receipt": {
+              "store_id": "offline-store",
+              "supplier_id": "offline-supplier",
+              "period_id": "offline-period",
+              "candidate_fixture_ref": "A03",
+              "candidate_qty_read": "60",
+              "unit": "kg",
+              "owner_confirmed": true,
+              "receipt_id": "364c235a-bc95-4a8a-96cd-2a6517914d46",
+              "received_qty": "60",
+              "confirmed_by": "검수 점주",
+              "confirmed_at": "2026-11-21T11:25:08.346543+09:00",
+              "target_delivery_line_id": "offline:DL-A091",
+              "include_in_received_totals": true,
+              "source_line_id": "87dfde82-74cd-5055-ac01-8160fe76c022",
+              "delivery_no": "DL-A091",
+              "qty_read": "60",
+              "evidence_refs": [
+                {
+                  "document_id": "b292095a-e43a-46ed-befb-726eeafdcb72",
+                  "line_id": "87dfde82-74cd-5055-ac01-8160fe76c022",
+                  "kind": "RECEIPT",
+                  "source_location": {
+                    "page": 1,
+                    "row": 1
+                  }
+                }
+              ]
+            },
+            "receipt_id": "364c235a-bc95-4a8a-96cd-2a6517914d46",
+            "target_delivery_line_id": "offline:DL-A091",
+            "candidates": [
+              {
+                "line_id": "offline:DL-A091",
+                "delivery_no": "DL-A091",
+                "delivery_date": "2026-11-09",
+                "item": "손질장어",
+                "spec": null,
+                "unit": "kg",
+                "evidence_refs": [
+                  {
+                    "document_id": "ff8c8d71-9ff7-4d98-9469-8d5dc37dbc9a",
+                    "line_id": "bc8f4252-1514-54ac-ba71-8dcfbd78b081",
+                    "kind": "DELIVERY",
+                    "source_location": {
+                      "page": 1,
+                      "row": 1
+                    }
+                  },
+                  {
+                    "document_id": "offline:A05",
+                    "line_id": null,
+                    "kind": "INVOICE",
+                    "source_location": {
+                      "page": 1,
+                      "text": "11월 13일 납품분을 양측 확인 후 36kg으로 수정했습니다."
+                    }
+                  }
+                ]
+              }
+            ],
+            "status": "LINKED",
+            "reason": null
+          },
+          {
+            "receipt": {
+              "store_id": "offline-store",
+              "supplier_id": "offline-supplier",
+              "period_id": "offline-period",
+              "candidate_fixture_ref": "A03",
+              "candidate_qty_read": "36",
+              "unit": "kg",
+              "owner_confirmed": null,
+              "receipt_id": "simulated:A131",
+              "received_qty": "36",
+              "confirmed_by": "SIMULATED_OWNER",
+              "confirmed_at": "2026-11-21T00:00:00+00:00",
+              "target_delivery_line_id": "offline:DL-A131",
+              "include_in_received_totals": false,
+              "delivery_no": "DL-A131",
+              "qty_read": "36",
+              "evidence_refs": [
+                {
+                  "document_id": "offline:A03",
+                  "line_id": null,
+                  "kind": "RECEIPT",
+                  "source_location": {
+                    "page": 1,
+                    "row": 2
+                  }
+                }
+              ],
+              "source_line_id": "simulated:A03:2"
+            },
+            "receipt_id": "simulated:A131",
+            "target_delivery_line_id": "offline:DL-A131",
+            "candidates": [
+              {
+                "line_id": "offline:DL-A131",
+                "delivery_no": "DL-A131",
+                "delivery_date": "2026-11-13",
+                "item": "손질장어",
+                "spec": null,
+                "unit": "kg",
+                "evidence_refs": [
+                  {
+                    "document_id": "fb844e75-67ee-47ef-8d0a-c7c090e78096",
+                    "line_id": null,
+                    "kind": "DELIVERY",
+                    "source_location": {
+                      "page": 1,
+                      "row": 1
+                    }
+                  },
+                  {
+                    "document_id": "offline:A05",
+                    "line_id": null,
+                    "kind": "INVOICE",
+                    "source_location": {
+                      "page": 1,
+                      "text": "11월 13일 납품분을 양측 확인 후 36kg으로 수정했습니다."
+                    }
+                  }
+                ]
+              }
+            ],
+            "status": "LINKED",
+            "reason": null
+          }
+        ],
+        "blockers": [],
+        "input_revision": 1,
+        "period_start": "2026-11-09",
+        "period_end": "2026-11-15",
+        "fact_status": "OWNER_CONFIRMED",
+        "work_status": "OPEN",
+        "payment_status": "UNCONFIRMED",
+        "memos": [
+          {
+            "store_id": "offline-store",
+            "supplier_id": "offline-supplier",
+            "period_id": "offline-period",
+            "memo_id": "simulated:memo:A06",
+            "transaction_id": "offline:transaction:DL-A131",
+            "confirmed_text": "거래처는 11월 13일에 장어 40킬로를 다 보냈다고 합니다. 우리 가게 기록에는 36킬로입니다.",
+            "source_mode": "TYPED_TEXT",
+            "supplier_claim_qty": "40",
+            "unit": "kg",
+            "confirmed_by": "SIMULATED_OWNER",
+            "confirmed_at": "2026-11-21T00:00:00+00:00"
+          }
+        ],
+        "invoice_history": [
+          {
+            "document": {
+              "store_id": "offline-store",
+              "supplier_id": "offline-supplier",
+              "period_id": "offline-period",
+              "document_id": "offline:A04",
+              "doc_no": "INV-A01",
+              "doc_type": "INVOICE",
+              "period_start": "2026-11-09",
+              "period_end": "2026-11-15",
+              "evidence_refs": [
+                {
+                  "document_id": "offline:A04",
+                  "line_id": null,
+                  "kind": "INVOICE",
+                  "source_location": {
+                    "page": 1,
+                    "text": "invoice header"
+                  }
+                }
+              ],
+              "lines": [
+                {
+                  "target_delivery_line_id": "offline:DL-A091",
+                  "billed_qty": "60",
+                  "unit_price": "20000",
+                  "unit": "kg",
+                  "billed_amount": 1200000
+                },
+                {
+                  "target_delivery_line_id": "offline:DL-A131",
+                  "billed_qty": "40",
+                  "unit_price": "20000",
+                  "unit": "kg",
+                  "billed_amount": 800000
+                }
+              ]
+            },
+            "replaced_by": "offline:A05",
+            "summary": {
+              "declared_qty": "100",
+              "billed_qty": "100",
+              "received_qty": "96",
+              "unit": "kg",
+              "delta_qty": "4",
+              "check_amount": 80000,
+              "billed_amount": 2000000
+            },
+            "items": [
+              {
+                "store_id": "offline-store",
+                "supplier_id": "offline-supplier",
+                "period_id": "offline-period",
+                "line_id": "offline:DL-A091",
+                "transaction_id": "offline:transaction:DL-A091",
+                "delivery_no": "DL-A091",
+                "delivery_date": "2026-11-09",
+                "item": "손질장어",
+                "spec": null,
+                "unit": "kg",
+                "declared_qty": "60",
+                "billed_qty": "60",
+                "unit_price": "20000",
+                "billed_amount": 1200000,
+                "evidence_refs": [
+                  {
+                    "document_id": "ff8c8d71-9ff7-4d98-9469-8d5dc37dbc9a",
+                    "line_id": "bc8f4252-1514-54ac-ba71-8dcfbd78b081",
+                    "kind": "DELIVERY",
+                    "source_location": {
+                      "page": 1,
+                      "row": 1
+                    }
+                  },
+                  {
+                    "document_id": "offline:A04",
+                    "line_id": null,
+                    "kind": "INVOICE",
+                    "source_location": {
+                      "page": 1,
+                      "text": "invoice header"
+                    }
+                  },
+                  {
+                    "document_id": "b292095a-e43a-46ed-befb-726eeafdcb72",
+                    "line_id": "87dfde82-74cd-5055-ac01-8160fe76c022",
+                    "kind": "RECEIPT",
+                    "source_location": {
+                      "page": 1,
+                      "row": 1
+                    }
+                  }
+                ],
+                "received_qty": "60",
+                "units_comparable": true,
+                "receipt_ids": [
+                  "364c235a-bc95-4a8a-96cd-2a6517914d46"
+                ],
+                "delta_qty": "0",
+                "check_amount": 0,
+                "match_result": "MATCHED",
+                "can_approve": false
+              },
+              {
+                "store_id": "offline-store",
+                "supplier_id": "offline-supplier",
+                "period_id": "offline-period",
+                "line_id": "offline:DL-A131",
+                "transaction_id": "offline:transaction:DL-A131",
+                "delivery_no": "DL-A131",
+                "delivery_date": "2026-11-13",
+                "item": "손질장어",
+                "spec": null,
+                "unit": "kg",
+                "declared_qty": "40",
+                "billed_qty": "40",
+                "unit_price": "20000",
+                "billed_amount": 800000,
+                "evidence_refs": [
+                  {
+                    "document_id": "fb844e75-67ee-47ef-8d0a-c7c090e78096",
+                    "line_id": null,
+                    "kind": "DELIVERY",
+                    "source_location": {
+                      "page": 1,
+                      "row": 1
+                    }
+                  },
+                  {
+                    "document_id": "offline:A04",
+                    "line_id": null,
+                    "kind": "INVOICE",
+                    "source_location": {
+                      "page": 1,
+                      "text": "invoice header"
+                    }
+                  },
+                  {
+                    "document_id": "offline:A03",
+                    "line_id": null,
+                    "kind": "RECEIPT",
+                    "source_location": {
+                      "page": 1,
+                      "row": 2
+                    }
+                  }
+                ],
+                "received_qty": "36",
+                "units_comparable": true,
+                "receipt_ids": [
+                  "simulated:A131"
+                ],
+                "delta_qty": "4",
+                "check_amount": 80000,
+                "match_result": "MISMATCH",
+                "can_approve": false
+              }
+            ]
+          }
+        ],
+        "active_invoice_ids": [
+          "offline:A05"
+        ],
+        "pending_invoices": [],
+        "excluded_invoices": [],
+        "approval_history": []
+      }
+    }
+  },
+  "sources": [
+    {
+      "path": "integration\\b1\\DL-A091_B2_실제판독.json",
+      "sha256": "f97a919cf120a2e1a2c59202981581277ec7b1332a4d2426209ce3b59eefb77d"
+    },
+    {
+      "path": "integration\\b1\\DL-A131_B1_실제판독.json",
+      "sha256": "8ecbf2348fd302f3978bd9e672f4aba5ee9fc70853bf8c958bc76107890f0816"
+    },
+    {
+      "path": "team-work-pack\\A06_통화뒤_점주음성_읽을문장.txt",
+      "sha256": "3ae351fedf71640a5cd3a175f0d9e6d32540746cbd0313cdc7717832be54f156"
+    },
+    {
+      "path": "team-work-pack\\A05_수정청구서.png",
+      "sha256": "c3b0cc8feafcf59f082b999b88249d607ea270520ca06fe8204673b056cd2523"
+    }
+  ],
+  "not_verified": [
+    "live API/DB/authentication",
+    "A131 real owner confirmation and server row mapping",
+    "A06 actual audio transcription and memo persistence",
+    "A05 OCR extraction and actual replacement/agreement events",
+    "atomic approval persistence/retries/concurrency",
+    "deployment/cross-browser approval lookup"
+  ]
+}

@@ -1,0 +1,32 @@
+--- a/app/workflow/settlement.py
++++ b/app/workflow/settlement.py
+@@ -6,6 +6,7 @@
+ 
+ from app.api.database import rpc
+ from app.reconcile.settlement import reconcile_period
++from app.reconcile.matching import delivery_candidates
+ 
+ 
+ def quantity(row, name):
+@@ -60,11 +61,16 @@
+         })
+ 
+     def target(line):
+-        candidates = [row for row in deliveries
+-                      if row["delivery_no"] == line["delivery_no"] and row["delivery_no"]
+-                      and row["item"] == line["raw_name"]
+-                      and row["unit"] == line["raw_unit"]]
+-        return candidates[0]["line_id"] if len(candidates) == 1 else None
++        fields = {"delivery_no": line["delivery_no"], "delivery_date": line["delivery_date"],
++                  "item": line["raw_name"], "spec": line["raw_spec"], "unit": line["raw_unit"]}
++        if not fields["delivery_no"] and not all(fields[key] for key in ("delivery_date", "item", "spec", "unit")):
++            warnings.add("INCOMPLETE_BILLING_MATCH")
++            return None
++        candidates = delivery_candidates(deliveries, fields)
++        if len(candidates) == 1 and fields["unit"] and fields["unit"] == candidates[0]["unit"]:
++            return candidates[0]["line_id"]
++        warnings.add("UNRESOLVED_BILLING_MATCH")
++        return None
+ 
+     invoices = []
+     for doc in documents.values():
