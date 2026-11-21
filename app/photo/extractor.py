@@ -136,10 +136,17 @@ def extract_document(raw_bytes: bytes, mime: str, document_id: str, context=None
         raise ValueError('Image bytes could not be decoded')
     # Keep source pixel coordinates while removing background colors and scan noise.
     _, clean = cv2.threshold(grayscale, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
+    result = _parse_rows(_scan_rows(clean), document_id)
+    if result["lines"]:
+        return result
+    # Thresholding can erase pale headers in photographs; preserve source coordinates.
+    return _parse_rows(_scan_rows(grayscale), document_id)
+
+
+def _scan_rows(image):
     with OCR_LOCK:
-        scan = _engine()(clean)
-    rows = _rows(scan.boxes, scan.txts) if scan.boxes is not None and scan.txts else []
-    return _parse_rows(rows, document_id)
+        scan = _engine()(image)
+    return _rows(scan.boxes, scan.txts) if scan.boxes is not None and scan.txts else []
 
 
 def _parse_rows(rows, document_id):
@@ -181,6 +188,11 @@ def _parse_rows(rows, document_id):
         qty_title = next(t[2] for t in columns if t[1] == 'qty_read')
         unit_match = re.search(r'\(([^)]+)\)', qty_title)
         for row in rows[heading + 1:]:
+            text = _compact(' '.join(t[4] for t in row))
+            if '이하여백' in text:
+                break
+            if any(_header_key(t[4]) in ('합계', '총계', '소계', '청구합계', '금액합계', '합계금액') for t in row):
+                continue
             if len(row) > 1:
                 cells = {}
                 for token in row:
