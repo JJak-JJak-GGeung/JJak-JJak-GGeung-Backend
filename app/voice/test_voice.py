@@ -100,3 +100,20 @@ def test_route_error_shape(monkeypatch):
     r = api.post("/api/transcriptions", files={"file": ("a.txt", b"x" * 2000, "text/plain")})
     assert r.status_code == 415
     assert r.json()["detail"]["code"] == "UNSUPPORTED_AUDIO"
+
+
+def test_missing_sdk_is_503(monkeypatch):
+    import builtins
+
+    monkeypatch.setenv("OPENAI_API_KEY", "x")
+    real_import = builtins.__import__
+
+    def fake_import(name, *a, **k):
+        if name == "openai":
+            raise ImportError("no openai")
+        return real_import(name, *a, **k)
+
+    monkeypatch.setattr(builtins, "__import__", fake_import)
+    with pytest.raises(TranscriptionError) as e:
+        transcribe_audio(WEBM, "audio/webm")
+    assert (e.value.code, e.value.status) == ("NO_OPENAI_SDK", 503)

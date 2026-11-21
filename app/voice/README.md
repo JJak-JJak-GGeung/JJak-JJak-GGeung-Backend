@@ -33,6 +33,7 @@ file = 브라우저가 녹음한 파일 1개 (MIME 그대로: audio/webm;codecs=
 | 415 | UNSUPPORTED_AUDIO | 오디오 형식 아님 | 직접 입력 |
 | 502 | TRANSCRIPTION_FAILED | OpenAI 호출 실패(한도·네트워크) | 직접 입력 |
 | 503 | NO_API_KEY | 서버 키 미설정 | 직접 입력 |
+| 503 | NO_OPENAI_SDK | 서버에 openai 패키지 없음 | 직접 입력 |
 
 오류 본문: `{"detail": {"code": "...", "message": "한국어 안내"}}` — 어떤 오류든 편집란은 직접 입력 가능 상태로 유지.
 

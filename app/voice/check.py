@@ -3,7 +3,7 @@
 배포 주소·점주 토큰·거래 ID만 .env에 채우면 바로 실행된다.
 
     VOICE_CHECK_BASE=https://api.example.com     # 구본혁 배포 주소
-    VOICE_CHECK_TOKEN=eyJ...                     # 점주 세션 접근 토큰 (Authorization: Bearer)
+    VOICE_CHECK_TOKEN=eyJ...                     # 선택: 점주 접근 토큰 (로그인 없는 배포면 비움)
     VOICE_CHECK_TX=<transaction_id>              # B2·C1·C2 대상 거래 (A: DL-A131)
     VOICE_CHECK_PERIOD=<period_id>               # 선택: 거래 응답에 input_revision이 없을 때
 
@@ -175,7 +175,7 @@ def main(argv=None) -> int:
     token = os.environ.get("VOICE_CHECK_TOKEN", "")
     tx = os.environ.get("VOICE_CHECK_TX", "")
     period = os.environ.get("VOICE_CHECK_PERIOD") or None
-    missing = [k for k, v in [("VOICE_CHECK_BASE", base), ("VOICE_CHECK_TOKEN", token)] if not v]
+    missing = [] if base else ["VOICE_CHECK_BASE"]  # 토큰은 로그인 없는 배포면 비워도 됨
     if a.step != "b1" and not tx:
         missing.append("VOICE_CHECK_TX")
     if a.step in ("b1", "b2") and not a.audio:
@@ -187,7 +187,7 @@ def main(argv=None) -> int:
         print("c1·c2는 실제 메모를 저장합니다. 확인했으면 --write를 붙여 다시 실행하세요.")
         return 2
 
-    headers = {"Authorization": f"Bearer {token}"}
+    headers = {"Authorization": f"Bearer {token}"} if token else {}
     with httpx.Client(base_url=base, headers=headers, timeout=60) as api:
         if a.step == "b1":
             local = None
