@@ -79,13 +79,35 @@ def iso(value):
 
 DATE_FIELDS = ("trade_date", "doc_date", "issued_on", "quoted_on", "period_start", "period_end", "payment_due_on")
 DECIMAL = r"-?[0-9]{1,16}(?:\.[0-9]{1,8})?"
+THOUSANDS = r"-?[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]{1,8})?"
+
+
+def _keep_text(target, key, printed, limit):
+    """Keep an unparseable printed value as evidence text instead of dropping it."""
+    if key not in target:
+        return
+    existing = target.get(key)
+    if existing is None:
+        target[key] = printed[:limit]
+    elif printed not in existing:
+        target[key] = f"{existing} / {printed}"[:limit]
+
+
+def _decimal(raw):
+    """'12,000' / '₩12,000원' -> '12000'. Anything ambiguous ('1,2', '12.000원', '10kg') -> None."""
+    text = re.sub(r"[₩원]", "", raw).strip()
+    if re.fullmatch(THOUSANDS, text):
+        text = text.replace(",", "")
+    elif re.search(r"[₩원]", raw) and "." in text:
+        return None  # Won has no fraction; a dot here is a misread separator, not a decimal point.
+    return text if re.fullmatch(DECIMAL, text) else None
 
 
 def normalize_draft(facts):
     """Model draft only: printed formats -> contract, blank or unreadable -> null for the reviewer.
 
-    One odd cell must not fail the whole photo. Nothing is guessed, and owner edits still go
-    through validate_fields unchanged.
+    One odd cell must not fail the whole photo. Nothing is guessed: unreadable dates keep their
+    printed text, and owner edits still go through validate_fields unchanged.
     """
     if not isinstance(facts, dict):
         return facts
@@ -94,8 +116,13 @@ def normalize_draft(facts):
             facts[key] = None
     for key in DATE_FIELDS:
         if isinstance(facts.get(key), str):
-            facts[key] = iso(facts[key])
-    if facts.get("period_start") and facts.get("period_end") and facts["period_start"] > facts["period_end"]:
+            printed = facts[key].strip()
+            facts[key] = iso(printed)
+            if facts[key] is None:
+                _keep_text(facts, "source_date_text", printed, 10000)
+    start, end = facts.get("period_start"), facts.get("period_end")
+    if isinstance(start, str) and isinstance(end, str) and start > end:
+        _keep_text(facts, "source_date_text", f"{start} ~ {end}", 10000)
         facts["period_start"] = facts["period_end"] = None
     for line in facts["lines"] if isinstance(facts.get("lines"), list) else []:
         if not isinstance(line, dict):
@@ -104,15 +131,13 @@ def normalize_draft(facts):
             if isinstance(line.get(key), str) and not line[key].strip():
                 line[key] = None
         if isinstance(line.get("delivery_date"), str):
-            printed = line["delivery_date"]
+            printed = line["delivery_date"].strip()
             line["delivery_date"] = iso(printed)
-            # Keep an unparseable printed date (e.g. "11/21") as evidence text.
-            if line["delivery_date"] is None and line.get("line_date_text") is None and "line_date_text" in line:
-                line["line_date_text"] = printed.strip()
+            if line["delivery_date"] is None:
+                _keep_text(line, "line_date_text", printed, 1000)
         for key in ("qty_read", "unit_price_read"):
             if isinstance(line.get(key), str):
-                text = re.sub(r"[\s,₩원]", "", line[key])
-                line[key] = text if re.fullmatch(DECIMAL, text) else None
+                line[key] = _decimal(line[key])
     return facts
 
 

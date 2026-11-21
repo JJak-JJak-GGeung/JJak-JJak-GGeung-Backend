@@ -95,10 +95,16 @@ class ExtractorTests(unittest.TestCase):
                      period_start="2026-11-15", period_end="2026-11-09")
         value["lines"][0].update(qty_read="1,200", unit_price_read="₩12,000", spec="",
                                  delivery_date="11/21", line_date_text=None)
-        value["lines"].append({**value["lines"][0], "qty_read": "10kg", "unit_price_read": "12,000원",
-                               "delivery_date": "2026.11.20", "unit": "  "})
+        base = value["lines"][0]
+        value["lines"] += [
+            {**base, "qty_read": "10kg", "unit_price_read": "12,000원", "delivery_date": "2026.11.20", "unit": "  "},
+            {**base, "qty_read": "1,2", "unit_price_read": "12.000원", "delivery_date": "11/22",
+             "line_date_text": "11월 22일분"},
+            {**base, "qty_read": "0,5", "unit_price_read": "12,000.50", "delivery_date": None},
+            {**base, "qty_read": "-", "unit_price_read": "₩", "delivery_date": None},
+        ]
         result = extract_document(image_bytes(), "image/png", None, client=provider(value))
-        first, second = result["lines"]
+        first, second, third, fourth, fifth = result["lines"]
         self.assertEqual((first["qty_read"], first["unit_price_read"]), ("1200", "12000"))
         self.assertIsNone(first["spec"])
         self.assertIsNone(first["delivery_date"])
@@ -107,16 +113,32 @@ class ExtractorTests(unittest.TestCase):
         self.assertEqual(second["unit_price_read"], "12000")
         self.assertEqual(second["delivery_date"], "2026-11-20")
         self.assertIsNone(second["unit"])
+        # Ambiguous separators are never collapsed into a bigger or smaller number.
+        self.assertIsNone(third["qty_read"])         # "1,2" is not 12
+        self.assertIsNone(third["unit_price_read"])  # "12.000원" is not 12 won
+        self.assertEqual(third["line_date_text"], "11월 22일분 / 11/22")
+        self.assertIsNone(fourth["qty_read"])        # "0,5" is not 05
+        self.assertEqual(fourth["unit_price_read"], "12000.50")
+        self.assertIsNone(fifth["qty_read"])
+        self.assertIsNone(fifth["unit_price_read"])
         self.assertIsNone(result["doc_no"])
         self.assertEqual(result["trade_date"], "2026-11-21")
         self.assertIsNone(result["doc_date"])
         self.assertIsNone(result["period_start"])
         self.assertIsNone(result["period_end"])
+        # Unreadable header dates keep their printed text for the reviewer.
+        self.assertEqual(result["source_date_text"], "26.11.21 / 2026-11-15 ~ 2026-11-09")
         # Owner edits are still validated strictly.
         edited = facts()
         edited["lines"][0]["qty_read"] = "1,200"
         with self.assertRaises(ValueError):
             validate_fields(edited)
+
+    def test_non_text_period_still_fails_as_invalid_text(self):
+        value = facts()
+        value.update(period_start=5, period_end="2026-11-09")
+        with self.assertRaisesRegex(ExtractionError, "^INVALID_DOCUMENT_TEXT$"):
+            extract_document(image_bytes(), "image/png", None, client=provider(value))
 
     def test_bad_numbers_dates_and_extra_fields_rejected(self):
         for field, invalid in [("qty_read", "NaN"), ("qty_read", "1,000"),

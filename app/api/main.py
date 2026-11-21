@@ -101,7 +101,7 @@ def document_response(value, lines=None):
         "photo_review": (value.get("metadata") or {}).get("photo_review"),
         **{key: value.get(key) for key in (
             "trade_date", "issued_on", "quoted_on", "source_date_text",
-            "supplier_name_read", "supplier_id", "doc_no", "doc_date", "period_start", "period_end",
+            "supplier_name_read", "supplier_id", "selected_supplier_id", "doc_no", "doc_date", "period_start", "period_end",
             "replaces_doc_no", "agreement_text", "agreement_source_location", "source_mode")},
     }
 
