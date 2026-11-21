@@ -1,0 +1,71 @@
+{
+  "lines": [
+    {
+      "store_id": "b1-local-store",
+      "supplier_id": "b1-local-supplier",
+      "period_id": "b1-local-period",
+      "delivery_no": "DL-A131",
+      "delivery_date": "2026-11-13",
+      "item": "손질장어",
+      "spec": null,
+      "unit": "kg",
+      "line_id": "b1-local-A02-1",
+      "declared_qty": "40",
+      "billed_qty": "40",
+      "unit_price": "20000",
+      "billed_amount": 800000,
+      "evidence_refs": [
+        {
+          "document_id": "fb844e75-67ee-47ef-8d0a-c7c090e78096",
+          "line_id": null,
+          "source_location": {
+            "page": 1,
+            "row": 1
+          },
+          "kind": "DELIVERY"
+        },
+        {
+          "document_id": null,
+          "line_id": null,
+          "source_location": {
+            "page": 1,
+            "row": 2
+          },
+          "kind": "INVOICE"
+        }
+      ]
+    }
+  ],
+  "receipts": [
+    {
+      "store_id": "b1-local-store",
+      "supplier_id": "b1-local-supplier",
+      "period_id": "b1-local-period",
+      "delivery_no": "DL-A131",
+      "delivery_date": "2026-11-13",
+      "item": "손질장어",
+      "spec": null,
+      "unit": "kg",
+      "receipt_id": null,
+      "source_line_id": null,
+      "confirmed_by": null,
+      "confirmed_at": null,
+      "qty_read": "36",
+      "received_qty": null,
+      "evidence_refs": [
+        {
+          "document_id": null,
+          "line_id": null,
+          "source_location": {
+            "page": 1,
+            "row": 2
+          },
+          "kind": "RECEIPT"
+        }
+      ]
+    }
+  ],
+  "store_id": "b1-local-store",
+  "supplier_id": "b1-local-supplier",
+  "period_id": "b1-local-period"
+}

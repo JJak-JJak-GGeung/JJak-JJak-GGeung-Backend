@@ -96,3 +96,19 @@ result = reconcile_receipts(
 전체 검산: `python -m unittest discover -s app/reconcile -t . -p "test_*.py" -v`
 
 검증 범위: 공개 합성 원본을 수동 전사한 예시 및 회귀 테스트. 실제 사진 판독·점주 확인·API/DB 연동은 미실행이다.
+
+## B1 · OCR 출력 연결부
+
+`app.reconcile.ocr.reconcile_ocr_documents(documents, confirmations, *, store_id, supplier_id, period_id)`로 사진 판독 출력에서 B1 계산까지 연결한다. `app.photo.extract_document`의 문서/행 필드 구조를 사용하며, OCR을 다시 실행하거나 판독값을 추측하지 않는다.
+
+호출 전 서버가 각 문서에 검증된 `store_id/supplier_id/period_id`와 각 행의 고유 `line_id`를 붙여야 한다. `document_id`도 필수다. 다른 원문 거래처·기간을 선택 중인 범위로 임의 지정하면 안 된다. 실제 서버 ID가 없는 로컬 검산에서는 명시적인 로컬 ID를 사용한다. 함수는 ID나 확인자를 자동 생성하지 않는다. `transaction_id`는 제공된 경우 보존하며 없으면 null이다.
+
+- DELIVERY의 `qty_read` → `declared_qty`, INVOICE의 `qty_read/unit_price_read/amount_read` → `billed_qty/unit_price/billed_amount`. 수량과 단가는 원래 십진 문자열, 원화 기재액은 정수/null을 유지한다.
+- 명세·청구는 B1과 같은 후보 검색 규칙을 공유한다. 모호한 행, 번호가 없는 불완전 후보, 단위 불명, 동일 청구 번호의 서로 다른 파일, 빈 판독 문서는 보류한다. 수정 청구는 합산하지 않고 `CORRECTION_REQUIRES_SETTLEMENT`로 반환한다. 유효 대체·양측 합의 처리는 C2 함수와 별도로 연결해야 한다.
+- RECEIPT의 `qty_read`는 기본적으로 **미확인 후보**다. OCR 문서나 원본 행 안의 `confirmed_by/at`, `received_qty`, 연결 대상 필드는 확인 근거로 사용하지 않는다.
+- `confirmations`에는 서버가 별도로 인증·저장한 수령 확인 이벤트만 전달한다. 동일 범위의 `source_line_id`로 판독 행을 찾는다. `receipt_id`, `confirmed_by/at`를 가진 이벤트가 있어야 집계한다. `received_qty`를 생략한 receipt_link는 해당 원본의 `qty_read`를 사용하며, 서버가 확인한 정정 수량은 이벤트의 값으로 명시한다. 같은 요청의 재전송은 같은 receipt_id를 사용한다.
+- 확인 이벤트에 대응하는 원본 행이 없으면 `UNKNOWN_CONFIRMATION_SOURCE`로 보류한다. 원본 행 없는 직접 수령 입력(receipt_entry)은 이 OCR 전용 연결부가 아닌 B1 수령 함수에 전달한다.
+- 원래 판독 행은 `ocr_line`, 기재 청구 행은 `invoice_ocr_line`, 문서·행·페이지/영역은 `evidence_refs`에 보존한다. 품목의 OCR 공백 차이는 연결용 값에서만 정규화하고 원문은 유지한다.
+- 결과는 기존 B1 필드에 청구 행 연결 후보·사유인 `document_links`와 `excluded_document_ids`를 추가한다. 이 진입점은 승인하지 않는다. 실제 사진 판독 JSON과 API/DB 호출에 대한 검증은 별도다.
+
+재현용 OCR 형식 예시는 `test_ocr.ocr_documents()`에 있다. 이는 엔진 실행 결과가 아닌 테스트 fixture다. 실제 판독 JSON을 받으면 서버 범위·ID를 명시해 같은 진입점으로 재검산한다.

@@ -1,0 +1,118 @@
+{
+  "provenance": {
+    "extraction": "local_rapidocr_from_team_pack_png_bytes",
+    "store_name_source": "visual_review_of_team_pack_originals",
+    "deployment_rows_verified": false,
+    "notes": [
+      "A02 document_id came from the shared deployment status. All rows were extracted locally.",
+      "A03/A04 document IDs and all server-issued line IDs are unknown.",
+      "A02 has no printed weekly period. Candidate period comes from matching A03 and A04."
+    ]
+  },
+  "matching_context": {
+    "store_name": "가온 장어식당",
+    "supplier_name": "달마루 수산",
+    "period_start": "2026-11-09",
+    "period_end": "2026-11-15",
+    "delivery_no": "DL-A131",
+    "delivery_date": "2026-11-13"
+  },
+  "documents": [
+    {
+      "fixture_ref": "A02",
+      "source_file": "A02_납품명세_1113.png",
+      "document_id": "fb844e75-67ee-47ef-8d0a-c7c090e78096",
+      "document_id_source": "shared_deployment_status",
+      "line_id": null,
+      "doc_type": "DELIVERY",
+      "doc_no": "DL-A131",
+      "store_id": null,
+      "store_name": "가온 장어식당",
+      "supplier_id": null,
+      "supplier_name_read": "달마루 수산",
+      "period_id": null,
+      "period_start_read": null,
+      "period_end_read": null,
+      "delivery_no": "DL-A131",
+      "delivery_date": "2026-11-13",
+      "item": "손질장어",
+      "spec": null,
+      "qty_read": "40",
+      "unit": "kg",
+      "unit_price_read": "20000",
+      "amount_read": 800000,
+      "source_location": {
+        "page": 1,
+        "row": 1
+      }
+    },
+    {
+      "fixture_ref": "A04",
+      "source_file": "A04_주간청구서.png",
+      "document_id": null,
+      "document_id_source": null,
+      "line_id": null,
+      "doc_type": "INVOICE",
+      "doc_no": "INV-A01",
+      "store_id": null,
+      "store_name": "가온 장어식당",
+      "supplier_id": null,
+      "supplier_name_read": "달마루 수산",
+      "period_id": null,
+      "period_start_read": "2026-11-09",
+      "period_end_read": "2026-11-15",
+      "delivery_no": "DL-A131",
+      "delivery_date": "2026-11-13",
+      "item": "손질장어",
+      "spec": null,
+      "qty_read": "40",
+      "unit": "kg",
+      "unit_price_read": "20000",
+      "amount_read": 800000,
+      "source_location": {
+        "page": 1,
+        "row": 2
+      }
+    },
+    {
+      "fixture_ref": "A03",
+      "source_file": "A03_점포수령기록.png",
+      "document_id": null,
+      "document_id_source": null,
+      "line_id": null,
+      "doc_type": "RECEIPT",
+      "doc_no": null,
+      "store_id": null,
+      "store_name": "가온 장어식당",
+      "supplier_id": null,
+      "supplier_name_read": "달마루 수산",
+      "period_id": null,
+      "period_start_read": "2026-11-09",
+      "period_end_read": "2026-11-15",
+      "delivery_no": "DL-A131",
+      "delivery_date": "2026-11-13",
+      "item": "손질장어",
+      "spec": null,
+      "qty_read": "36",
+      "unit": "kg",
+      "unit_price_read": null,
+      "amount_read": null,
+      "source_location": {
+        "page": 1,
+        "row": 2
+      }
+    }
+  ],
+  "receipt": {
+    "candidate_fixture_ref": "A03",
+    "candidate_qty_read": "36",
+    "unit": "kg",
+    "owner_confirmed": null,
+    "receipt_id": null,
+    "received_qty": null,
+    "confirmed_by": null,
+    "confirmed_at": null,
+    "target_delivery_line_id": null,
+    "include_in_received_totals": false
+  }
+}

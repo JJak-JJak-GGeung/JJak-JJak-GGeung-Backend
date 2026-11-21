@@ -7,6 +7,23 @@ from typing import Any
 from . import _quantity, reconcile_lines
 
 
+def delivery_candidates(lines, source):
+    """Find candidates only; this does not confirm or aggregate a source row."""
+    target = source.get("target_delivery_line_id")
+    number = source.get("delivery_no")
+    pool = list(lines)
+    if target:
+        pool = [line for line in pool if line["line_id"] == target]
+    if number:
+        pool = [line for line in pool if line.get("delivery_no") == number]
+    for key in ("delivery_date", "item", "spec"):
+        if source.get(key):
+            pool = [line for line in pool if line.get(key) == source[key]]
+    if source.get("unit") and (not target and not number or len(pool) > 1):
+        pool = [line for line in pool if line.get("unit") == source["unit"]]
+    return pool
+
+
 def reconcile_receipts(
     lines: list[dict[str, Any]], receipts: list[dict[str, Any]],
     *, store_id: str, supplier_id: str, period_id: str,
@@ -29,22 +46,6 @@ def reconcile_receipts(
             raise ValueError("Billing rows must belong to the requested scope")
         by_line[line_id] = line
 
-    def candidates(receipt):
-        target = receipt.get("target_delivery_line_id")
-        number = receipt.get("delivery_no")
-        pool = list(by_line.values())
-        if target:
-            pool = [line for line in pool if line["line_id"] == target]
-        if number:
-            pool = [line for line in pool if line.get("delivery_no") == number]
-        for key in ("delivery_date", "item", "spec"):
-            if receipt.get(key):
-                pool = [line for line in pool if line.get(key) == receipt[key]]
-        # A known target/unique number can link across units, but not calculate.
-        if receipt.get("unit") and (not target and not number or len(pool) > 1):
-            pool = [line for line in pool if line.get("unit") == receipt["unit"]]
-        return pool
-
     links = []
     by_receipt = {}
     id_conflicts = set()
@@ -56,7 +57,7 @@ def reconcile_receipts(
         if any(receipt.get(key) != value for key, value in scope.items()):
             event.update(status="OUT_OF_SCOPE", reason="SCOPE_MISMATCH")
             continue
-        pool = candidates(receipt)
+        pool = delivery_candidates(by_line.values(), receipt)
         event["candidates"] = [
             {key: line.get(key) for key in (
                 "line_id", "delivery_no", "delivery_date", "item", "spec", "unit",
