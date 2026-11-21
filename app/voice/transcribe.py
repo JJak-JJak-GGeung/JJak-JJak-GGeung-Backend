@@ -84,7 +84,12 @@ def resolve_extension(mime: str | None, data: bytes) -> str:
 def _default_client():
     if not os.environ.get("OPENAI_API_KEY"):
         raise TranscriptionError("NO_API_KEY", 503, "서버에 OPENAI_API_KEY가 설정되지 않았습니다.")
-    from openai import OpenAI
+    try:
+        from openai import OpenAI
+    except ImportError as exc:
+        raise TranscriptionError(
+            "NO_OPENAI_SDK", 503, "서버에 openai 패키지가 없습니다. requirements.txt에 openai를 추가해 주세요."
+        ) from exc
 
     return OpenAI(timeout=60.0, max_retries=1)
 
