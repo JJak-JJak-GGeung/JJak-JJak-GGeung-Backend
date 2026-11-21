@@ -207,6 +207,11 @@ class ExtractorTests(unittest.TestCase):
             value = facts()
             value.update(doc_type=kind, doc_no="INV-1" if kind == "INVOICE" else None)
             value["lines"][0]["qty_read"] = qty
+            if kind == "DELIVERY":
+                value.update(single_delivery_header=True, doc_no="DL-A131", source_date_text="납품일 2026-11-13")
+                value["lines"][0].update(delivery_no=None, delivery_date=None)
+            if kind == "RECEIPT":
+                value["lines"][0].update(unit=None, quantity_heading="실수령(kg)")
             draft = extract_document(image_bytes(), "image/png", kind, client=provider(value))
             draft.update(scope)
             draft["lines"][0]["line_id"] = kind + ":1"
@@ -273,6 +278,41 @@ class ReviewTests(unittest.TestCase):
                        {**self.review, "lines": [{**self.review["lines"][0], "item": " "}]}]:
             with self.subTest(review=review), self.assertRaises(ExtractionError):
                 prepare_review(self.draft, review)
+
+class PrintedHeaderTests(unittest.TestCase):
+    def read(self, kind, header_date, rows, single=True):
+        raw = facts()
+        raw.update(doc_type=kind, doc_no="S-405", doc_date="2026-10-10",
+                   source_date_text=header_date, single_delivery_header=single)
+        raw["lines"] = [{**raw["lines"][0], "delivery_no": None, "delivery_date": None,
+                         "unit": None, **row} for row in rows]
+        return extract_document(image_bytes(), "image/png", None, client=provider(raw))["lines"]
+
+    def test_single_delivery_header_links_lines(self):
+        rows = self.read("DELIVERY", "납품일: 2026.10.10", [{"quantity_heading": "수량(kg)"}])
+        self.assertEqual((rows[0]["delivery_no"], rows[0]["delivery_date"], rows[0]["unit"]),
+                         ("S-405", "2026-10-10", "kg"))
+
+    def test_multiple_rows_keep_their_units_and_evidence(self):
+        rows = self.read("RECEIPT", "작성일 2026-10-10", [
+            {"quantity_heading": "실수령(kg)", "delivery_no": "D-A"},
+            {"quantity_heading": "실수령(kg)", "delivery_no": "D-B", "unit": "박스"},
+            {"quantity_heading": "단가(원/kg)"},
+        ], single=False)
+        self.assertEqual([r["unit"] for r in rows], ["kg", "박스", None])
+        self.assertEqual([r["delivery_no"] for r in rows], ["D-A", "D-B", None])
+        self.assertTrue(all(r["delivery_date"] is None for r in rows))
+
+    def test_ambiguous_headers_never_override_rows(self):
+        rows = self.read("DELIVERY", "발행일 2026-10-10", [
+            {"delivery_no": "different", "delivery_date": "2026-10-09"},
+            {"line_date_text": "10/07", "quantity_heading": "수량(kg/박스)"},
+        ])
+        self.assertEqual(rows[0]["delivery_date"], "2026-10-09")
+        self.assertEqual(rows[0]["delivery_no"], "different")
+        self.assertIsNone(rows[1]["delivery_no"])
+        self.assertIsNone(rows[1]["delivery_date"])
+        self.assertIsNone(rows[1]["unit"])
 
 
 if __name__ == "__main__":
