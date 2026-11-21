@@ -17,6 +17,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.photo.extractor import extract_document
 from app.api.auth import Owner, current_owner, require_store
 from app.api.photo_review import router as review_router
+from app.api.directory import router as directory_router
 from app.api.database import original_upload_path, remote, rows, rpc
 from app.workflow.settlement import get_settlement
 from app.voice.router import router as voice_router
@@ -24,6 +25,7 @@ from app.voice.router import router as voice_router
 app = FastAPI(title="짝짜꿍 조회 API")
 app.include_router(voice_router, dependencies=[Depends(current_owner)])
 app.include_router(review_router)
+app.include_router(directory_router)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[v.strip() for v in os.getenv("CORS_ORIGINS", "").split(",") if v.strip()],
