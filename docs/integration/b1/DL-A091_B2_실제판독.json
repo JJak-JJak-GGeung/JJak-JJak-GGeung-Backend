@@ -1,0 +1,119 @@
+{
+  "provenance": {
+    "extraction": "local_rapidocr_from_team_pack_png_bytes",
+    "store_name_source": "visual_review_of_team_pack_originals",
+    "deployment_rows_verified": true,
+    "notes": [
+      "A01 has no printed weekly period. Candidate period comes from A03 and A04.",
+      "Document IDs were mapped using matching SHA-256 hashes; row IDs were verified in the deployed period response.",
+      "A04 represents the initial invoice. The observed deployed settlement currently uses the A05 corrected invoice. The confirmation event is stored separately from OCR."
+    ]
+  },
+  "matching_context": {
+    "store_name": "가온 장어식당",
+    "supplier_name": "달마루 수산",
+    "period_start": "2026-11-09",
+    "period_end": "2026-11-15",
+    "delivery_no": "DL-A091",
+    "delivery_date": "2026-11-09"
+  },
+  "documents": [
+    {
+      "fixture_ref": "A01",
+      "source_file": "A01_납품명세_1109.png",
+      "document_id": "ff8c8d71-9ff7-4d98-9469-8d5dc37dbc9a",
+      "document_id_source": "deployment_original_sha256_match",
+      "line_id": "bc8f4252-1514-54ac-ba71-8dcfbd78b081",
+      "doc_type": "DELIVERY",
+      "doc_no": "DL-A091",
+      "store_id": "cc3be3a5-a76d-43fb-aeea-1d9a5502184f",
+      "store_name": "가온 장어식당",
+      "supplier_id": "d12b383c-2d40-4c77-83f1-05e6479f7c00",
+      "supplier_name_read": "달마루 수산",
+      "period_id": "56a6054f-909f-4073-9f1b-35fcd4d41150",
+      "period_start_read": null,
+      "period_end_read": null,
+      "delivery_no": "DL-A091",
+      "delivery_date": "2026-11-09",
+      "item": "손질장어",
+      "spec": null,
+      "qty_read": "60",
+      "unit": "kg",
+      "unit_price_read": "20000",
+      "amount_read": 1200000,
+      "source_location": {
+        "page": 1,
+        "row": 1
+      }
+    },
+    {
+      "fixture_ref": "A04",
+      "source_file": "A04_주간청구서.png",
+      "document_id": "a2182bea-7a62-4284-823b-4b4e117524b3",
+      "document_id_source": "deployment_original_sha256_match",
+      "line_id": "795f21a1-ea43-55ce-b352-0b55693ee3e3",
+      "doc_type": "INVOICE",
+      "doc_no": "INV-A01",
+      "store_id": "cc3be3a5-a76d-43fb-aeea-1d9a5502184f",
+      "store_name": "가온 장어식당",
+      "supplier_id": "d12b383c-2d40-4c77-83f1-05e6479f7c00",
+      "supplier_name_read": "달마루 수산",
+      "period_id": "56a6054f-909f-4073-9f1b-35fcd4d41150",
+      "period_start_read": "2026-11-09",
+      "period_end_read": "2026-11-15",
+      "delivery_no": "DL-A091",
+      "delivery_date": "2026-11-09",
+      "item": "손질장어",
+      "spec": null,
+      "qty_read": "60",
+      "unit": "kg",
+      "unit_price_read": "20000",
+      "amount_read": 1200000,
+      "source_location": {
+        "page": 1,
+        "row": 1
+      }
+    },
+    {
+      "fixture_ref": "A03",
+      "source_file": "A03_점포수령기록.png",
+      "document_id": "b292095a-e43a-46ed-befb-726eeafdcb72",
+      "document_id_source": "deployment_original_sha256_match",
+      "line_id": "87dfde82-74cd-5055-ac01-8160fe76c022",
+      "doc_type": "RECEIPT",
+      "doc_no": null,
+      "store_id": "cc3be3a5-a76d-43fb-aeea-1d9a5502184f",
+      "store_name": "가온 장어식당",
+      "supplier_id": "d12b383c-2d40-4c77-83f1-05e6479f7c00",
+      "supplier_name_read": "달마루 수산",
+      "period_id": "56a6054f-909f-4073-9f1b-35fcd4d41150",
+      "period_start_read": "2026-11-09",
+      "period_end_read": "2026-11-15",
+      "delivery_no": "DL-A091",
+      "delivery_date": "2026-11-09",
+      "item": "손질장어",
+      "spec": null,
+      "qty_read": "60",
+      "unit": "kg",
+      "unit_price_read": null,
+      "amount_read": null,
+      "source_location": {
+        "page": 1,
+        "row": 1
+      }
+    }
+  ],
+  "receipt": {
+    "candidate_fixture_ref": "A03",
+    "candidate_qty_read": "60",
+    "unit": "kg",
+    "owner_confirmed": true,
+    "receipt_id": "364c235a-bc95-4a8a-96cd-2a6517914d46",
+    "received_qty": "60",
+    "confirmed_by": "검수 점주",
+    "confirmed_at": "2026-11-21T11:25:08.346543+09:00",
+    "target_delivery_line_id": "bc8f4252-1514-54ac-ba71-8dcfbd78b081",
+    "include_in_received_totals": true,
+    "source_line_id": "87dfde82-74cd-5055-ac01-8160fe76c022"
+  }
+}
