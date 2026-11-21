@@ -1,0 +1,4 @@
+# 음성 전사 모듈 의존성 (구본혁 서버 requirements에 합쳐 주세요)
+openai>=1.60
+fastapi>=0.115
+python-multipart>=0.0.9
