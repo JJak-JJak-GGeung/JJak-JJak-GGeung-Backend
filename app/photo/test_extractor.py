@@ -105,6 +105,28 @@ class ExtractorTests(unittest.TestCase):
         self.assertEqual(result["lines"][0]["unit_price_read"], "20000.125")
         self.assertIsNone(result["lines"][0]["spec"])
 
+    def test_item_details_survive_extraction_and_review(self):
+        value = facts()
+        value["lines"][0].update(
+            item_code="0012", origin="국내산", lot_no="LOT-3", line_note="냉장",
+            supply_amount_read=9000, discount_amount_read=0, line_total_read=9900,
+        )
+        draft = extract_document(image_bytes(), "image/png", None, client=provider(value))
+        review = facts()
+        review["lines"][0].update(source_row=1, origin=None, supply_amount_read=8000)
+        _, edits = prepare_review(draft, review)
+        self.assertEqual(edits[0]["item_code"], "0012")
+        self.assertEqual(edits[0]["lot_no"], "LOT-3")
+        self.assertEqual(edits[0]["line_note"], "냉장")
+        self.assertEqual(edits[0]["discount_amount_read"], 0)
+        self.assertEqual(edits[0]["line_total_read"], 9900)
+        self.assertEqual(edits[0]["supply_amount_read"], 8000)
+        self.assertIsNone(edits[0]["origin"])
+        self.assertEqual(draft["lines"][0]["origin"], "국내산")
+        review["lines"][0]["line_total_read"] = "9900"
+        with self.assertRaisesRegex(ExtractionError, "INVALID_AMOUNT"):
+            prepare_review(draft, review)
+
     def test_odd_model_cells_become_reviewable_instead_of_failing_the_photo(self):
         value = facts()
         value.update(doc_no=" ", trade_date="2026년 11월 21일", doc_date="26.11.21",
