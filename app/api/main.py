@@ -16,8 +16,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.photo.extractor import extract_document
 from app.api.database import remote, rows, rpc
 from app.workflow.settlement import get_settlement
+from app.voice.router import router as voice_router
 
 app = FastAPI(title="짝짜꿍 조회 API")
+app.include_router(voice_router)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[v.strip() for v in os.getenv("CORS_ORIGINS", "").split(",") if v.strip()],
