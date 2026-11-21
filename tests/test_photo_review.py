@@ -54,6 +54,18 @@ class PhotoApiTests(unittest.TestCase):
                 "request_key": "review-test-key", "actor_label": "test reviewer"}
         return data, {"file": ("photo.png", raw, "image/png")}
 
+    def test_legacy_line_reference_edits_preserve_omitted_and_explicit_null(self):
+        from app.api.photo_review import ReviewLine
+        base = dict(item="검수", unit=None, qty_read=None, unit_price_read=None, amount_read=None)
+        self.assertNotIn("delivery_no", ReviewLine(**base).model_dump(exclude_unset=True))
+        review = ReviewLine(**base, delivery_no=None, delivery_date="2024-02-29")
+        fields = review.model_dump(exclude_unset=True)
+        self.assertIsNone(fields["delivery_no"])
+        self.assertEqual(fields["delivery_date"], "2024-02-29")
+        for invalid in ("2025-02-29", "11/13", 123456):
+            with self.assertRaises(ValueError):
+                ReviewLine(**base, delivery_date=invalid)
+
     def test_preview_does_not_write_or_confirm(self):
         with patch("app.api.photo_review_v2.extract_document", return_value=facts()), \
                 patch("app.api.photo_review_v2.rpc") as rpc, patch("app.api.photo_review_v2.remote") as storage:
