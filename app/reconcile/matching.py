@@ -56,9 +56,6 @@ def reconcile_receipts(
         if any(receipt.get(key) != value for key, value in scope.items()):
             event.update(status="OUT_OF_SCOPE", reason="SCOPE_MISMATCH")
             continue
-        if not receipt.get("confirmed_by") or not receipt.get("confirmed_at"):
-            event.update(status="UNCONFIRMED", reason="RECEIPT_NOT_CONFIRMED")
-            continue
         pool = candidates(receipt)
         event["candidates"] = [
             {key: line.get(key) for key in (
@@ -66,6 +63,10 @@ def reconcile_receipts(
                 "evidence_refs",
             )} for line in pool
         ]
+        # Candidate display does not confirm a link or contribute to quantities.
+        if not receipt.get("confirmed_by") or not receipt.get("confirmed_at"):
+            event.update(status="UNCONFIRMED", reason="RECEIPT_NOT_CONFIRMED")
+            continue
         receipt_id = receipt.get("receipt_id")
         if not isinstance(receipt_id, str) or not receipt_id.strip():
             event["reason"] = "MISSING_RECEIPT_ID"

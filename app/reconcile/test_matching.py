@@ -97,6 +97,33 @@ class MatchingTests(unittest.TestCase):
         self.assertEqual([link["status"] for link in result["receipt_links"]],
                          ["LINKED", "DUPLICATE", "DUPLICATE"])
 
+    def test_unconfirmed_candidates_do_not_link_or_count_received_quantity(self):
+        for missing in ("confirmed_by", "confirmed_at"):
+            with self.subTest(missing=missing):
+                value = receipt(**{missing: None}, target_delivery_line_id="delivery-1")
+                result = run([line(received_qty="36")], [value])
+                link = result["receipt_links"][0]
+                self.assertEqual(link["status"], "UNCONFIRMED")
+                self.assertEqual(link["candidates"][0]["line_id"], "delivery-1")
+                self.assertIsNone(link["target_delivery_line_id"])
+                for record in (result["items"][0], result["summary"]):
+                    for field in ("received_qty", "delta_qty", "check_amount"):
+                        self.assertIsNone(record[field])
+                self.assertFalse(result["can_approve"])
+
+    def test_unconfirmed_ambiguous_candidates_and_scope_boundary(self):
+        lines = [line(), line("delivery-2")]
+        value = receipt(delivery_no=None, delivery_date="2026-11-13", item="eel",
+                        spec="cleaned", confirmed_by=None)
+        result = run(lines, [value])
+        self.assertEqual(len(result["receipt_links"][0]["candidates"]), 2)
+        self.assertEqual(result["receipt_links"][0]["status"], "UNCONFIRMED")
+        self.assertIsNone(result["summary"]["received_qty"])
+        value["store_id"] = "other-store"
+        excluded = run(lines, [value])["receipt_links"][0]
+        self.assertEqual(excluded["status"], "OUT_OF_SCOPE")
+        self.assertEqual(excluded["candidates"], [])
+
     def test_duplicate_id_or_source_with_changed_quantity_holds(self):
         for receipt_id in ("receipt-1", "new-id"):
             with self.subTest(receipt_id=receipt_id):
