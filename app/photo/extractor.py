@@ -67,6 +67,17 @@ def validate_image(raw, mime):
         raise ExtractionError("INVALID_IMAGE") from error
 
 
+def iso(value):
+    try:
+        if not isinstance(value, str):
+            return None
+        match = re.fullmatch(r"\s*(\d{4})\s*[-./년]\s*(\d{1,2})\s*[-./월]\s*(\d{1,2})\s*(?:일|\.)?\s*(?:\([월화수목금토일]\))?\s*", value)
+        return date(*(int(v) for v in match.groups())).isoformat() if match else None
+    except ValueError:
+        return None
+
+
+
 def validate_fields(value):
     """Validate both provider output and edits; reject malformed values, never repair silently."""
     if not isinstance(value, dict) or set(value) != set(SCHEMA["properties"]):
@@ -137,7 +148,15 @@ def extract_document(raw_bytes, mime, document_id, context=None, *, client=None)
         if any(getattr(part, "type", None) == "refusal"
                for item in response.output for part in getattr(item, "content", [])):
             raise ExtractionError("READING_REFUSED")
-        facts = validate_fields(json.loads(response.output_text))
+        raw_facts = json.loads(response.output_text)
+        # Normalize printed Korean dates in the model draft; edits still require ISO.
+        for key in ("trade_date", "doc_date", "issued_on", "quoted_on", "period_start", "period_end", "payment_due_on"):
+            if (normalized := iso(raw_facts.get(key))) is not None:
+                raw_facts[key] = normalized
+        for line in raw_facts.get("lines", []):
+            if (normalized := iso(line.get("delivery_date"))) is not None:
+                line["delivery_date"] = normalized
+        facts = validate_fields(raw_facts)
     except ExtractionError:
         raise
     except Exception as error:
