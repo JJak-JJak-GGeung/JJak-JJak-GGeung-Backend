@@ -84,6 +84,7 @@ Even for UNKNOWN, extract the header and item rows the same way.
   (e.g. '수량 파악 후 견적'), and memo rows written in the item column are each extracted as their own row, with blank cells null.
   Never copy the parent item's unit, price or amount into them.
 - Extract repeated item names as separate rows. Do not extract empty grid rows with no content.
+- If the same document is printed twice on one page (e.g. 공급자 보관용 and 공급받는자 보관용 copies), extract the rows of one copy only.
 - Not item rows: 합계/소계/세액 합계/청구 합계/잔액/입금 rows, bank account rows (bank name, account holder),
   특기사항 (remarks), and the amount-in-Korean-words line.
 - If the item column holds a weight such as '120g(40g*3)', '40g' or '8g', that is the item. If the unit cell says '8g', unit='8g'.
