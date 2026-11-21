@@ -7,7 +7,7 @@ import json
 import os
 import time
 
-from .extractor import ExtractionError, LINE_FIELDS, TEXT_FIELDS, validate_fields
+from .extractor import AMOUNT_FIELDS, ExtractionError, LINE_FIELDS, TEXT_FIELDS, validate_fields
 
 
 def review_warnings(draft):
@@ -49,7 +49,7 @@ def verify(raw, draft, issued_at, signature):
 
 def prepare_review(draft, review):
     """Keep source lineage for edited rows, and allow explicit insertions and deletions."""
-    if not isinstance(review, dict) or set(review) != {"doc_type", *TEXT_FIELDS, "lines"}:
+    if not isinstance(review, dict) or set(review).difference(AMOUNT_FIELDS) != {"doc_type", *TEXT_FIELDS, "lines"}:
         raise ExtractionError("INVALID_REVIEW")
     if not isinstance(review["lines"], list) or not 1 <= len(review["lines"]) <= 300:
         raise ExtractionError("INVALID_REVIEW_LINES")
@@ -67,7 +67,9 @@ def prepare_review(draft, review):
         if not isinstance(row["item"], str) or not row["item"].strip():
             raise ExtractionError("ITEM_REQUIRED")
         edits.append({**row, "source_row": source})
+    for key in AMOUNT_FIELDS:
+        facts.setdefault(key, draft.get(key))
     validate_fields(facts)
     if facts["doc_type"] == "UNKNOWN":
         raise ExtractionError("DOCUMENT_TYPE_REQUIRED")
-    return {key: facts[key] for key in ("doc_type", *TEXT_FIELDS)}, edits
+    return {key: facts[key] for key in ("doc_type", *TEXT_FIELDS, *AMOUNT_FIELDS)}, edits

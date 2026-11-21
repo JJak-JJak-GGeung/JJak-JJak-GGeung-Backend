@@ -53,6 +53,22 @@ class ExtractorTests(unittest.TestCase):
         self.assertNotIn("hints", call)
         self.assertEqual(result["analysis"]["input_tokens"], 20)
 
+    def test_statement_amounts_keep_printed_and_reviewed_values(self):
+        fields = {**facts(), "trade_date": "2025-01-31", "current_balance": 4400,
+                  "deposit_amount": 300, "tax_total": None, "document_total": 1000}
+        draft = extract_document(image_bytes(), "image/png", None, client=provider(fields))
+        reviewed = deepcopy(fields)
+        reviewed.update(deposit_amount=None, tax_total=0)
+        reviewed["lines"][0]["source_row"] = 1
+        result, _ = prepare_review(draft, reviewed)
+        self.assertEqual(result["trade_date"], "2025-01-31")
+        self.assertIsNone(result["deposit_amount"])
+        self.assertEqual(result["tax_total"], 0)
+        self.assertEqual(result["current_balance"], 4400)
+        self.assertEqual(draft["deposit_amount"], 300)
+        with self.assertRaises(ExtractionError):
+            prepare_review(draft, {**reviewed, "tax_total": True})
+
     def test_configured_model(self):
         with patch.dict(os.environ, {"OPENAI_DOCUMENT_MODEL": "configured-vision-model"}):
             client = provider()
