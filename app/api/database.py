@@ -42,3 +42,9 @@ def rows(table, **filters):
             return json.load(response)
     except (HTTPError, URLError, TimeoutError):
         raise HTTPException(503, "Database temporarily unavailable")
+
+def original_upload_path(base):
+    # A subsequent upload must survive retries of a previous Storage deletion.
+    retired = rows("document_removals", base_path="eq." + base, retired_path="not.is.null",
+                   order="created_at.desc,document_id.desc", limit="1")
+    return base if not retired else base + "~" + retired[0]["document_id"]

@@ -6,11 +6,13 @@ import logging
 import os
 from urllib.error import HTTPError
 from uuid import UUID
+from datetime import date
 
 from fastapi import APIRouter, File, Form, HTTPException, UploadFile
 from pydantic import BaseModel, Field, ValidationError
 
-from .database import remote, rows, rpc
+from .database import original_upload_path, remote, rows, rpc
+from .auth import Owner, require_store
 from app.photo.vision import DocType, decimal_text, extract_document
 
 router = APIRouter()
@@ -25,9 +27,13 @@ class ReviewLine(BaseModel):
 
 
 class Review(BaseModel):
-    store_id: UUID
-    supplier_id: UUID
-    period_id: UUID
+    store_id: UUID | None = None
+    supplier_id: UUID | None = None
+    period_id: UUID | None = None
+    store_name: str | None = Field(default=None, min_length=1, max_length=150)
+    supplier_name: str | None = Field(default=None, min_length=1, max_length=150)
+    week_start: date | None = None
+    trade_date: date | None = None
     doc_type: DocType
     lines: list[ReviewLine] = Field(min_length=1, max_length=300)
 
@@ -50,7 +56,7 @@ def photo(file):
 
 
 @router.post("/api/photo-previews")
-def preview(file: UploadFile = File(...)):
+def preview(owner: Owner, file: UploadFile = File(...)):
     data, digest = photo(file)
     try:
         draft = extract_document(data, file.content_type, None)
@@ -63,8 +69,8 @@ def preview(file: UploadFile = File(...)):
     return {"draft": draft, "signature": seal(digest, draft)}
 
 
-@router.post("/api/photo-previews/confirm")
-def confirm(file: UploadFile = File(...), draft_json: str = Form(...), signature: str = Form(...),
+@router.post("/api/photo-previews/confirm", operation_id="confirm_photo_with_supplier_registration")
+def confirm(owner: Owner, file: UploadFile = File(...), draft_json: str = Form(...), signature: str = Form(...),
             review_json: str = Form(...), request_key: str = Form(..., min_length=1, max_length=200)):
     data, digest = photo(file)
     try:
@@ -81,21 +87,45 @@ def confirm(file: UploadFile = File(...), draft_json: str = Form(...), signature
                                        for v in (line.qty_read, line.unit_price_read)):
             raise HTTPException(422, "INVALID_REVIEW_LINE")
     ids = review.model_dump(mode="json")
-    period = rows("periods", id="eq." + ids["period_id"], store_id="eq." + ids["store_id"],
-                  supplier_id="eq." + ids["supplier_id"])
-    if not period:
-        raise HTTPException(422, "REVIEW_SCOPE_MISMATCH")
-    path = ids["store_id"] + "/" + digest
+    if "trade_date" in review.model_fields_set:
+        # The signed model draft remains unchanged in the audit record.
+        draft = {**draft, "_review_dates": {"trade_date": ids["trade_date"]}}
+    else:
+        ids.pop("trade_date")
+    if review.store_id is not None:
+        require_store(review.store_id, owner)
+    if review.period_id is not None:
+        if not review.store_id or not review.supplier_id or any((review.store_name, review.supplier_name, review.week_start)):
+            raise HTTPException(422, "REVIEW_SCOPE_MISMATCH")
+        if not rows("periods", id="eq."+ids["period_id"], store_id="eq."+ids["store_id"], supplier_id="eq."+ids["supplier_id"]):
+            raise HTTPException(422, "REVIEW_SCOPE_MISMATCH")
+        # Preserve existing request fingerprints when retrying older clients' confirmations.
+        for name in ("store_name","supplier_name","week_start"):
+            ids.pop(name)
+    else:
+        for ident, name in ((review.store_id,review.store_name),(review.supplier_id,review.supplier_name)):
+            if bool(ident) == bool((name or "").strip()):
+                raise HTTPException(422, "REVIEW_SCOPE_MISMATCH")
+        if not review.week_start or review.week_start.weekday() != 0:
+            raise HTTPException(422, "REVIEW_WEEK_REQUIRED")
+    path = original_upload_path((ids["store_id"] or "owners/"+owner) + "/" + digest)
     try:
         with remote("/storage/v1/object/originals/" + path, "POST", data, file.content_type):
             pass
     except HTTPError as err:
         if err.code not in (400,409) or b"Duplicate" not in err.read():
             raise HTTPException(503, "Original storage unavailable") from None
+    if review.period_id is None:
+        return rpc("confirm_photo_with_context", {
+            "p_owner": owner, "p_review": ids, "p_draft": draft,
+            "p_file": {"hash":digest,"filename":(file.filename or "photo")[:255],"path":path,
+                       "mime":file.content_type,"size":len(data),"key":request_key,
+                       "payload":fingerprint([owner,digest,draft,ids])},
+        })
     return rpc("confirm_photo_review", {
         "p_period": ids["period_id"], "p_store": ids["store_id"], "p_supplier": ids["supplier_id"],
         "p_hash": digest, "p_filename": (file.filename or "photo")[:255], "p_path": path,
         "p_mime": file.content_type, "p_size": len(data), "p_key": str(request_key),
-        "p_payload": fingerprint([digest, draft, ids]), "p_type": review.doc_type,
+        "p_payload": fingerprint([owner, digest, draft, ids]), "p_type": review.doc_type,
         "p_draft": draft, "p_edits": ids["lines"],
     })

@@ -3,6 +3,7 @@ import argparse
 from concurrent.futures import ThreadPoolExecutor
 import hashlib
 import json
+import os
 from pathlib import Path
 from urllib.error import HTTPError
 from urllib.request import Request, build_opener, urlopen
@@ -13,13 +14,17 @@ parser.add_argument("--originals", type=Path, required=True)
 parser.add_argument("--approval-id")
 parser.add_argument("--base", default="https://jjak-jjak-ggeung-a1.rkrbhm0ryexya.ap-northeast-2.cs.amazonlightsail.com")
 args = parser.parse_args()
+token = os.environ.get("PUBLIC_A_BROWSER_TOKEN")
+if not token:
+    parser.error("Set PUBLIC_A_BROWSER_TOKEN to the credential of the isolated QA browser profile.")
+headers = {"Authorization": "Bearer " + token}
 origin = "https://jjak-jjak-ggeung-frontend.vercel.app"
 period_path = "/api/periods/" + args.period
 
 
 def call(path, body=None):
     request = Request(args.base + path, data=None if body is None else json.dumps(body).encode(),
-                      headers={"Origin": origin, "Content-Type": "application/json"})
+                      headers={**headers, "Origin": origin, "Content-Type": "application/json"})
     with urlopen(request, timeout=180) as response:
         assert response.headers.get("Access-Control-Allow-Origin") == origin
         return json.load(response)
@@ -36,6 +41,7 @@ def expected_error(status, action):
 
 def verify_snapshot(approval_id):
     fresh = build_opener()
+    fresh.addheaders = list(headers.items())
     with fresh.open(args.base + period_path + "/approvals", timeout=30) as response:
         history = json.load(response)["approvals"]
     assert len(history) == 1 and history[0]["approval_id"] == approval_id
@@ -63,7 +69,7 @@ if args.approval_id:
         assert current["input_revision"] > approved["input_revision"]
         assert current["approved_amount"] is None
         print("PASS later evidence starts a new review while the original approval snapshot is preserved")
-    print("PASS new-session approval list/detail, version-aware period state, original bytes and unchanged approval count")
+    print("PASS same-profile approval list/detail, version-aware period state, original bytes and unchanged approval count")
     raise SystemExit(0)
 
 state = call(period_path)
