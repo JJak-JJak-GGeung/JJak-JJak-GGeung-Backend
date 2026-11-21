@@ -53,3 +53,16 @@ python -m venv .venv && .venv/Scripts/python -m pip install -r app/voice/require
 .venv/Scripts/python -m app.voice 녹음.m4a           # 실제 전사 (.env의 OPENAI_API_KEY 사용)
 curl -F "file=@녹음.webm;type=audio/webm" http://localhost:8000/api/transcriptions
 ```
+
+## 배포 검증 (역할 카드 B1·B2·C1·C2)
+
+`.env`에 `VOICE_CHECK_BASE`(배포 주소), `VOICE_CHECK_TOKEN`(점주 접근 토큰), `VOICE_CHECK_TX`(대상 거래 ID), 선택 `VOICE_CHECK_PERIOD`를 채운다.
+
+```bash
+python -m app.voice.check b1 녹음.m4a               # 배포 응답 = 로컬 전사, 필드는 draft_text 하나
+python -m app.voice.check b2 녹음.m4a               # 전사 전후 메모 수·input_revision 불변 (A-08)
+python -m app.voice.check c1 --write --text "..."   # 확인 저장 1건, 같은 키 재시도 같은 memo_id, 다른 본문 409 (A-09)
+python -m app.voice.check c2 --write --text "..."   # TYPED_TEXT도 같은 메모 경로
+```
+
+c1·c2는 실제 메모를 남긴다. A 정산 흐름을 이어가려면 우영과 대상 거래를 정한 뒤 실행한다.
