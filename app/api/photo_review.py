@@ -26,6 +26,15 @@ class ReviewLine(BaseModel):
     qty_read: str | None
     unit_price_read: str | None
     amount_read: int | None = Field(strict=True, ge=-9007199254740991, le=9007199254740991)
+    spec: str | None = Field(default=None, max_length=1000)
+    item_code: str | None = Field(default=None, max_length=1000)
+    origin: str | None = Field(default=None, max_length=1000)
+    lot_no: str | None = Field(default=None, max_length=1000)
+    line_note: str | None = Field(default=None, max_length=1000)
+    tax_amount_read: int | None = Field(default=None, strict=True, ge=-9007199254740991, le=9007199254740991)
+    supply_amount_read: int | None = Field(default=None, strict=True, ge=-9007199254740991, le=9007199254740991)
+    discount_amount_read: int | None = Field(default=None, strict=True, ge=-9007199254740991, le=9007199254740991)
+    line_total_read: int | None = Field(default=None, strict=True, ge=-9007199254740991, le=9007199254740991)
 
 
 class Review(BaseModel):
@@ -98,6 +107,8 @@ def confirm(owner: Owner, file: UploadFile = File(...), draft_json: str = Form(.
                                        for v in (line.qty_read, line.unit_price_read)):
             raise HTTPException(422, "INVALID_REVIEW_LINE")
     ids = review.model_dump(mode="json")
+    # Omitted edits use the signed draft, while an explicit null clears the cell.
+    ids["lines"] = [line.model_dump(mode="json", exclude_unset=True) for line in review.lines]
     overrides = ids.pop("statement_amounts", None)
     if overrides:
         draft = {**draft, "_review_amounts": overrides}

@@ -7,7 +7,7 @@ import json
 import os
 import time
 
-from .extractor import AMOUNT_FIELDS, ExtractionError, LINE_FIELDS, TEXT_FIELDS, validate_fields
+from .extractor import AMOUNT_FIELDS, BASE_LINE_FIELDS, DETAIL_FIELDS, ExtractionError, LINE_FIELDS, TEXT_FIELDS, validate_fields
 
 
 def review_warnings(draft):
@@ -56,14 +56,19 @@ def prepare_review(draft, review):
     facts = deepcopy(review)
     used = set()
     edits = []
+    required = {*BASE_LINE_FIELDS, "source_row"}
+    allowed = {*LINE_FIELDS, "source_row"}
     for row in facts["lines"]:
-        if not isinstance(row, dict) or set(row) != {*LINE_FIELDS, "source_row"}:
+        if not isinstance(row, dict) or not required <= row.keys() <= allowed:
             raise ExtractionError("INVALID_REVIEW_LINE")
         source = row.pop("source_row")
         if source is not None:
             if type(source) is not int or not 1 <= source <= len(draft["lines"]) or source in used:
                 raise ExtractionError("INVALID_SOURCE_ROW")
             used.add(source)
+            for key in DETAIL_FIELDS:
+                if key in draft["lines"][source - 1]:
+                    row.setdefault(key, draft["lines"][source - 1][key])
         if not isinstance(row["item"], str) or not row["item"].strip():
             raise ExtractionError("ITEM_REQUIRED")
         edits.append({**row, "source_row": source})

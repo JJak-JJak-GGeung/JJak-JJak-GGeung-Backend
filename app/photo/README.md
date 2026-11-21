@@ -56,7 +56,10 @@ JSON/로그에는 요청 ID·모델·프롬프트 버전·토큰 사용량·시�
 문서 필드: `supplier_name_read`, `doc_no`, `doc_date`, `period_start`, `period_end`,
 `payment_due_on`, `replaces_doc_no`, `agreement_text` (string/null).
 행 필드: `delivery_no`, `delivery_date`, `item`, `spec`, `unit`, `qty_read`, `unit_price_read`,
-`amount_read`. 수량·단가는 십진 문자열, 기재액은 원 단위 정수/null이다.
+`amount_read`, `tax_amount_read`, `line_date_text`, `item_code`, `origin`, `lot_no`, `line_note`,
+`supply_amount_read`, `discount_amount_read`, `line_total_read`. 수량·단가는 십진 문자열이며, 금액은 원 단위 정수 또는 null이다.
+추가 필드를 검수 요청에서 생략하면 서명된 판독값을 유지한다. 값을 명시적으로 null로 보내면 빈칸으로 저장한다.
+배포 시 Database의 `20261121055610_document_line_details.sql`을 먼저 적용한다.
 부호 있는 값은 보존하되 대조 엔진의 기존 승인 차단 규칙을 따른다.
 
 `source_location`은 페이지/행 순서만 제공하고 정확한 좌표는 `null`이다.
