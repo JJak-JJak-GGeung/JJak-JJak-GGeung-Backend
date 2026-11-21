@@ -3,6 +3,7 @@ import argparse
 from concurrent.futures import ThreadPoolExecutor
 import hashlib
 import json
+import os
 from pathlib import Path
 from urllib.error import HTTPError
 from urllib.request import Request, build_opener, urlopen
@@ -15,11 +16,20 @@ parser.add_argument("--base", default="https://jjak-jjak-ggeung-a1.rkrbhm0ryexya
 args = parser.parse_args()
 origin = "https://jjak-jjak-ggeung-frontend.vercel.app"
 period_path = "/api/periods/" + args.period
+token = os.environ.get("PUBLIC_A_ACCESS_TOKEN")
+if not token:
+    parser.error("set PUBLIC_A_ACCESS_TOKEN to the QA store owner's access token")
+
+
+def authenticated(path, *, data=None, fresh=False):
+    access = os.getenv("PUBLIC_A_FRESH_ACCESS_TOKEN", token) if fresh else token
+    return Request(args.base + path, data=data, headers={
+        "Origin": origin, "Content-Type": "application/json", "Authorization": "Bearer " + access,
+    })
 
 
 def call(path, body=None):
-    request = Request(args.base + path, data=None if body is None else json.dumps(body).encode(),
-                      headers={"Origin": origin, "Content-Type": "application/json"})
+    request = authenticated(path, data=None if body is None else json.dumps(body).encode())
     with urlopen(request, timeout=180) as response:
         assert response.headers.get("Access-Control-Allow-Origin") == origin
         return json.load(response)
@@ -36,17 +46,17 @@ def expected_error(status, action):
 
 def verify_snapshot(approval_id):
     fresh = build_opener()
-    with fresh.open(args.base + period_path + "/approvals", timeout=30) as response:
+    with fresh.open(authenticated(period_path + "/approvals", fresh=True), timeout=30) as response:
         history = json.load(response)["approvals"]
     assert len(history) == 1 and history[0]["approval_id"] == approval_id
-    with fresh.open(args.base + "/api/approvals/" + approval_id, timeout=30) as response:
+    with fresh.open(authenticated("/api/approvals/" + approval_id, fresh=True), timeout=30) as response:
         approved = json.load(response)
     assert approved["approved_amount"] == 1920000 and approved["payment_status"] == "UNCONFIRMED"
     assert approved["snapshot"]["items"]
     for source in approved["snapshot"]["documents"]:
         if source["source_mode"] != "FILE":
             continue
-        with fresh.open(args.base + "/api/documents/" + source["id"] + "/original", timeout=30) as response:
+        with fresh.open(authenticated("/api/documents/" + source["id"] + "/original", fresh=True), timeout=30) as response:
             data = response.read()
         assert hashlib.sha256(data).hexdigest() == source["file_hash"]
         assert data == (args.originals / source["filename"]).read_bytes()

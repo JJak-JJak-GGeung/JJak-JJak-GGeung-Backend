@@ -5,12 +5,23 @@ from unittest.mock import patch
 from uuid import uuid4
 
 import httpx
+import pytest
 from fastapi.testclient import TestClient
 from openai import OpenAI
 from PIL import Image
 
 from app.api.main import app
+from app.api.auth import current_owner
 from app.photo import vision
+
+
+@pytest.fixture(autouse=True)
+def authenticated_owner():
+    owner = str(uuid4())
+    app.dependency_overrides[current_owner] = lambda: owner
+    with patch("app.api.auth.rows", return_value=[{"id": "owned-store"}]):
+        yield
+    app.dependency_overrides.pop(current_owner, None)
 
 
 def png():

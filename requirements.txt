@@ -6,3 +6,4 @@ onnxruntime>=1.20,<2
 opencv-python-headless>=4.10,<5
 openai>=1.60
 Pillow>=10.3,<13
+langgraph>=1.0,<2
