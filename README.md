@@ -1,28 +1,31 @@
 # 짝짜꿍 Backend
 
-FastAPI 서버와 도메인 로직을 구현합니다. AWS에서 Docker로 실행하고 Vercel의 Flutter Web이 HTTPS로 호출합니다.
+짝짜꿍은 식자재를 납품받는 점주가 사진으로 올린 명세서·수령 기록·청구서를 한곳에서 대조하는 서비스입니다. 거래처와 통화한 내용은 전사 초안을 고쳐 해당 거래의 메모로 남길 수 있습니다. 점주는 차이가 난 품목과 원본을 확인하고 정산을 직접 승인합니다.
 
-## GPT 사진 분석 전환 브랜치
+## 심사위원용 시연
 
-`feat/gpt-document-extraction`에서는 OCR 대신 GPT 이미지 분석을 사용합니다.
-루트 `.env`의 `OPENAI_API_KEY`를 백엔드에서 읽으며, 원본과 편집 표의 사람 검수 후 저장합니다.
-[설정·검수 화면·새 API·DB 선행 조건](app/photo/README.md)을 확인하세요.
-기존 무검수 업로드 경로는 409를 반환하므로 프론트엔드도 새 검수 API에 연결해야 합니다.
+[합성 예시 사진 A01~A05 다운로드](https://raw.githubusercontent.com/JJak-JJak-GGeung/JJak-JJak-GGeung-Frontend/main/docs/demo/jjakjjakggeung-demo-a01-a05.zip) · [배포 앱 열기](https://jjak-jjak-ggeung-frontend.vercel.app/)
 
-| 담당 | 브랜치 | 경로 |
-| --- | --- | --- |
-| 박승원 | `screen-photo` | `app/photo/` |
-| 이성찬 | `voice` | `app/voice/` |
-| 안홍모 | `reconcile` | `app/reconcile/` |
-| 구본혁 | `server` | `app/api/`, `app/workflow/`, 서버 진입점·의존성·Docker |
-| 우영 | `integration-notes` | `docs/contract/`, `docs/integration/` |
+처음 방문한 브라우저에는 저장된 점포와 거래가 없습니다. 회원가입 없이 사진으로 새 점포와 거래처를 만들 수 있습니다.
 
-공통 입출력은 [계약 문서](docs/contract/v1.md)를 따릅니다. 우영은 웹·서버·DB 각각의 커밋과 실제 배포 URL을 기록합니다.
+1. 예시 ZIP을 풀고 배포 앱 오른쪽 아래 **+ → 사진 올리기**에서 `A02_납품명세_1113.png`를 선택합니다.
+2. **원본 보기**에서 명세 번호 `DL-A131`, 첫 품목 `40kg`, 단가 `20,000원/kg`을 판독값과 대조합니다.
+3. **가온 장어식당**을 내 점포로, **달마루 수산**을 거래처로 선택하거나 새로 등록합니다. **납품 명세서**, 정산 주 **2026-11-09~11-15**를 선택하고 저장한 뒤, 정산 화면에서 문서와 원본을 다시 엽니다.
 
-## 협업 순서
+[전체 시연 안내](https://github.com/JJak-JJak-GGeung/JJak-JJak-GGeung-Frontend/blob/main/docs/DEMO.md)에서 수령 확인부터 승인본 재조회까지 볼 수 있습니다.
 
-역할 브랜치에서 변경하고 이 저장소의 `main`을 대상으로 PR을 엽니다. PR에 직접 확인한 동작과 결과, 다음 담당자가 받을 값을 적습니다. 우영이 검토·병합하고 구본혁이 병합된 버전을 배포합니다. 팀 배포팩의 `frontend/`, `backend/`는 해당 저장소 루트를 뜻합니다. DB 변경은 Database 저장소로 보냅니다.
+## 구성
 
-[팀 노션과 역할 카드](https://tasteful-fight-7cd.notion.site/41d58907758380bdb941e7781b7096af) · [Database](https://github.com/JJak-JJak-GGeung/JJak-JJak-GGeung-Database) · [Frontend](https://github.com/JJak-JJak-GGeung/JJak-JJak-GGeung-Frontend)
+| 저장소 | 역할 |
+| --- | --- |
+| [Frontend](https://github.com/JJak-JJak-GGeung/JJak-JJak-GGeung-Frontend) | Flutter Web 화면, 사진·통화녹음 입력, 판독값 검수, 주간 정산 조회 |
+| [Backend](https://github.com/JJak-JJak-GGeung/JJak-JJak-GGeung-Backend) | FastAPI, 사진 판독과 음성 전사, 수령·청구 대조 및 승인 처리 |
+| [Database](https://github.com/JJak-JJak-GGeung/JJak-JJak-GGeung-Database) | Supabase PostgreSQL 스키마, 원본 보관, 확인 이력과 승인본 저장 |
 
-공개 A 자료는 팀 배포팩에서 사용합니다. 로컬 환경 파일·인증 키·B 입력과 정답표는 팀 저장소 밖에 보관합니다.
+이 저장소는 FastAPI 서버입니다. Lightsail에서 Docker로 실행하고 Vercel의 Flutter Web이 HTTPS로 호출합니다.
+
+- `app/api/`는 사진 검수·원본 조회·수령 확인·메모·승인 API를 제공합니다.
+- `app/photo/`는 사진을 판독하고 원본과 대조할 초안을, `app/voice/`는 확인 전 전사 초안을 만듭니다.
+- `app/reconcile/`은 확인된 수령과 유효한 청구를 대조해 수량·금액 차이와 승인 가능 여부를 계산합니다.
+
+[공통 입출력 계약](./docs/contract/v1.md) · [사진 판독 설정과 API](./app/photo/README.md) · [팀 작업 지침](./docs/TEAM_WORKFLOW.md)
