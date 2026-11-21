@@ -9,24 +9,25 @@ from uuid import UUID, uuid5
 from typing import Literal
 from pydantic import BaseModel, Field
 
-from fastapi import FastAPI, HTTPException, UploadFile, File, Form
+from fastapi import Depends, FastAPI, HTTPException, UploadFile, File, Form
 from fastapi.responses import Response
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.photo.extractor import extract_document
+from app.api.auth import Owner, current_owner, require_store
 from app.api.photo_review import router as review_router
 from app.api.database import remote, rows, rpc
 from app.workflow.settlement import get_settlement
 from app.voice.router import router as voice_router
 
 app = FastAPI(title="짝짜꿍 조회 API")
-app.include_router(voice_router)
+app.include_router(voice_router, dependencies=[Depends(current_owner)])
 app.include_router(review_router)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[v.strip() for v in os.getenv("CORS_ORIGINS", "").split(",") if v.strip()],
     allow_methods=["GET", "POST"],
-    allow_headers=["Content-Type"],
+    allow_headers=["Content-Type", "Authorization"],
 )
 
 
@@ -36,18 +37,20 @@ def health():
 
 
 @app.get("/api/stores")
-def stores():
-    return {"stores": [{"id": r["id"], "name": r["name"]} for r in rows("stores", order="name")]}
+def stores(owner: Owner):
+    return {"stores": [{"id": r["id"], "name": r["name"]} for r in rows("stores", owner_user_id="eq." + owner, order="name")]}
 
 
 @app.get("/api/suppliers")
-def suppliers(store_id: UUID):
+def suppliers(store_id: UUID, owner: Owner):
+    require_store(store_id, owner)
     return {"suppliers": [{"id": r["id"], "name": r["name"]} for r in
                           rows("suppliers", store_id="eq." + str(store_id), order="name")]}
 
 
 @app.get("/api/periods")
-def periods(store_id: UUID, supplier_id: UUID):
+def periods(store_id: UUID, supplier_id: UUID, owner: Owner):
+    require_store(store_id, owner)
     result = rows("periods", store_id="eq." + str(store_id),
                   supplier_id="eq." + str(supplier_id), order="period_start.desc")
     return {"is_example": False, "periods": [
@@ -56,7 +59,8 @@ def periods(store_id: UUID, supplier_id: UUID):
 
 
 @app.get("/api/periods/{period_id}")
-def period(period_id: UUID):
+def period(period_id: UUID, owner: Owner):
+    period_record(period_id, owner)
     result = get_settlement(period_id)
     result["documents"] = document_list(period_id)
     return result
@@ -128,15 +132,13 @@ def document_list(period_id):
 
 
 @app.post("/api/periods/{period_id}/documents")
-def upload_document(period_id: UUID, file: UploadFile = File(...),
+def upload_document(period_id: UUID, owner: Owner, file: UploadFile = File(...),
                     doc_type: str = Form(...), request_key: str = Form(...)):
     if doc_type not in {"DELIVERY", "RECEIPT", "INVOICE", "CORRECTED_INVOICE"}:
         raise HTTPException(422, "Invalid document type")
     if not request_key or len(request_key) > 200:
         raise HTTPException(422, "Invalid request key")
-    periods = rows("periods", id="eq." + str(period_id))
-    if not periods:
-        raise HTTPException(404, "Period not found")
+    selected = period_record(period_id, owner)
     data = file.file.read(10485761)
     if not data or len(data) > 10485760:
         raise HTTPException(413, "File must contain 1 byte to 10 MB")
@@ -150,7 +152,7 @@ def upload_document(period_id: UUID, file: UploadFile = File(...),
     if mime is None or file.content_type != mime:
         raise HTTPException(415, "Supported formats: PNG, JPEG, WebP")
     digest = hashlib.sha256(data).hexdigest()
-    storage_path = periods[0]["store_id"] + "/" + digest
+    storage_path = selected["store_id"] + "/" + digest
     payload = hashlib.sha256((str(period_id) + ":" + doc_type + ":" + digest).encode()).hexdigest()
     try:
         try:
@@ -184,11 +186,12 @@ def upload_document(period_id: UUID, file: UploadFile = File(...),
 
 
 @app.post("/api/documents/{document_id}/extraction")
-def retry_extraction(document_id: UUID):
+def retry_extraction(document_id: UUID, owner: Owner):
     result = rows("documents", id="eq." + str(document_id))
     if not result:
         raise HTTPException(404, "Document not found")
     doc = result[0]
+    require_store(doc["store_id"], owner)
     if doc.get("source_mode", "FILE") != "FILE":
         raise HTTPException(422, "Only uploaded originals can be read")
     doc["extraction_status"] = run_extraction(doc)
@@ -198,11 +201,12 @@ def retry_extraction(document_id: UUID):
 
 
 @app.get("/api/documents/{document_id}/original")
-def original(document_id: UUID):
+def original(document_id: UUID, owner: Owner):
     result = rows("documents", id="eq." + str(document_id))
     if not result:
         raise HTTPException(404, "Document not found")
     doc = result[0]
+    require_store(doc["store_id"], owner)
     if doc["source_mode"] != "FILE":
         raise HTTPException(422, "This document contains confirmed text")
     try:
@@ -235,16 +239,17 @@ class MemoRequest(RevisionRequest):
     source_mode: Literal["VOICE_MEMO", "TYPED_TEXT"]
 
 
-def period_record(period_id):
+def period_record(period_id, owner):
     result = rows("periods", id="eq." + str(period_id))
     if not result:
         raise HTTPException(404, "Period not found")
+    require_store(result[0]["store_id"], owner)
     return result[0]
 
 
 @app.post("/api/periods/{period_id}/confirmations")
-def confirm(period_id: UUID, request: ConfirmationRequest):
-    value = period_record(period_id)
+def confirm(period_id: UUID, request: ConfirmationRequest, owner: Owner):
+    value = period_record(period_id, owner)
     body = request.model_dump(mode="json", exclude_none=True)
     for key in ("expected_revision", "request_key", "actor_label"):
         body.pop(key)
@@ -257,11 +262,12 @@ def confirm(period_id: UUID, request: ConfirmationRequest):
 
 
 @app.get("/api/transactions/{transaction_id}")
-def transaction(transaction_id: UUID):
+def transaction(transaction_id: UUID, owner: Owner):
     result = rows("recon_items", id="eq." + str(transaction_id))
     if not result:
         raise HTTPException(404, "Transaction not found")
     value = result[0]
+    require_store(value["store_id"], owner)
     state = get_settlement(value["period_id"])
     item = next((item for item in state["items"] if item["transaction_id"] == str(transaction_id)), None)
     if not item:
@@ -272,11 +278,12 @@ def transaction(transaction_id: UUID):
 
 
 @app.post("/api/transactions/{transaction_id}/memos")
-def save_memo(transaction_id: UUID, request: MemoRequest):
+def save_memo(transaction_id: UUID, request: MemoRequest, owner: Owner):
     result = rows("recon_items", id="eq." + str(transaction_id))
     if not result:
         raise HTTPException(404, "Transaction not found")
     value = result[0]
+    require_store(value["store_id"], owner)
     saved = rpc("save_confirmed_memo", {
         "p_store": value["store_id"], "p_transaction": str(transaction_id),
         "p_text": request.confirmed_text, "p_mode": request.source_mode,
@@ -294,8 +301,8 @@ def approval_response(value):
 
 
 @app.post("/api/periods/{period_id}/approvals")
-def approve(period_id: UUID, request: RevisionRequest):
-    value = period_record(period_id)
+def approve(period_id: UUID, request: RevisionRequest, owner: Owner):
+    value = period_record(period_id, owner)
     # approve_period only trusts a reconciliation published at the current revision.
     get_settlement(period_id)
     return rpc("approve_period", {
@@ -306,17 +313,18 @@ def approve(period_id: UUID, request: RevisionRequest):
 
 
 @app.get("/api/periods/{period_id}/approvals")
-def approvals(period_id: UUID):
-    period_record(period_id)
+def approvals(period_id: UUID, owner: Owner):
+    period_record(period_id, owner)
     return {"approvals": [approval_response(value) for value in
                           rows("settlement_versions", period_id="eq." + str(period_id), order="version_no.desc")]}
 
 
 @app.get("/api/approvals/{approval_id}")
-def approval(approval_id: UUID):
+def approval(approval_id: UUID, owner: Owner):
     result = rows("settlement_versions", id="eq." + str(approval_id))
     if not result:
         raise HTTPException(404, "Approval not found")
     value = result[0]
+    require_store(value["store_id"], owner)
     snapshot = value["snapshot"]
     return {**approval_response(value), "snapshot": snapshot}

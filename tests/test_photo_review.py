@@ -5,12 +5,23 @@ from unittest.mock import patch
 from uuid import uuid4
 
 import httpx
+import pytest
 from fastapi.testclient import TestClient
 from openai import OpenAI
 from PIL import Image
 
 from app.api.main import app
+from app.api.auth import current_owner
 from app.photo import vision
+
+
+@pytest.fixture(autouse=True)
+def authenticated_owner():
+    owner = str(uuid4())
+    app.dependency_overrides[current_owner] = lambda: owner
+    with patch("app.api.auth.rows", return_value=[{"id": "owned-store"}]):
+        yield
+    app.dependency_overrides.pop(current_owner, None)
 
 
 def png():
@@ -76,3 +87,35 @@ def test_model_failure_no_silent_accept():
         response = TestClient(app).post("/api/photo-previews", files={"file":("x.png",png(),"image/png")})
         assert response.status_code == 503
         persist.assert_not_called()
+
+
+def test_unknown_supplier_confirmed_only_under_current_owner(monkeypatch):
+    from app.api import photo_review, auth
+    raw = png()
+    owner, shop = str(uuid4()), str(uuid4())
+    app.dependency_overrides[current_owner] = lambda: owner
+    monkeypatch.setenv("SUPABASE_SECRET_KEY", "test-key")
+    draft = {"store_name_read": "받는 곳", "supplier_name_read": "새 공급자", "lines": [{"item":"새 품목"}]}
+    monkeypatch.setattr(photo_review, "extract_document", lambda *args: draft)
+    monkeypatch.setattr(auth, "rows", lambda *a, **k: [])
+    files = {"file": ("sample.png", raw, "image/png")}
+    client = TestClient(app)
+    with patch.object(photo_review,"rpc") as rpc, patch.object(photo_review,"remote") as storage:
+        preview = client.post("/api/photo-previews",files=files)
+        assert preview.status_code == 200
+        rpc.assert_not_called()
+        storage.assert_not_called()
+        review = {"store_name":"받는 곳","supplier_name":"확인한 새 공급자","doc_type":"DELIVERY","week_start":"2026-11-09",
+                  "lines":[{"item":"새 품목","qty_read":None,"unit":None,"unit_price_read":None,"amount_read":None}]}
+        fields = {"signature":preview.json()["signature"],"draft_json":json.dumps(draft),"request_key":"k"}
+        def save(r):
+            return client.post("/api/photo-previews/confirm",files=files,data={**fields,"review_json":json.dumps(r)})
+        assert save({**review,"store_name":None,"store_id":shop}).status_code == 404
+        assert save({**review,"week_start":"2026-11-10"}).status_code == 422
+        storage.assert_not_called()
+        rpc.return_value={"document_id":"d","period_id":"p"}
+        assert save(review).json()["document_id"]=="d"
+        name,args=rpc.call_args.args
+        assert name=="confirm_photo_with_context"
+        assert args["p_owner"]==owner and args["p_review"]["supplier_name"]=="확인한 새 공급자"
+        assert args["p_draft"]["supplier_name_read"]=="새 공급자"
