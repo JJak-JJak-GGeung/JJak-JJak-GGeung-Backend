@@ -77,6 +77,44 @@ def iso(value):
         return None
 
 
+DATE_FIELDS = ("trade_date", "doc_date", "issued_on", "quoted_on", "period_start", "period_end", "payment_due_on")
+DECIMAL = r"-?[0-9]{1,16}(?:\.[0-9]{1,8})?"
+
+
+def normalize_draft(facts):
+    """Model draft only: printed formats -> contract, blank or unreadable -> null for the reviewer.
+
+    One odd cell must not fail the whole photo. Nothing is guessed, and owner edits still go
+    through validate_fields unchanged.
+    """
+    if not isinstance(facts, dict):
+        return facts
+    for key in TEXT_FIELDS:
+        if isinstance(facts.get(key), str) and not facts[key].strip():
+            facts[key] = None
+    for key in DATE_FIELDS:
+        if isinstance(facts.get(key), str):
+            facts[key] = iso(facts[key])
+    if facts.get("period_start") and facts.get("period_end") and facts["period_start"] > facts["period_end"]:
+        facts["period_start"] = facts["period_end"] = None
+    for line in facts["lines"] if isinstance(facts.get("lines"), list) else []:
+        if not isinstance(line, dict):
+            continue
+        for key in LINE_FIELDS:
+            if isinstance(line.get(key), str) and not line[key].strip():
+                line[key] = None
+        if isinstance(line.get("delivery_date"), str):
+            printed = line["delivery_date"]
+            line["delivery_date"] = iso(printed)
+            # Keep an unparseable printed date (e.g. "11/21") as evidence text.
+            if line["delivery_date"] is None and line.get("line_date_text") is None and "line_date_text" in line:
+                line["line_date_text"] = printed.strip()
+        for key in ("qty_read", "unit_price_read"):
+            if isinstance(line.get(key), str):
+                text = re.sub(r"[\s,₩원]", "", line[key])
+                line[key] = text if re.fullmatch(DECIMAL, text) else None
+    return facts
+
 
 def validate_fields(value):
     """Validate both provider output and edits; reject malformed values, never repair silently."""
@@ -148,15 +186,7 @@ def extract_document(raw_bytes, mime, document_id, context=None, *, client=None)
         if any(getattr(part, "type", None) == "refusal"
                for item in response.output for part in getattr(item, "content", [])):
             raise ExtractionError("READING_REFUSED")
-        raw_facts = json.loads(response.output_text)
-        # Normalize printed Korean dates in the model draft; edits still require ISO.
-        for key in ("trade_date", "doc_date", "issued_on", "quoted_on", "period_start", "period_end", "payment_due_on"):
-            if (normalized := iso(raw_facts.get(key))) is not None:
-                raw_facts[key] = normalized
-        for line in raw_facts.get("lines", []):
-            if (normalized := iso(line.get("delivery_date"))) is not None:
-                line["delivery_date"] = normalized
-        facts = validate_fields(raw_facts)
+        facts = validate_fields(normalize_draft(json.loads(response.output_text)))
     except ExtractionError:
         raise
     except Exception as error:

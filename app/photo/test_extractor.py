@@ -89,6 +89,35 @@ class ExtractorTests(unittest.TestCase):
         self.assertEqual(result["lines"][0]["unit_price_read"], "20000.125")
         self.assertIsNone(result["lines"][0]["spec"])
 
+    def test_odd_model_cells_become_reviewable_instead_of_failing_the_photo(self):
+        value = facts()
+        value.update(doc_no=" ", trade_date="2026년 11월 21일", doc_date="26.11.21",
+                     period_start="2026-11-15", period_end="2026-11-09")
+        value["lines"][0].update(qty_read="1,200", unit_price_read="₩12,000", spec="",
+                                 delivery_date="11/21", line_date_text=None)
+        value["lines"].append({**value["lines"][0], "qty_read": "10kg", "unit_price_read": "12,000원",
+                               "delivery_date": "2026.11.20", "unit": "  "})
+        result = extract_document(image_bytes(), "image/png", None, client=provider(value))
+        first, second = result["lines"]
+        self.assertEqual((first["qty_read"], first["unit_price_read"]), ("1200", "12000"))
+        self.assertIsNone(first["spec"])
+        self.assertIsNone(first["delivery_date"])
+        self.assertEqual(first["line_date_text"], "11/21")
+        self.assertIsNone(second["qty_read"])  # "10kg" is left for the reviewer, not guessed
+        self.assertEqual(second["unit_price_read"], "12000")
+        self.assertEqual(second["delivery_date"], "2026-11-20")
+        self.assertIsNone(second["unit"])
+        self.assertIsNone(result["doc_no"])
+        self.assertEqual(result["trade_date"], "2026-11-21")
+        self.assertIsNone(result["doc_date"])
+        self.assertIsNone(result["period_start"])
+        self.assertIsNone(result["period_end"])
+        # Owner edits are still validated strictly.
+        edited = facts()
+        edited["lines"][0]["qty_read"] = "1,200"
+        with self.assertRaises(ValueError):
+            validate_fields(edited)
+
     def test_bad_numbers_dates_and_extra_fields_rejected(self):
         for field, invalid in [("qty_read", "NaN"), ("qty_read", "1,000"),
                                ("amount_read", True), ("amount_read", 1.5),
