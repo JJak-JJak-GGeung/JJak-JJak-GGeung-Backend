@@ -11,7 +11,7 @@ from fastapi import APIRouter, File, Form, HTTPException, UploadFile
 from fastapi.responses import HTMLResponse
 
 from app.photo.extractor import MAX_BYTES, extract_document, validate_image
-from app.photo.review import fingerprint, prepare_review, review_warnings, sign, verify
+from app.photo.review import UnitContainsQuantity, fingerprint, prepare_review, review_warnings, sign, verify
 from .database import original_upload_path, remote, rows, rpc
 from .auth import Owner, require_store
 
@@ -61,6 +61,8 @@ def confirm(owner: Owner, file: UploadFile = File(...), draft_json: str = Form(.
         if draft.get("_preview_owner") != owner:
             raise ValueError("PREVIEW_OWNER_MISMATCH")
         fields, edits = prepare_review(draft, json.loads(review_json))
+    except UnitContainsQuantity:
+        raise HTTPException(422, "UNIT_CONTAINS_QUANTITY") from None
     except (ValueError, KeyError, TypeError):
         raise HTTPException(422, "INVALID_OR_EXPIRED_REVIEW") from None
     scope = {"store_id": str(store_id), "supplier_id": str(supplier_id), "period_id": str(period_id)}

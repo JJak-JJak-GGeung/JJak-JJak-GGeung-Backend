@@ -15,6 +15,7 @@ from pydantic import BaseModel, Field, ValidationError, field_validator
 from .database import original_upload_path, remote, rows, rpc
 from .auth import Owner, require_store
 from app.photo.extractor import AMOUNT_FIELDS
+from app.photo.review import unit_contains_quantity
 from app.photo.vision import DocType, decimal_text, extract_document
 
 router = APIRouter()
@@ -103,6 +104,8 @@ def confirm(owner: Owner, file: UploadFile = File(...), draft_json: str = Form(.
     if len(review.lines) != len(draft["lines"]):
         raise HTTPException(422, "REVIEW_LINE_COUNT")
     for line in review.lines:
+        if unit_contains_quantity(line.unit):
+            raise HTTPException(422, "UNIT_CONTAINS_QUANTITY")
         if not line.item.strip() or any(v is not None and decimal_text(v) is None
                                        for v in (line.qty_read, line.unit_price_read)):
             raise HTTPException(422, "INVALID_REVIEW_LINE")

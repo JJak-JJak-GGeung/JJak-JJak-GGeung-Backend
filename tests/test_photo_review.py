@@ -81,6 +81,29 @@ class PhotoApiTests(unittest.TestCase):
         self.assertEqual(payload["p_edits"][0]["qty_read"], "0")
         self.assertIsNone(payload["p_edits"][1]["source_row"])
 
+    def test_quantity_in_unit_never_writes_on_either_confirm_route(self):
+        from hashlib import sha256
+        from app.api.photo_review import seal
+
+        data, files = self.request()
+        review = json.loads(data["review_json"])
+        review["lines"][0].update(qty_read="40", unit="36kg")
+        data["review_json"] = json.dumps(review)
+        legacy = dict(data)
+        with patch.dict(os.environ, {"SUPABASE_SECRET_KEY": "test-only"}):
+            legacy["signature"] = seal(sha256(files["file"][1]).hexdigest(), json.loads(data["draft_json"]))
+            for route, module, form in [
+                ("photo-previews", "photo_review", legacy),
+                ("photo-previews-v2", "photo_review_v2", data),
+            ]:
+                with self.subTest(route=route), patch(f"app.api.{module}.remote") as storage, \
+                        patch(f"app.api.{module}.rpc") as rpc:
+                    response = self.client.post(f"/api/{route}/confirm", data=form, files=files)
+                    self.assertEqual(response.status_code, 422)
+                    self.assertEqual(response.json()["detail"], "UNIT_CONTAINS_QUANTITY")
+                    storage.assert_not_called()
+                    rpc.assert_not_called()
+
     def test_tampered_preview_never_writes(self):
         data, files = self.request()
         data["draft_json"] = data["draft_json"].replace('"40"', '"999"')
