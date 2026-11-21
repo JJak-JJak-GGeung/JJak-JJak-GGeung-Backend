@@ -218,7 +218,7 @@ def extract_document(raw_bytes, mime, document_id, context=None, *, client=None)
     started = time.monotonic()
     try:
         response = client.responses.create(
-            model=model, store=False, max_output_tokens=12000,
+            model=model, store=False, max_output_tokens=20000,
             instructions=INSTRUCTIONS,
             input=[{"role": "user", "content": [
                 {"type": "input_text", "text": "사진의 문서를 지정 스키마로 추출하세요."},
