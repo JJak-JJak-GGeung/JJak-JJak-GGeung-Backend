@@ -99,6 +99,10 @@ result = reconcile_receipts(
 
 ## B1 · OCR 출력 연결부
 
+GPT 전환 후 권장 진입점은 `app.reconcile.documents.reconcile_documents`입니다.
+기존 `app.reconcile.ocr.reconcile_ocr_documents`는 호환 import로 유지하며 OCR 엔진을 호출하지 않습니다.
+아래 OCR 설명은 이전 입력 계약 이력입니다. GPT 출력도 미확인 문서 사실로 취급하고 서버 확인 이벤트만 집계합니다.
+
 `app.reconcile.ocr.reconcile_ocr_documents(documents, confirmations, *, store_id, supplier_id, period_id)`로 사진 판독 출력에서 B1 계산까지 연결한다. `app.photo.extract_document`의 문서/행 필드 구조를 사용하며, OCR을 다시 실행하거나 판독값을 추측하지 않는다.
 
 호출 전 서버가 각 문서에 검증된 `store_id/supplier_id/period_id`와 각 행의 고유 `line_id`를 붙여야 한다. `document_id`도 필수다. 다른 원문 거래처·기간을 선택 중인 범위로 임의 지정하면 안 된다. 실제 서버 ID가 없는 로컬 검산에서는 명시적인 로컬 ID를 사용한다. 함수는 ID나 확인자를 자동 생성하지 않는다. `transaction_id`는 제공된 경우 보존하며 없으면 null이다.

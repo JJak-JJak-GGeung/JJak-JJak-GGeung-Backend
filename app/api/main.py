@@ -1,12 +1,12 @@
-import hashlib
 from datetime import date, datetime, timezone
 import json
-import logging
 import os
+from pathlib import Path
+from dotenv import load_dotenv
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
-from uuid import UUID, uuid5
+from uuid import UUID
 from typing import Literal
 from pydantic import BaseModel, Field
 
@@ -14,21 +14,23 @@ from fastapi import Depends, FastAPI, HTTPException, UploadFile, File, Form
 from fastapi.responses import Response
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.photo.extractor import extract_document
 from app.api.auth import Owner, current_owner, require_store
 from app.api.photo_review import router as review_router
 from app.api.directory import router as directory_router
+from app.api.photo_review_v2 import router as review_v2_router
 from app.api.database import original_upload_path, remote, rows, rpc
 from app.workflow.settlement import get_settlement
 from app.voice.router import router as voice_router
 
+load_dotenv(Path(__file__).resolve().parents[2] / ".env", override=False)
 app = FastAPI(title="짝짜꿍 조회 API")
 app.include_router(voice_router, dependencies=[Depends(current_owner)])
 app.include_router(review_router)
 app.include_router(directory_router)
+app.include_router(review_v2_router)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[v.strip() for v in os.getenv("CORS_ORIGINS", "").split(",") if v.strip()],
+    allow_origins=[v.strip() for v in (os.getenv("CORS_ORIGINS") or os.getenv("FRONTEND_ORIGIN", "")).split(",") if v.strip()],
     allow_methods=["GET", "POST"],
     allow_headers=["Content-Type", "Authorization"],
 )
@@ -96,39 +98,12 @@ def document_response(value, lines=None):
         "lines": [line_response(r) for r in lines],
         "duplicate": value.get("duplicate", False),
         "input_revision": value.get("input_revision"),
+        "photo_review": (value.get("metadata") or {}).get("photo_review"),
         **{key: value.get(key) for key in (
             "trade_date", "issued_on", "quoted_on", "source_date_text",
             "supplier_name_read", "supplier_id", "doc_no", "doc_date", "period_start", "period_end",
             "replaces_doc_no", "agreement_text", "agreement_source_location", "source_mode")},
     }
-
-
-def run_extraction(doc, data=None):
-    """Persist one complete extraction atomically with stable source line IDs."""
-    if doc["extraction_status"] in ("COMPLETED", "SUCCESS"):
-        return doc["extraction_status"]
-    try:
-        if data is None:
-            with remote("/storage/v1/object/authenticated/originals/" + doc["storage_path"]) as response:
-                data = response.read()
-        result = extract_document(data, doc["mime_type"], doc["id"])
-        compact = lambda value: "".join((value or "").split())
-        matches = [supplier for supplier in rows("suppliers", store_id="eq." + doc["store_id"])
-                   if compact(supplier["name"]) == compact(result["supplier_name_read"]) and compact(supplier["name"])]
-        result["supplier_id"] = matches[0]["id"] if len(matches) == 1 else None
-        lines = [{**line, "id": str(uuid5(UUID(doc["id"]), "line-" + str(index)))}
-                 for index, line in enumerate(result["lines"])]
-        rpc("persist_extraction", {"p_document": doc["id"], "p_fields": result, "p_lines": lines})
-        return "COMPLETED"
-    except Exception:
-        logging.exception("Extraction failed for document %s", doc["id"])
-        try:
-            with remote("/rest/v1/documents?id=eq." + doc["id"], "PATCH",
-                        json.dumps({"extraction_status": "FAILED"}).encode()):
-                pass
-        except (HTTPError, URLError, TimeoutError):
-            logging.exception("Could not mark document %s as FAILED", doc["id"])
-        return "FAILED"
 
 
 def document_list(period_id):
@@ -142,55 +117,7 @@ def document_list(period_id):
 @app.post("/api/periods/{period_id}/documents")
 def upload_document(period_id: UUID, owner: Owner, file: UploadFile = File(...),
                     doc_type: str = Form(...), request_key: str = Form(...)):
-    if doc_type not in {"DELIVERY", "RECEIPT", "INVOICE", "CORRECTED_INVOICE"}:
-        raise HTTPException(422, "Invalid document type")
-    if not request_key or len(request_key) > 200:
-        raise HTTPException(422, "Invalid request key")
-    selected = period_record(period_id, owner)
-    data = file.file.read(10485761)
-    if not data or len(data) > 10485760:
-        raise HTTPException(413, "File must contain 1 byte to 10 MB")
-    mime = None
-    if data.startswith(b"\x89PNG\r\n\x1a\n"):
-        mime = "image/png"
-    elif data.startswith(b"\xff\xd8\xff"):
-        mime = "image/jpeg"
-    elif data[:4] == b"RIFF" and data[8:12] == b"WEBP":
-        mime = "image/webp"
-    if mime is None or file.content_type != mime:
-        raise HTTPException(415, "Supported formats: PNG, JPEG, WebP")
-    digest = hashlib.sha256(data).hexdigest()
-    storage_path = original_upload_path(selected["store_id"] + "/" + digest)
-    payload = hashlib.sha256((str(period_id) + ":" + doc_type + ":" + digest).encode()).hexdigest()
-    try:
-        try:
-            with remote("/storage/v1/object/originals/" + storage_path, "POST", data, mime):
-                pass
-        except HTTPError as error:
-            body = error.read()
-            if error.code not in (400, 409) or b"Duplicate" not in body:
-                raise
-        args = {"p_period": str(period_id), "p_hash": digest, "p_path": storage_path,
-                "p_filename": (file.filename or "original")[:255], "p_mime": mime,
-                "p_size": len(data), "p_type": doc_type, "p_key": request_key,
-                "p_payload": payload}
-        with remote("/rest/v1/rpc/register_document", "POST", json.dumps(args).encode()) as response:
-            doc = json.load(response)
-    except HTTPError as error:
-        body = error.read()
-        if b"KEY_REUSE" in body:
-            raise HTTPException(409, "KEY_REUSE")
-        logging.error("Document storage request failed: HTTP %s", error.code)
-        raise HTTPException(503, "Document storage unavailable")
-    except (URLError, TimeoutError):
-        raise HTTPException(503, "Document storage unavailable")
-    if doc["extraction_status"] not in ("COMPLETED", "SUCCESS"):
-        doc["extraction_status"] = run_extraction(doc, data)
-        # Saved lines bump the period revision through a database trigger.
-        doc["input_revision"] = rows("periods", id="eq." + str(period_id))[0]["input_revision"]
-    return document_response({**rows("documents", id="eq." + doc["id"])[0],
-                              "duplicate": doc.get("duplicate", False),
-                              "input_revision": doc.get("input_revision")})
+    raise HTTPException(409, "PHOTO_REVIEW_REQUIRED: use a photo preview and explicit confirmation")
 
 
 @app.post("/api/documents/{document_id}/extraction")
@@ -202,10 +129,9 @@ def retry_extraction(document_id: UUID, owner: Owner):
     require_store(doc["store_id"], owner)
     if doc.get("source_mode", "FILE") != "FILE":
         raise HTTPException(422, "Only uploaded originals can be read")
-    doc["extraction_status"] = run_extraction(doc)
-    return document_response({**rows("documents", id="eq." + doc["id"])[0],
-                              "duplicate": doc.get("duplicate", False),
-                              "input_revision": doc.get("input_revision")})
+    if doc["extraction_status"] not in ("COMPLETED", "SUCCESS"):
+        raise HTTPException(409, "PHOTO_REVIEW_REQUIRED: use a photo preview")
+    return document_response(doc)
 
 
 @app.get("/api/documents/{document_id}/original")
@@ -365,3 +291,10 @@ def edit_trade_date(period_id: UUID, document_id: UUID, edit: TradeDateEdit, own
     rpc("correct_document_trade_date", {"p_owner": owner, "p_period": str(period_id),
         "p_doc": str(document_id), "p_expected": values["expected"], "p_date": values["trade_date"]})
     return {"trade_date": values["trade_date"]}
+
+
+
+@app.get("/api/periods/{period_id}/review-context")
+def review_context(period_id: UUID, owner: Owner):
+    value = period_record(period_id, owner)
+    return {key: value[key] for key in ("id", "store_id", "supplier_id", "input_revision")}

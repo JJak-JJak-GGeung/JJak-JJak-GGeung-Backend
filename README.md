@@ -2,6 +2,13 @@
 
 FastAPI 서버와 도메인 로직을 구현합니다. AWS에서 Docker로 실행하고 Vercel의 Flutter Web이 HTTPS로 호출합니다.
 
+## GPT 사진 분석 전환 브랜치
+
+`feat/gpt-document-extraction`에서는 OCR 대신 GPT 이미지 분석을 사용합니다.
+루트 `.env`의 `OPENAI_API_KEY`를 백엔드에서 읽으며, 원본과 편집 표의 사람 검수 후 저장합니다.
+[설정·검수 화면·새 API·DB 선행 조건](app/photo/README.md)을 확인하세요.
+기존 무검수 업로드 경로는 409를 반환하므로 프론트엔드도 새 검수 API에 연결해야 합니다.
+
 | 담당 | 브랜치 | 경로 |
 | --- | --- | --- |
 | 박승원 | `screen-photo` | `app/photo/` |
