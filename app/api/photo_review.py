@@ -22,6 +22,16 @@ router = APIRouter()
 
 
 class ReviewLine(BaseModel):
+    delivery_no: str | None = Field(default=None, min_length=1, max_length=1000)
+    delivery_date: str | None = Field(default=None, pattern=r"^[0-9]{4}-[0-9]{2}-[0-9]{2}$")
+
+    @field_validator("delivery_date")
+    @classmethod
+    def calendar_date(cls, value):
+        if value is not None:
+            date.fromisoformat(value)
+        return value
+
     item: str = Field(min_length=1, max_length=300)
     unit: str | None = Field(max_length=60)
     qty_read: str | None
@@ -87,7 +97,7 @@ def preview(owner: Owner, file: UploadFile = File(...)):
         raise HTTPException(503, "PHOTO_READING_FAILED") from None
     if not draft["lines"] or len(draft["lines"]) > 300:
         raise HTTPException(422, "NO_REVIEWABLE_LINES")
-    return {"draft": draft, "signature": seal(digest, draft)}
+    return {"draft": draft, "signature": seal(digest, draft), "line_reference_edits": True}
 
 
 @router.post("/api/photo-previews/confirm", operation_id="confirm_photo_with_supplier_registration")
