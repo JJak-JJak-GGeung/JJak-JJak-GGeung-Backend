@@ -10,22 +10,22 @@ class LayoutTests(unittest.TestCase):
     def test_trade_statement_table(self):
         result = _parse_rows([
             row((0, "거 래 명 세 표")),
-            row((0, "거래일"), (150, "2025-01-31(금)")),
+            row((0, "거래일"), (150, "2024-06-12(금)")),
             row((500, "상 호"), (600, "검증 공급사")),
             row((0, "No."), (200, "품 목 · 규 격"), (400, "단 위"),
                 (500, "수 량"), (600, "단 가"), (750, "공 급 가 액"), (950, "세 액")),
             row((0, "1"), (200, "검증 품목 가"), (400, "kg"),
-                (500, "140.0"), (600, "38,000"), (750, "5,320,000")),
+                (500, "14.0"), (600, "2,000"), (750, "28,000")),
             row((0, "2"), (200, "검증 품목 나"), (400, "kg"),
-                (500, "10.0"), (600, "39,000"), (750, "390,000")),
-            row((400, "합계"), (500, "150.0"), (750, "5,710,000")),
+                (500, "3.0"), (600, "3,000"), (750, "9,000")),
+            row((400, "합계"), (500, "17.0"), (750, "37,000")),
         ], "document")
         self.assertEqual(result["doc_type"], "DELIVERY")
-        self.assertEqual(result["doc_date"], "2025-01-31")
+        self.assertEqual(result["doc_date"], "2024-06-12")
         self.assertEqual(result["supplier_name_read"], "검증 공급사")
         self.assertEqual(len(result["lines"]), 2)
-        self.assertEqual([r["qty_read"] for r in result["lines"]], ["140.0", "10.0"])
-        self.assertEqual([r["amount_read"] for r in result["lines"]], [5320000, 390000])
+        self.assertEqual([r["qty_read"] for r in result["lines"]], ["14.0", "3.0"])
+        self.assertEqual([r["amount_read"] for r in result["lines"]], [28000, 9000])
         self.assertIsNone(result["period_start"])
         self.assertIsNone(result["lines"][0]["delivery_no"])
 
