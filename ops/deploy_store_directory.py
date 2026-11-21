@@ -19,7 +19,7 @@ import uuid
 REGION = "ap-northeast-2"
 SERVICE = "jjak-jjak-ggeung-a1"
 ORIGIN = "https://jjak-jjak-ggeung-a1.rkrbhm0ryexya.ap-northeast-2.cs.amazonlightsail.com"
-COMMIT = "32a03d050fac04ce8431d48fa75ba02f951acb8d"
+COMMIT = "b7baec37499e510dd4ffde541ad98334cbe9447e"
 NEW_ROUTES = {
     ("/api/photo-previews-v2", "post"),
     ("/api/photo-previews-v2/confirm", "post"),
@@ -37,10 +37,15 @@ os.environ["AWS_PAGER"] = ""
 
 def aws(action, *args, payload=None):
     cmd = ["aws", "lightsail", action, "--region", REGION, "--output", "json", *args]
-    if payload is not None:
-        cmd += ["--cli-input-json", "file:///dev/stdin"]
-    run = subprocess.run(cmd, input=json.dumps(payload) if payload is not None else None,
-                         capture_output=True, text=True)
+    # AWS CLI v2 can see an empty payload when file:///dev/stdin is used.
+    if payload is None:
+        run = subprocess.run(cmd, capture_output=True, text=True)
+    else:
+        with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8") as request:
+            json.dump(payload, request)
+            request.flush()
+            run = subprocess.run([*cmd, "--cli-input-json", "file://" + request.name],
+                                 capture_output=True, text=True)
     if run.returncode:
         # AWS responses and parameter-validation errors can contain environment values.
         code = re.search(r"An error occurred \(([A-Za-z0-9_.-]+)\)", run.stderr)
@@ -73,7 +78,14 @@ def verify_source():
         raise SystemExit("Backend main이 바뀌었습니다. 새 커밋을 검토한 뒤 배포하세요.")
 
 
+def verify_receipt_api(schema):
+    kinds = schema["components"]["schemas"]["ConfirmationRequest"]["properties"]["kind"].get("enum", [])
+    if "receipt_entry" not in kinds:
+        raise SystemExit("검수 수정본에 직접 수령 등록 계약이 없습니다.")
+
+
 def smoke():
+    verify_receipt_api(live_json("/openapi.json"))
     try:
         live_json("/api/stores")
     except urllib.error.HTTPError as error:
@@ -121,7 +133,9 @@ def build_push(tmp, previous_routes):
             raise SystemExit("Git 소스 읽기 실패")
     schema = subprocess.check_output(["docker", "run", "--rm", "--entrypoint", "python", tag,
         "-c", "import json; from app.api.main import app; print(json.dumps(app.openapi()))"], text=True)
-    missing = (previous_routes | NEW_ROUTES) - routes(json.loads(schema))
+    candidate = json.loads(schema)
+    verify_receipt_api(candidate)
+    missing = (previous_routes | NEW_ROUTES) - routes(candidate)
     if missing:
         raise SystemExit("배포 후보에서 누락된 운영 API: " + repr(sorted(missing)))
     subprocess.run(["aws", "lightsail", "push-container-image", "--region", REGION, "--service-name",
@@ -161,6 +175,9 @@ def main():
             raise SystemExit("현재 이미지와 운영 API가 일치하지 않습니다.")
         smoke()
         return
+    if (active.get("version") != 18 or
+            not containers[target].get("image", "").endswith(":line-details-05916a1cdc3282a2")):
+        raise SystemExit("검수한 운영 v18 이후 다른 배포가 있습니다. 현재 이미지를 먼저 대조하세요.")
     env = containers[target].setdefault("environment", {})
     if not all(env.get(k) for k in ("SUPABASE_URL","SUPABASE_SECRET_KEY")):
         raise SystemExit("선택된 운영 컨테이너에 기존 Supabase 설정이 없습니다. AWS 배포 설정을 확인하세요.")
