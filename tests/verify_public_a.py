@@ -56,8 +56,14 @@ def verify_snapshot(approval_id):
 
 if args.approval_id:
     approved = verify_snapshot(args.approval_id)
-    assert call(period_path)["approved_amount"] == approved["approved_amount"]
-    print("PASS new-session approval list/detail, period approved state, original bytes and unchanged approval count")
+    current = call(period_path)
+    if current["input_revision"] == approved["input_revision"]:
+        assert current["approved_amount"] == approved["approved_amount"]
+    else:
+        assert current["input_revision"] > approved["input_revision"]
+        assert current["approved_amount"] is None
+        print("PASS later evidence starts a new review while the original approval snapshot is preserved")
+    print("PASS new-session approval list/detail, version-aware period state, original bytes and unchanged approval count")
     raise SystemExit(0)
 
 state = call(period_path)
