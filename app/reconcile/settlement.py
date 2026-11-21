@@ -167,18 +167,8 @@ def reconcile_period(
         item["fact_status"] = ("CONFLICTING" if item["line_id"] in conflicts else
                                "OWNER_CONFIRMED" if item["received_qty"] is not None else "UNCONFIRMED")
         refs = item.get("evidence_refs") or []
-        receipt_refs = [ref for ref in refs if ref.get("kind") == "RECEIPT"]
-        has_receipt_evidence = bool(receipt_refs) and all(
-            _evidence([ref]) or (
-                ref.get("receipt_id") in item["receipt_ids"]
-                and isinstance(ref.get("evidence_text"), str)
-                and bool(ref["evidence_text"].strip())
-            ) for ref in receipt_refs
-        )
-        if not has_receipt_evidence or not all(
-            _evidence([ref for ref in refs if ref.get("kind") == kind])
-            for kind in ("DELIVERY", "INVOICE")
-        ):
+        if not all(_evidence([ref for ref in refs if ref.get("kind") == kind])
+                   for kind in ("DELIVERY", "INVOICE", "RECEIPT")):
             blockers.add("MISSING_SOURCE_EVIDENCE")
         if (item.get("declared_qty") is None or item.get("billed_qty") is None):
             blockers.add("MISSING_DOCUMENT_QUANTITY")

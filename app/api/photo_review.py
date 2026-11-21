@@ -7,13 +7,11 @@ import os
 from urllib.error import HTTPError
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
+from fastapi import APIRouter, File, Form, HTTPException, UploadFile
 from pydantic import BaseModel, Field, ValidationError
 
 from .database import remote, rows, rpc
-from .auth import Owner, require_any_store, require_store
-from app.photo.vision import DocType, decimal_text
-from app.workflow.photo import preview_photo_graph
+from app.photo.vision import DocType, decimal_text, extract_document
 
 router = APIRouter()
 
@@ -51,13 +49,11 @@ def photo(file):
     return data, hashlib.sha256(data).hexdigest()
 
 
-@router.post("/api/photo-previews", dependencies=[Depends(require_any_store)])
+@router.post("/api/photo-previews")
 def preview(file: UploadFile = File(...)):
     data, digest = photo(file)
     try:
-        draft = preview_photo_graph.invoke({
-            "data": data, "mime": file.content_type, "document_id": None,
-        })["result"]
+        draft = extract_document(data, file.content_type, None)
     except Exception as error:
         # Neither original images nor provider responses belong in logs.
         logging.warning("Photo preview failed (%s)", type(error).__name__)
@@ -68,7 +64,7 @@ def preview(file: UploadFile = File(...)):
 
 
 @router.post("/api/photo-previews/confirm")
-def confirm(owner: Owner, file: UploadFile = File(...), draft_json: str = Form(...), signature: str = Form(...),
+def confirm(file: UploadFile = File(...), draft_json: str = Form(...), signature: str = Form(...),
             review_json: str = Form(...), request_key: str = Form(..., min_length=1, max_length=200)):
     data, digest = photo(file)
     try:
@@ -85,7 +81,6 @@ def confirm(owner: Owner, file: UploadFile = File(...), draft_json: str = Form(.
                                        for v in (line.qty_read, line.unit_price_read)):
             raise HTTPException(422, "INVALID_REVIEW_LINE")
     ids = review.model_dump(mode="json")
-    require_store(review.store_id, owner)
     period = rows("periods", id="eq." + ids["period_id"], store_id="eq." + ids["store_id"],
                   supplier_id="eq." + ids["supplier_id"])
     if not period:
@@ -101,6 +96,6 @@ def confirm(owner: Owner, file: UploadFile = File(...), draft_json: str = Form(.
         "p_period": ids["period_id"], "p_store": ids["store_id"], "p_supplier": ids["supplier_id"],
         "p_hash": digest, "p_filename": (file.filename or "photo")[:255], "p_path": path,
         "p_mime": file.content_type, "p_size": len(data), "p_key": str(request_key),
-        "p_payload": fingerprint([owner, digest, draft, ids]), "p_type": review.doc_type,
+        "p_payload": fingerprint([digest, draft, ids]), "p_type": review.doc_type,
         "p_draft": draft, "p_edits": ids["lines"],
     })

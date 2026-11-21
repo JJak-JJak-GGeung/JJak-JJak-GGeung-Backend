@@ -1,7 +1,7 @@
 import unittest
 from types import SimpleNamespace
 from unittest.mock import patch
-from app.photo.extractor import read_ocr
+from app.photo.extractor import extract_document
 from app.photo.extractor import _column, _parse_rows
 
 
@@ -68,7 +68,7 @@ class LayoutTests(unittest.TestCase):
         ]
         with patch.dict("sys.modules", {"cv2": cv, "numpy": np}):
             with patch("app.photo.extractor._scan_rows", side_effect=[[], scanned]) as scan:
-                result = read_ocr(b"test bytes", "image/png", "document")
+                result = extract_document(b"test bytes", "image/png", "document")
         self.assertEqual([call.args[0] for call in scan.call_args_list], ["threshold", "gray"])
         self.assertEqual(len(result["lines"]), 1)
 
