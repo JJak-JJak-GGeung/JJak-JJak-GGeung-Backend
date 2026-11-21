@@ -19,7 +19,7 @@ from app.photo import vision
 def authenticated_owner():
     owner = str(uuid4())
     app.dependency_overrides[current_owner] = lambda: owner
-    with patch("app.api.auth.rows", return_value=[{"id": "owned-store"}]):
+    with patch("app.api.auth.rows", return_value=[{"id": "owned-store"}]), patch("app.api.database.rows", return_value=[]):
         yield
     app.dependency_overrides.pop(current_owner, None)
 

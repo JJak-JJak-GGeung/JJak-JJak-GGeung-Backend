@@ -1,4 +1,5 @@
 import hashlib
+from datetime import date, datetime, timezone
 import json
 import logging
 import os
@@ -16,7 +17,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.photo.extractor import extract_document
 from app.api.auth import Owner, current_owner, require_store
 from app.api.photo_review import router as review_router
-from app.api.database import remote, rows, rpc
+from app.api.database import original_upload_path, remote, rows, rpc
 from app.workflow.settlement import get_settlement
 from app.voice.router import router as voice_router
 
@@ -63,6 +64,8 @@ def period(period_id: UUID, owner: Owner):
     period_record(period_id, owner)
     result = get_settlement(period_id)
     result["documents"] = document_list(period_id)
+    result["pending_removals"] = [r["document_id"] for r in rows("document_removals",
+        period_id="eq." + str(period_id), purged_at="is.null")]
     return result
 
 
@@ -75,6 +78,7 @@ def line_response(row):
             "unit_price_read": None if row["unit_price_read"] is None else str(row["unit_price_read"]),
             "unit_price_corrected": None if row["unit_price_corrected"] is None else str(row["unit_price_corrected"]),
             "amount_corrected": row["amount_corrected"],
+            "tax_amount_read": row.get("tax_amount_read"), "line_date_text": row.get("line_date_text"),
             "amount_read": row["amount_read"], "source_location": row["source_location"]}
 
 
@@ -90,6 +94,7 @@ def document_response(value, lines=None):
         "duplicate": value.get("duplicate", False),
         "input_revision": value.get("input_revision"),
         **{key: value.get(key) for key in (
+            "trade_date", "issued_on", "quoted_on", "source_date_text",
             "supplier_name_read", "supplier_id", "doc_no", "doc_date", "period_start", "period_end",
             "replaces_doc_no", "agreement_text", "agreement_source_location", "source_mode")},
     }
@@ -152,7 +157,7 @@ def upload_document(period_id: UUID, owner: Owner, file: UploadFile = File(...),
     if mime is None or file.content_type != mime:
         raise HTTPException(415, "Supported formats: PNG, JPEG, WebP")
     digest = hashlib.sha256(data).hexdigest()
-    storage_path = selected["store_id"] + "/" + digest
+    storage_path = original_upload_path(selected["store_id"] + "/" + digest)
     payload = hashlib.sha256((str(period_id) + ":" + doc_type + ":" + digest).encode()).hexdigest()
     try:
         try:
@@ -328,3 +333,32 @@ def approval(approval_id: UUID, owner: Owner):
     require_store(value["store_id"], owner)
     snapshot = value["snapshot"]
     return {**approval_response(value), "snapshot": snapshot}
+
+@app.post("/api/periods/{period_id}/documents/{document_id}/remove")
+def remove_upload(period_id: UUID, document_id: UUID, owner: Owner):
+    result = rpc("remove_uploaded_document", {"p_owner": owner, "p_period": str(period_id),
+                                               "p_doc": str(document_id)})
+    path = result["path"]
+    if path is not None:
+        try:
+            # Storage's batch removal is idempotent for absent keys.
+            with remote("/storage/v1/object/originals", "DELETE", json.dumps({"prefixes": [path]}).encode()):
+                pass
+            with remote("/rest/v1/document_removals?document_id=eq." + str(document_id), "PATCH",
+                        json.dumps({"purged_at": datetime.now(timezone.utc).isoformat()}).encode()):
+                pass
+        except (HTTPError, URLError, TimeoutError):
+            raise HTTPException(503, "FILE_REMOVAL_PENDING") from None
+    return {"document_id": str(document_id), "removed": True}
+
+class TradeDateEdit(BaseModel):
+    expected: date | None
+    trade_date: date | None
+
+
+@app.post("/api/periods/{period_id}/documents/{document_id}/trade-date")
+def edit_trade_date(period_id: UUID, document_id: UUID, edit: TradeDateEdit, owner: Owner):
+    values = edit.model_dump(mode="json")
+    rpc("correct_document_trade_date", {"p_owner": owner, "p_period": str(period_id),
+        "p_doc": str(document_id), "p_expected": values["expected"], "p_date": values["trade_date"]})
+    return {"trade_date": values["trade_date"]}

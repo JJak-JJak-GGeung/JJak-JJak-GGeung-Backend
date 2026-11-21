@@ -11,7 +11,7 @@ from datetime import date
 from fastapi import APIRouter, File, Form, HTTPException, UploadFile
 from pydantic import BaseModel, Field, ValidationError
 
-from .database import remote, rows, rpc
+from .database import original_upload_path, remote, rows, rpc
 from .auth import Owner, require_store
 from app.photo.vision import DocType, decimal_text, extract_document
 
@@ -33,6 +33,7 @@ class Review(BaseModel):
     store_name: str | None = Field(default=None, min_length=1, max_length=150)
     supplier_name: str | None = Field(default=None, min_length=1, max_length=150)
     week_start: date | None = None
+    trade_date: date | None = None
     doc_type: DocType
     lines: list[ReviewLine] = Field(min_length=1, max_length=300)
 
@@ -86,6 +87,11 @@ def confirm(owner: Owner, file: UploadFile = File(...), draft_json: str = Form(.
                                        for v in (line.qty_read, line.unit_price_read)):
             raise HTTPException(422, "INVALID_REVIEW_LINE")
     ids = review.model_dump(mode="json")
+    if "trade_date" in review.model_fields_set:
+        # The signed model draft remains unchanged in the audit record.
+        draft = {**draft, "_review_dates": {"trade_date": ids["trade_date"]}}
+    else:
+        ids.pop("trade_date")
     if review.store_id is not None:
         require_store(review.store_id, owner)
     if review.period_id is not None:
@@ -102,7 +108,7 @@ def confirm(owner: Owner, file: UploadFile = File(...), draft_json: str = Form(.
                 raise HTTPException(422, "REVIEW_SCOPE_MISMATCH")
         if not review.week_start or review.week_start.weekday() != 0:
             raise HTTPException(422, "REVIEW_WEEK_REQUIRED")
-    path = (ids["store_id"] or "owners/"+owner) + "/" + digest
+    path = original_upload_path((ids["store_id"] or "owners/"+owner) + "/" + digest)
     try:
         with remote("/storage/v1/object/originals/" + path, "POST", data, file.content_type):
             pass
