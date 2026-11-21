@@ -8,7 +8,7 @@ import os
 import re
 import time
 
-from .extractor import ExtractionError, LINE_FIELDS, TEXT_FIELDS, validate_fields
+from .extractor import AMOUNT_FIELDS, BASE_LINE_FIELDS, DETAIL_FIELDS, ExtractionError, LINE_FIELDS, TEXT_FIELDS, validate_fields
 
 
 _QUANTITY_WITH_UNIT = re.compile(
@@ -65,27 +65,34 @@ def verify(raw, draft, issued_at, signature):
 
 def prepare_review(draft, review):
     """Keep source lineage for edited rows, and allow explicit insertions and deletions."""
-    if not isinstance(review, dict) or set(review) != {"doc_type", *TEXT_FIELDS, "lines"}:
+    if not isinstance(review, dict) or set(review).difference(AMOUNT_FIELDS) != {"doc_type", *TEXT_FIELDS, "lines"}:
         raise ExtractionError("INVALID_REVIEW")
     if not isinstance(review["lines"], list) or not 1 <= len(review["lines"]) <= 300:
         raise ExtractionError("INVALID_REVIEW_LINES")
     facts = deepcopy(review)
     used = set()
     edits = []
+    required = {*BASE_LINE_FIELDS, "source_row"}
+    allowed = {*LINE_FIELDS, "source_row"}
     for row in facts["lines"]:
-        if not isinstance(row, dict) or set(row) != {*LINE_FIELDS, "source_row"}:
+        if not isinstance(row, dict) or not required <= row.keys() <= allowed:
             raise ExtractionError("INVALID_REVIEW_LINE")
         source = row.pop("source_row")
         if source is not None:
             if type(source) is not int or not 1 <= source <= len(draft["lines"]) or source in used:
                 raise ExtractionError("INVALID_SOURCE_ROW")
             used.add(source)
+            for key in DETAIL_FIELDS:
+                if key in draft["lines"][source - 1]:
+                    row.setdefault(key, draft["lines"][source - 1][key])
         if not isinstance(row["item"], str) or not row["item"].strip():
             raise ExtractionError("ITEM_REQUIRED")
         if unit_contains_quantity(row["unit"]):
             raise UnitContainsQuantity("UNIT_CONTAINS_QUANTITY")
         edits.append({**row, "source_row": source})
+    for key in AMOUNT_FIELDS:
+        facts.setdefault(key, draft.get(key))
     validate_fields(facts)
     if facts["doc_type"] == "UNKNOWN":
         raise ExtractionError("DOCUMENT_TYPE_REQUIRED")
-    return {key: facts[key] for key in ("doc_type", *TEXT_FIELDS)}, edits
+    return {key: facts[key] for key in ("doc_type", *TEXT_FIELDS, *AMOUNT_FIELDS)}, edits

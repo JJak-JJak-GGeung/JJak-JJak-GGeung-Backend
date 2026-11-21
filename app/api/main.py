@@ -16,9 +16,11 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.auth import Owner, current_owner, require_store
 from app.api.photo_review import router as review_router
+from app.photo.extractor import AMOUNT_FIELDS
 from app.api.directory import router as directory_router
 from app.api.photo_review_v2 import router as review_v2_router
 from app.api.database import original_upload_path, remote, rows, rpc
+from app.photo.extractor import DETAIL_FIELDS
 from app.workflow.settlement import get_settlement
 from app.voice.router import router as voice_router
 
@@ -75,7 +77,7 @@ def period(period_id: UUID, owner: Owner):
 
 
 def line_response(row):
-    return {"line_id": row["id"], "delivery_no": row["delivery_no"],
+    return {**{key: row.get(key) for key in DETAIL_FIELDS}, "line_id": row["id"], "delivery_no": row["delivery_no"],
             "delivery_date": row["delivery_date"], "item": row["raw_name"],
             "spec": row["raw_spec"], "unit": row["raw_unit"],
             "qty_read": None if row["qty_read"] is None else str(row["qty_read"]),
@@ -100,8 +102,8 @@ def document_response(value, lines=None):
         "input_revision": value.get("input_revision"),
         "photo_review": (value.get("metadata") or {}).get("photo_review"),
         **{key: value.get(key) for key in (
-            "trade_date", "issued_on", "quoted_on", "source_date_text",
-            "supplier_name_read", "supplier_id", "doc_no", "doc_date", "period_start", "period_end",
+            *AMOUNT_FIELDS, "trade_date", "issued_on", "quoted_on", "source_date_text",
+            "supplier_name_read", "supplier_id", "selected_supplier_id", "doc_no", "doc_date", "period_start", "period_end",
             "replaces_doc_no", "agreement_text", "agreement_source_location", "source_mode")},
     }
 

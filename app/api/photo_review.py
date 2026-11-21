@@ -5,14 +5,16 @@ import json
 import logging
 import os
 from urllib.error import HTTPError
+from typing import Annotated
 from uuid import UUID
 from datetime import date
 
 from fastapi import APIRouter, File, Form, HTTPException, UploadFile
-from pydantic import BaseModel, Field, ValidationError
+from pydantic import BaseModel, Field, ValidationError, field_validator
 
 from .database import original_upload_path, remote, rows, rpc
 from .auth import Owner, require_store
+from app.photo.extractor import AMOUNT_FIELDS
 from app.photo.review import unit_contains_quantity
 from app.photo.vision import DocType, decimal_text, extract_document
 
@@ -25,6 +27,15 @@ class ReviewLine(BaseModel):
     qty_read: str | None
     unit_price_read: str | None
     amount_read: int | None = Field(strict=True, ge=-9007199254740991, le=9007199254740991)
+    spec: str | None = Field(default=None, max_length=1000)
+    item_code: str | None = Field(default=None, max_length=1000)
+    origin: str | None = Field(default=None, max_length=1000)
+    lot_no: str | None = Field(default=None, max_length=1000)
+    line_note: str | None = Field(default=None, max_length=1000)
+    tax_amount_read: int | None = Field(default=None, strict=True, ge=-9007199254740991, le=9007199254740991)
+    supply_amount_read: int | None = Field(default=None, strict=True, ge=-9007199254740991, le=9007199254740991)
+    discount_amount_read: int | None = Field(default=None, strict=True, ge=-9007199254740991, le=9007199254740991)
+    line_total_read: int | None = Field(default=None, strict=True, ge=-9007199254740991, le=9007199254740991)
 
 
 class Review(BaseModel):
@@ -35,8 +46,17 @@ class Review(BaseModel):
     supplier_name: str | None = Field(default=None, min_length=1, max_length=150)
     week_start: date | None = None
     trade_date: date | None = None
+    statement_amounts: dict[str, Annotated[int, Field(strict=True, ge=-9007199254740991, le=9007199254740991)] | None] | None = None
     doc_type: DocType
     lines: list[ReviewLine] = Field(min_length=1, max_length=300)
+
+
+    @field_validator("statement_amounts")
+    @classmethod
+    def known_amounts(cls, values):
+        if values is not None and set(values).difference(AMOUNT_FIELDS):
+            raise ValueError("Unknown statement amount")
+        return values
 
 
 def fingerprint(value):
@@ -90,6 +110,11 @@ def confirm(owner: Owner, file: UploadFile = File(...), draft_json: str = Form(.
                                        for v in (line.qty_read, line.unit_price_read)):
             raise HTTPException(422, "INVALID_REVIEW_LINE")
     ids = review.model_dump(mode="json")
+    # Omitted edits use the signed draft, while an explicit null clears the cell.
+    ids["lines"] = [line.model_dump(mode="json", exclude_unset=True) for line in review.lines]
+    overrides = ids.pop("statement_amounts", None)
+    if overrides:
+        draft = {**draft, "_review_amounts": overrides}
     if "trade_date" in review.model_fields_set:
         # The signed model draft remains unchanged in the audit record.
         draft = {**draft, "_review_dates": {"trade_date": ids["trade_date"]}}
