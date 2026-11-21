@@ -41,7 +41,8 @@ def health():
 
 @app.get("/api/stores")
 def stores(owner: Owner):
-    return {"stores": [{"id": r["id"], "name": r["name"]} for r in rows("stores", owner_user_id="eq." + owner, order="name")]}
+    return {"directory_registration": True,
+            "stores": [{"id": r["id"], "name": r["name"]} for r in rows("stores", owner_user_id="eq." + owner, order="name")]}
 
 
 @app.get("/api/suppliers")
