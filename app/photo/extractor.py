@@ -120,7 +120,7 @@ def _column(label):
     }.get(key)
 
 
-def extract_document(raw_bytes: bytes, mime: str, document_id: str, context=None) -> dict:
+def read_ocr(raw_bytes: bytes, mime: str, document_id: str, context=None) -> dict:
     """Return OCR facts and evidence without confirming receipts or approving amounts.
 
     The caller assigns line IDs. Region coordinates are [left, top, right, bottom]
@@ -217,3 +217,7 @@ def _parse_rows(rows, document_id):
         'agreement_source_location': _location(agreement) if agreement else None,
         'lines': lines,
     }
+
+def extract_document(raw_bytes, mime, document_id, context=None):
+    from .vision import extract_document as read_with_vision
+    return read_with_vision(raw_bytes, mime, document_id, context)
