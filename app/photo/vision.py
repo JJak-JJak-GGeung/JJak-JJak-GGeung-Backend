@@ -1,5 +1,5 @@
 """Compatibility entry point for the GPT-only extractor; no supplemental OCR."""
-from .extractor import extract_document
+from .extractor import extract_document, iso
 import re
 from typing import Literal
 
@@ -11,4 +11,4 @@ def decimal_text(value):
         return None
     return value if re.fullmatch(r"-?[0-9]{1,16}(?:\.[0-9]{1,8})?", value) else None
 
-__all__ = ["extract_document", "DocType", "decimal_text"]
+__all__ = ["extract_document", "iso", "DocType", "decimal_text"]
